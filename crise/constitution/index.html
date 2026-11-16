@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Article 42 et la Particratie Belge - Analyse Interactive</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        accent: {
+                            500: '#d97706',
+                            600: '#b45309',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Shared & Responsive Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-800 font-sans antialiased leading-relaxed flex flex-col min-h-screen">
+
+    <!-- Chosen Palette: Warm Neutral Harmony (Slate, Stone, Amber Accent) -->
+    <!-- Application Structure Plan:
+         - Navigation thématique par onglets (Tabs):
+           1. Vue d'Ensemble & Synthèse: Cartes KPI, positionnement de la tension démocratique et sélecteur de perspective (Juriste, Politologue, Citoyen).
+           2. Théorie & Fondements: Comparateur dynamique Rousseau vs Sieyès, Évolution textuelle (1831 vs 1993), et Citations clés.
+           3. Mécanismes de la Particratie: Graphiques Chart.js (Discipline de vote CRISP 13 397 votes, Plafonds financiers), analyse des accords de coalition et cordon sanitaire.
+           4. Jurisprudence & Lignes de Faille: Simulateur interactif de cas juridiques (Transfuges, Lettres en blanc, Irresponsabilité) et benchmark international (Venise & CEDH).
+           5. Pistes de Réforme: Simulateur de Démocratie Délibérative et liste des leviers statutaires pour régénérer le mandat libre.
+         - Structure choisie pour transformer une analyse juridique et sociologique complexe en un outil d'exploration non-linéaire et intuitif. -->
+    <!-- Visualization & Content Choices:
+         - KPI Cards: Pour marquer visuellement les chiffres fondamentaux (1831, 13 397 votes, 0€ de validité).
+         - Chart.js Canvas (Bar & Donut): Visualisation du degré de discipline de vote (99.8%) et de l'asymétrie de financement.
+         - Interactive Case Simulator: Permet de tester les issues juridiques vs politiques pour chaque scénario de dissidence.
+         - Tab navigation in Vanilla JS: Rendu rapide sans rechargement de page.
+         - Confirmation: Aucun graphisme SVG externe, aucun diagramme Mermaid JS. Tout repose sur Canvas et Tailwind HTML/CSS. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="bg-amber-600 text-white font-bold px-2.5 py-1 rounded text-sm tracking-wide">ART. 42</span>
+                    <h1 class="font-bold text-lg sm:text-xl text-slate-100 truncate">Constitution Belge & Particratie</h1>
+                </div>
+                <div class="text-xs sm:text-sm text-slate-400 hidden md:block">
+                    Théorie du Mandat Libre vs Mandat Impératif <span class="italic">De Facto</span>
+                </div>
+            </div>
+            <!-- Dynamic Navigation Tabs -->
+            <nav class="flex space-x-1 sm:space-x-4 border-t border-slate-800 overflow-x-auto pb-1 pt-1 scrollbar-none text-xs sm:text-sm">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn px-3 py-2 rounded-md font-medium whitespace-nowrap bg-amber-600 text-white">
+                    📊 Vue d'Ensemble
+                </button>
+                <button onclick="switchTab('theory')" id="tab-theory" class="tab-btn px-3 py-2 rounded-md font-medium whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+                    ⚖️ Fondements Théoriques
+                </button>
+                <button onclick="switchTab('particracy')" id="tab-particracy" class="tab-btn px-3 py-2 rounded-md font-medium whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+                    🏛️ La Particratie en Action
+                </button>
+                <button onclick="switchTab('jurisprudence')" id="tab-jurisprudence" class="tab-btn px-3 py-2 rounded-md font-medium whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+                    🛡️ Jurisprudence & Protections
+                </button>
+                <button onclick="switchTab('reforms')" id="tab-reforms" class="tab-btn px-3 py-2 rounded-md font-medium whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800">
+                    💡 Perspectives de Réforme
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ========================================== -->
+        <!-- TAB 1: VUE D'ENSEMBLE & SYNTHÈSE -->
+        <!-- ========================================== -->
+        <section id="content-overview" class="tab-content block space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Le Paradoxe Fondateur de la Démocratie Belge</h2>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    Cette application explore le grand écart conceptuel de l'architecture constitutionnelle belge : l'opposition théorique entre le 
+                    <strong>mandat représentatif libre</strong> (consacré par l'article 42 de la Constitution depuis 1831) et l'émergence d'un 
+                    <strong>mandat impératif <em>de facto</em></strong> imposé par une <strong>particratie omniprésente</strong>. Alors que la règle de droit interdit toute forme de contrainte sur l'élu, la réalité sociologique soumet ce dernier à une discipline de parti quasi absolue et au diktat des accords de coalition.
+                </p>
+                <div class="p-4 bg-amber-50 border-l-4 border-amber-600 rounded text-amber-900 text-sm">
+                    <strong>Article 42 de la Constitution :</strong> « Les membres des deux Chambres représentent la Nation, et non uniquement ceux qui les ont élus. »
+                </div>
+            </div>
+
+            <!-- KPI Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center">
+                    <div class="text-3xl font-extrabold text-slate-900">1831</div>
+                    <div class="text-xs text-slate-500 mt-1 uppercase font-semibold">Consécration du Mandat Libre</div>
+                    <div class="text-xs text-slate-600 mt-2">Rejet du modèle rousseauiste et de la souveraineté populaire.</div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center">
+                    <div class="text-3xl font-extrabold text-amber-600">13 397</div>
+                    <div class="text-xs text-slate-500 mt-1 uppercase font-semibold">Votes Analystés (CRISP)</div>
+                    <div class="text-xs text-slate-600 mt-2">Démontrant une quasi-absence de dissidence parlementaire.</div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center">
+                    <div class="text-3xl font-extrabold text-slate-900">99.8%</div>
+                    <div class="text-xs text-slate-500 mt-1 uppercase font-semibold">Cohésion Partisane</div>
+                    <div class="text-xs text-slate-600 mt-2">Niveau de discipline de vote en séance plénière.</div>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center">
+                    <div class="text-3xl font-extrabold text-emerald-600">0 €</div>
+                    <div class="text-xs text-slate-500 mt-1 uppercase font-semibold">Valeur des Lettres en Blanc</div>
+                    <div class="text-xs text-slate-600 mt-2">Nullité absolue des engagements de démission préalable.</div>
+                </div>
+            </div>
+
+            <!-- Perspective Switcher -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Explorez la Tension Selon Votre Angle d'Analyse</h3>
+                <p class="text-sm text-slate-600 mb-4">Cliquez sur une perspective ci-dessous pour faire ressortir l'enjeu prioritaire :</p>
+                
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button onclick="setPerspective('jurist')" id="btn-persp-jurist" class="px-4 py-2 rounded text-sm font-medium border bg-slate-900 text-white border-slate-900">
+                        ⚖️ Perspective Juridique
+                    </button>
+                    <button onclick="setPerspective('politologist')" id="btn-persp-politologist" class="px-4 py-2 rounded text-sm font-medium border bg-stone-100 text-slate-700 border-slate-300 hover:bg-slate-200">
+                        🏛️ Perspective Politologique
+                    </button>
+                    <button onclick="setPerspective('citizen')" id="btn-persp-citizen" class="px-4 py-2 rounded text-sm font-medium border bg-stone-100 text-slate-700 border-slate-300 hover:bg-slate-200">
+                        👥 Perspective Citoyenne
+                    </button>
+                </div>
+
+                <div id="perspective-box" class="p-4 bg-slate-50 rounded-lg border border-slate-200 text-sm text-slate-700">
+                    <!-- Dynamic Content inserted via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: FONDEMENTS THÉORIQUES DE L'ARTICLE 42 -->
+        <!-- ========================================== -->
+        <section id="content-theory" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Généalogie & Fondements Philosophico-Juridiques</h2>
+                <p class="text-slate-700 leading-relaxed">
+                    L'article 42 de la Constitution belge tire ses origines de la philosophie politique post-révolutionnaire. En 1831, le Congrès national a opéré un choix doctrinal décisif en faveur du concept de <strong>Souveraineté Nationale</strong> théorisé par Sieyès, rejetant expressément le modèle rousseauiste de <strong>Souveraineté Populaire</strong>. Cette section expose les fondements théoriques qui ont rendu le mandat impératif juridiquement impossible dans l'État belge.
+                </p>
+            </div>
+
+            <!-- Comparison Table Component -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-4">Dualité Doctrinale : Souveraineté Populaire vs Souveraineté Nationale</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-900 border-b border-slate-300">
+                                <th class="p-3 font-semibold">Critère d'Analyse</th>
+                                <th class="p-3 font-semibold text-amber-800 bg-amber-50/50">Souveraineté Populaire (J.-J. Rousseau)</th>
+                                <th class="p-3 font-semibold text-blue-900 bg-blue-50/50">Souveraineté Nationale (E.-J. Sieyès / BE 1831)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3 font-medium text-slate-900">Titulaire du Pouvoir</td>
+                                <td class="p-3 bg-amber-50/30">Le Peuple (somme synchronique des citoyens vivants).</td>
+                                <td class="p-3 bg-blue-50/30 font-semibold text-blue-900">La Nation (entité abstraite, indivisible, diachronique).</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium text-slate-900">Nature du Pouvoir</td>
+                                <td class="p-3 bg-amber-50/30">Divisible. Chaque citoyen détient une part de souveraineté.</td>
+                                <td class="p-3 bg-blue-50/30">Indivisible. Aucun individu ou groupe ne possède de part.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium text-slate-900">Rôle de l'Électeur</td>
+                                <td class="p-3 bg-amber-50/30">Mandant. Donne des instructions obligatoires à l'élu.</td>
+                                <td class="p-3 bg-blue-50/30">Sélecteur. Désigne la personne jugée la plus apte à délibérer.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium text-slate-900">Nature du Mandat</td>
+                                <td class="p-3 bg-amber-50/30 font-semibold text-amber-900">Mandat Impératif & Révocable (Recall).</td>
+                                <td class="p-3 bg-blue-50/30 font-semibold text-blue-900">Mandat Représentatif Libre & Irrévocable.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-medium text-slate-900">Statut de l'Élu</td>
+                                <td class="p-3 bg-amber-50/30">Simple commis / délégué révocable.</td>
+                                <td class="p-3 bg-blue-50/30">Représentant de la Nation tout entière (Art. 42).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Historical Wording Evolution -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">L'Évolution Textuelle de l'Article 42 (1831 vs 1993)</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                    Initialement numéroté Article 32, le texte a subi une révision formelle lors de la 4<sup>e</sup> réforme de l'État en 1993 pour adapter sa formulation à l'État fédéral sans modifier sa substance prohibitionniste.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Texte Historique (1831 - 1993)</span>
+                        <p class="mt-2 text-slate-800 italic font-serif">
+                            « Les membres des deux Chambres représentent la nation et non uniquement <span class="bg-amber-100 font-sans not-italic font-semibold px-1">la province ou la subdivision de province qui les a nommés</span>. »
+                        </p>
+                        <p class="text-xs text-slate-600 mt-3">
+                            <strong>Objectif originel :</strong> Empêcher le retour au fédéralisme des États provinciaux de l'Ancien Régime et briser tout ancrage impératif local.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <span class="text-xs font-bold uppercase tracking-wider text-blue-800">Texte Actuel (Depuis 1993)</span>
+                        <p class="mt-2 text-slate-800 italic font-serif">
+                            « Les membres des deux Chambres représentent la Nation, et non uniquement <span class="bg-blue-200 font-sans not-italic font-semibold px-1">ceux qui les ont élus</span>. »
+                        </p>
+                        <p class="text-xs text-slate-600 mt-3">
+                            <strong>Signification moderne :</strong> Coupure explicite du lien juridique entre l'élu et son électorat (qu'il soit local, régional ou linguistique). 
+                            <em>Note de doctrine (A.-E. Bourgaux) :</em> Le texte reste muet sur le rôle prépondérant des partis politiques.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 3: LA PARTICRATIE EN ACTION -->
+        <!-- ========================================== -->
+        <section id="content-particracy" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Anatomie Sociologique : La Dominance Partisane</h2>
+                <p class="text-slate-700 leading-relaxed">
+                    Si la Constitution proclame l'indépendance du député, la réalité institutionnelle belge se caractérise par une <strong>hyper-particratie</strong>. La combinaison de la pilarisation historique, du financement public massif des états-majors, du monopole des nominations sur les listes électorales et de la primauté des accords de coalition produit une discipline de vote quasi-absolue, érigeant un <strong>mandat impératif <em>de facto</em></strong>.
+                </p>
+            </div>
+
+            <!-- Charts & Metrics Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chart 1: CRISP Voting Discipline -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-base font-bold text-slate-900 mb-1">Discipline de Vote à la Chambre (Étude CRISP)</h3>
+                    <p class="text-xs text-slate-500 mb-4">Analyse de F. Verleden sur 13 397 votes nominatifs valables (1995-2019).</p>
+                    <div class="chart-container">
+                        <canvas id="crispChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-3 italic">
+                        Résultat : La dissidence individuelle est statistiquement négligeable (< 0.2%), survenant presque uniquement lors de votes éthiques "libérés" ou de ruptures de ban définitives.
+                    </p>
+                </div>
+
+                <!-- Chart 2: Party Financing Asymmetry -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                    <h3 class="text-base font-bold text-slate-900 mb-1">Financement Politique (Loi de 1989)</h3>
+                    <p class="text-xs text-slate-500 mb-4">Structure d'indépendance financière : Parti vs Député Individuel.</p>
+                    <div class="chart-container">
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                    <p class="text-xs text-slate-600 mt-3 italic">
+                        Les partis dotés d'un groupe reconnu (min. 5 députés) reçoivent des millions d'euros publics, rendant les élus totalement dépendants des logistiques partisanes.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interactive Accord de Coalition vs Parlement -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900">L'Accord de Coalition : Véritable "Norme Suprême" ?</h3>
+                <p class="text-sm text-slate-700">
+                    Selon la formule de Marc Uyttendaele, l'accord de coalition rédigé en conclave secret par les présidents de parti prime en pratique sur les délibérations parlementaires. Le Parlement agit alors comme une simple chambre d'enregistrement.
+                </p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+                        <div class="font-bold text-slate-900 text-sm mb-1">1. Conclave des Présidents</div>
+                        Négociation à huis clos de l'accord de gouvernement par les états-majors non élus au suffrage direct pour cette fonction.
+                    </div>
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded">
+                        <div class="font-bold text-amber-900 text-sm mb-1">2. Injonction de Vote</div>
+                        Transmission des consignes strictes aux groupes parlementaires. Tout écart est sanctionné par l'exclusion politique.
+                    </div>
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+                        <div class="font-bold text-slate-900 text-sm mb-1">3. Chape de Plomb</div>
+                        Stérilisation du débat au sein de l'hémicycle. L'élu ne peut amender les textes majeurs sans l'accord de la majorité.
+                    </div>
+                </div>
+
+                <!-- Cordon Sanitaire Case Highlight -->
+                <div class="p-4 bg-stone-100 border-l-4 border-slate-700 rounded text-xs space-y-1">
+                    <span class="font-bold text-slate-900 uppercase tracking-wide">Zoom : Le Cordon Sanitaire</span>
+                    <p class="text-slate-700">
+                        Engagement politique transpartisan interdisant toute alliance ou vote conjoint avec l'extrême droite. Bien que motivé par la défense de la démocratie, il fonctionne juridiquement comme un <strong>super-mandat impératif moral</strong> imposé par les directions de partis à leurs parlementaires sous peine d'excommunication médiatique et politique immédiate.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 4: JURISPRUDENCE & LIGNES DE FAILLE -->
+        <!-- ========================================== -->
+        <section id="content-jurisprudence" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Tensions Juridictionnelles & Protections de l'Élu</h2>
+                <p class="text-slate-700 leading-relaxed">
+                    Malgré la pression particratique, l'ordre juridique belge et international maintient l'article 42 comme un <strong>bouclier normatif impénétrable</strong>. En cas de conflit frontal entre un parlementaire et son parti, les juridictions font systématiquement prévaloir le principe du mandat libre. Cette section vous permet de simuler le verdict juridique face aux tentatives de contrainte partisane.
+                </p>
+            </div>
+
+            <!-- Interactive Legal Case Simulator -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-2">Simulateur de Casus Belli Juridique</h3>
+                <p class="text-sm text-slate-600 mb-4">Sélectionnez une situation de conflit entre un député et son parti pour découvrir l'arbitrage du droit :</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                    <button onclick="runScenario('transfuge')" id="scen-transfuge" class="scen-btn text-left p-3 rounded-lg border font-medium text-xs sm:text-sm bg-slate-900 text-white border-slate-900">
+                        🔄 Le "Nomadisme Politique" (Transfuge)
+                    </button>
+                    <button onclick="runScenario('lettre')" id="scen-lettre" class="scen-btn text-left p-3 rounded-lg border font-medium text-xs sm:text-sm bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
+                        📝 Lettre de Démission en Blanc
+                    </button>
+                    <button onclick="runScenario('dissidence')" id="scen-dissidence" class="scen-btn text-left p-3 rounded-lg border font-medium text-xs sm:text-sm bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100">
+                        🗣️ Dissidence & Irresponsabilité (Art. 58)
+                    </button>
+                </div>
+
+                <div id="scenario-output" class="p-5 bg-slate-50 border border-slate-200 rounded-lg text-sm space-y-3">
+                    <!-- Dynamic Scenario Content -->
+                </div>
+            </div>
+
+            <!-- Supranational Perspective (Venice & ECHR) -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900">Le Regard Supranational : Commission de Venise & CEDH</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded">
+                        <div class="font-bold text-slate-900 text-sm mb-1">Commission de Venise (Rapport CDL-AD(2009)027)</div>
+                        <p class="text-slate-700 mb-2">
+                            Le mandat impératif est rejeté comme incompatible avec les standards des démocraties constitutionnelles occidentales.
+                        </p>
+                        <p class="text-slate-600 italic">
+                            « La destitution d'un député pour défection de son groupe politique renverse la hiérarchie démocratique en subordonnant l'élu à l'appareil du parti. »
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded">
+                        <div class="font-bold text-blue-900 text-sm mb-1">Cour Européenne des Droits de l'Homme (CEDH)</div>
+                        <p class="text-slate-700 mb-2">
+                            Protection via l'Article 3 du Protocole n° 1 (Droit à des élections libres).
+                        </p>
+                        <p class="text-slate-600 italic">
+                            <strong>Arrêt Tomenko c. Ukraine (2025) & Karácsony c. Hongrie (2016) :</strong> Condamnation des déchéances automatiques de mandat ordonnées par les partis. Seul l'élu est maître de son siège.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- TAB 5: PISTES DE RÉFORME & AVENIR -->
+        <!-- ========================================== -->
+        <section id="content-reforms" class="tab-content hidden space-y-6">
+            <!-- Intro Paragraph -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">Perspectives de Réforme : Régénérer la Représentation</h2>
+                <p class="text-slate-700 leading-relaxed">
+                    Face à la dépréciation du rôle parlementaire et au sentiment d'un constitutionnalisme de façade, plusieurs voies d'innovation institutionnelle sont explorées en Belgique. Il s'agit non de nier le rôle des partis, mais d'oxygéner le débat public par la <strong>démocratisation des structures partisanes</strong> et l'intégration de la <strong>démocratie délibérative citoyenne</strong>.
+                </p>
+            </div>
+
+            <!-- Deliberative Democracy Simulator -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900">Le Tournant Délibératif : Tirage au Sort & Commissions Mixtes</h3>
+                <p class="text-sm text-slate-600">
+                    La Belgique s'est imposée comme un laboratoire mondial de la démocratie délibérative (ex: G1000, Dialogue germanophone, Commissions délibératives bruxelloises). Testez ci-dessous l'impact du tirage au sort sur la discipline de vote :
+                </p>
+
+                <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <label class="text-xs font-bold text-slate-700 uppercase">Mode d'Assemblée :</label>
+                    <select id="assembly-mode" onchange="updateDeliberativeMode()" class="bg-white border border-slate-300 text-slate-800 text-xs sm:text-sm rounded p-2 focus:ring-amber-500 focus:border-amber-500">
+                        <option value="traditional">Parlement Traditionnel (100% Élus Partisans)</option>
+                        <option value="mixed">Commission Délibérative (75% Citoyens Tirés au Sort / 25% Élus)</option>
+                    </select>
+                </div>
+
+                <div id="deliberative-results" class="p-5 bg-stone-50 border border-slate-200 rounded-lg text-sm">
+                    <!-- Dynamic Deliberative Output -->
+                </div>
+            </div>
+
+            <!-- Reforms Checklist -->
+            <div class="bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+                <h3 class="text-lg font-bold text-slate-900 mb-4">Leviers Réformateurs pour Revaloriser l'Article 42</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                        <div class="font-bold text-slate-900 text-sm mb-2">1. Statut Constitutionnel des Partis</div>
+                        <p class="text-xs text-slate-600">
+                            Consacrer les partis dans la Constitution (T. Gaudin) pour les soumettre à des obligations strictes de démocratie interne, de transparence et d'ouverture des primaires pour les accords de coalition.
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                        <div class="font-bold text-slate-900 text-sm mb-2">2. Refonte du Financement Public</div>
+                        <p class="text-xs text-slate-600">
+                            Conditionner les dotations à des critères de financement participatif et abaisser le seuil de 5 députés requis pour constituer un groupe afin d'offrir des moyens logistiques aux indépendants.
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                        <div class="font-bold text-slate-900 text-sm mb-2">3. Articulation Délibérative</div>
+                        <p class="text-xs text-slate-600">
+                            Pérenniser les commissions citoyennes consultatives. La délibération apaisée des citoyens suppléera l'absence d'indépendance partisane tout en respectant le vote final de la loi par les Chambres.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>Analyse d'Ingénierie Constitutionnelle Belge & Particratie — Fondé sur la doctrine et la jurisprudence (Bourgaux, Uyttendaele, Verleden / CRISP, Commission de Venise, CEDH).</p>
+            <p class="text-slate-500">Réalisé sous forme d'Application Web Interactive à Fichier Unique (SPA).</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic Layer -->
+    <script>
+        // Data Storage & State Management
+        let crispChartInstance = null;
+        let financeChartInstance = null;
+
+        const perspectives = {
+            jurist: {
+                title: "Angle du Droit Constitutionnel",
+                text: "L'article 42 est un dogme intangible. Le mandat impératif est juridiquement nul. Aucune convention de droit privé (lettre de démission en blanc, statut d'un parti) ne peut destituer un parlementaire. Le nomadisme politique (transfuges) est protégé, de même que l'irresponsabilité des votes (art. 58). Pour le juriste, le mandat libre survit pleinement dans le prétoire."
+            },
+            politologist: {
+                title: "Angle de la Science Politique",
+                text: "L'article 42 est une fiction constitutionnelle ou un 'constitutionnalisme de façade'. Le système belge est une particratie consociative où le pouvoir réel réside dans les conclaves de présidents de parti. Les accords de coalition forment la véritable norme suprême, et la cohésion de vote (99.8%) impose un mandat impératif de facto via le monopole de la confection des listes électorales."
+            },
+            citizen: {
+                title: "Angle Démocratique & Citoyen",
+                text: "Il existe une coupure profonde entre l'élu et l'électeur. L'élu semble n'obéir qu'à son siège de parti plutôt qu'à l'intérêt général de la Nation. Les innovations délibératives (tirage au sort, commissions citoyennes) apparaissent comme le seul moyen d'insuffler une parole affranchie des diktats de partis au sein du Parlement."
+            }
+        };
+
+        const scenarios = {
+            transfuge: {
+                title: "Cas 1 : Le Député Transfuge / Démissionnaire du Parti",
+                facts: "Un député entre en conflit avec sa direction de parti, démissionne du groupe et décide de siéger comme indépendant ou de rejoindre un autre parti.",
+                verdict: "LE DÉPUTÉ CONSERVE SON SIÈGE.",
+                legalBasis: "L'article 42 proclame qu'il représente la Nation. Le parti ne détient aucun droit de propriété sur le mandat constitutionnel. Les statuts du parti exigeant la remise du siège sont nuls de plein droit.",
+                practicalEffect: "Sanction politique violente : perte des moyens du groupe (attachés, temps de parole restreint), mort politique quasi certaine pour la législature suivante."
+            },
+            lettre: {
+                title: "Cas 2 : La Lettre de Démission en Blanc",
+                facts: "Avant les élections, le candidat a signé sous contrainte une lettre de démission non datée. Suite à une dissidence, le président de parti la date et la transmet à la Chambre.",
+                verdict: "NULLITÉ ABSOLUE DU DOCUMENT.",
+                legalBasis: "Jurisprudence constante des cours d'appel et de cassation : le mandat est d'ordre public. L'engagement préalable à renoncer à un mandat constitutionnel est nul et non avenu car assimilé à un mandat impératif prohibé.",
+                practicalEffect: "Le président d'assemblée doit ignorer la lettre. Le député reste en fonction."
+            },
+            dissidence: {
+                title: "Cas 3 : Vote Dissident en Plénière",
+                facts: "Un député de la majorité vote contre un projet de loi clef issu de l'accord de coalition, invoquant sa conscience et l'intérêt de la Nation.",
+                verdict: "IMMUNITÉ JURIDIQUE TOTALE (ART. 58).",
+                legalBasis: "L'article 58 garantit l'irresponsabilité parlementaire. Aucune poursuite judiciaire, pénale ou civile n'est possible pour les votes ou opinions exprimés.",
+                practicalEffect: "Exclusion quasi immédiate du groupe politique du parti, retrait des mandats dérivés (intercommunales, commissions rémunérées)."
+            }
+        };
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-600', 'text-white');
+                btn.classList.add('text-slate-300', 'hover:bg-slate-800');
+            });
+
+            const activeContent = document.getElementById(`content-${tabId}`);
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+
+            if (activeContent) activeContent.classList.remove('hidden');
+            if (activeBtn) {
+                activeBtn.classList.add('bg-amber-600', 'text-white');
+                activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800');
+            }
+
+            // Lazy Render Charts when tab active
+            if (tabId === 'particracy') {
+                renderCharts();
+            }
+        }
+
+        // Perspective Selection Handler
+        function setPerspective(key) {
+            const data = perspectives[key];
+            const box = document.getElementById('perspective-box');
+            
+            ['jurist', 'politologist', 'citizen'].forEach(p => {
+                const btn = document.getElementById(`btn-persp-${p}`);
+                if (p === key) {
+                    btn.className = "px-4 py-2 rounded text-sm font-medium border bg-slate-900 text-white border-slate-900";
+                } else {
+                    btn.className = "px-4 py-2 rounded text-sm font-medium border bg-stone-100 text-slate-700 border-slate-300 hover:bg-slate-200";
+                }
+            });
+
+            box.innerHTML = `
+                <h4 class="font-bold text-slate-900 text-base mb-1">${data.title}</h4>
+                <p class="leading-relaxed">${data.text}</p>
+            `;
+        }
+
+        // Legal Case Scenario Handler
+        function runScenario(scenKey) {
+            const data = scenarios[scenKey];
+            const output = document.getElementById('scenario-output');
+
+            document.querySelectorAll('.scen-btn').forEach(btn => {
+                btn.className = "scen-btn text-left p-3 rounded-lg border font-medium text-xs sm:text-sm bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100";
+            });
+            document.getElementById(`scen-${scenKey}`).className = "scen-btn text-left p-3 rounded-lg border font-medium text-xs sm:text-sm bg-slate-900 text-white border-slate-900";
+
+            output.innerHTML = `
+                <div class="font-bold text-slate-900 text-base border-b border-slate-200 pb-2">${data.title}</div>
+                <div><strong class="text-slate-900">Faits :</strong> ${data.facts}</div>
+                <div class="p-3 bg-emerald-100 border-l-4 border-emerald-600 rounded text-emerald-900 font-bold text-sm">
+                    ⚖️ Verdict Juridique : ${data.verdict}
+                </div>
+                <div><strong class="text-slate-900">Fondement (Art. 42 / Droit Public) :</strong> ${data.legalBasis}</div>
+                <div class="text-xs text-slate-600 italic"><strong class="text-slate-800 not-italic">Réalité Particratique :</strong> ${data.practicalEffect}</div>
+            `;
+        }
+
+        // Deliberative Mode Handler
+        function updateDeliberativeMode() {
+            const mode = document.getElementById('assembly-mode').value;
+            const container = document.getElementById('deliberative-results');
+
+            if (mode === 'traditional') {
+                container.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="font-bold text-slate-900 text-base">Résultat : Logique de Bloc Partisan (Discipline 99.8%)</div>
+                        <p class="text-xs text-slate-700">
+                            Les membres votent strictement selon l'accord de coalition ou les consignes de leur président de parti. Les amendements individuels basés sur la délibération sont rejetés.
+                        </p>
+                        <div class="w-full bg-slate-200 h-4 rounded-full overflow-hidden flex text-[10px] text-white text-center font-bold">
+                            <div class="bg-blue-600 h-full" style="width: 55%">Majorité Partisane (55%)</div>
+                            <div class="bg-slate-500 h-full" style="width: 45%">Opposition Partisane (45%)</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="font-bold text-emerald-900 text-base">Résultat : Transgression des Lignes Partisanes</div>
+                        <p class="text-xs text-slate-700">
+                            Les citoyens tirés au sort ne craignent aucune sanction de président de parti ni non-réélection. Les arguments rationnels forcent les parlementaires élus à justifier leurs choix au-delà du dogme de parti, réactivant l'esprit délibératif recherché par l'article 42.
+                        </p>
+                        <div class="w-full bg-slate-200 h-4 rounded-full overflow-hidden flex text-[10px] text-white text-center font-bold">
+                            <div class="bg-amber-600 h-full" style="width: 40%">Consensus Transpartisan (40%)</div>
+                            <div class="bg-emerald-600 h-full" style="width: 45%">Citoyens Libres (45%)</div>
+                            <div class="bg-slate-400 h-full" style="width: 15%">Minorité Ligne Dur (15%)</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Render Chart.js Visualizations
+        function renderCharts() {
+            // Crisp Voting Discipline Chart
+            if (!crispChartInstance) {
+                const ctx1 = document.getElementById('crispChart').getContext('2d');
+                crispChartInstance = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Votes Conformes Ligne de Parti', 'Dissidences Individuelles'],
+                        datasets: [{
+                            data: [13370, 27],
+                            backgroundColor: ['#1e293b', '#d97706'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let val = context.raw;
+                                        let total = 13397;
+                                        let perc = ((val/total)*100).toFixed(2);
+                                        return `${context.label}: ${val} (${perc}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Party Financing Asymmetry Chart
+            if (!financeChartInstance) {
+                const ctx2 = document.getElementById('financeChart').getContext('2d');
+                financeChartInstance = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Parti (Dotation Publique)', 'Député (Dons P. Physiques Max)'],
+                        datasets: [{
+                            label: 'Plafond / Capacité Financière (€)',
+                            data: [5000000, 500],
+                            backgroundColor: ['#2563eb', '#10b981']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                type: 'logarithmic',
+                                title: { display: true, text: 'Euros (€) - Échelle Logarithmique' }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Initialize default view
+        window.addEventListener('DOMContentLoaded', () => {
+            setPerspective('jurist');
+            runScenario('transfuge');
+            updateDeliberativeMode();
+        });
+    </script>
+</body>
+</html>
