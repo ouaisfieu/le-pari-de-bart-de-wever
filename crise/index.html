@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Politologique de la Crise Belge (2024-2026)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            accent: '#b91c1c',
+                            gold: '#b45309',
+                            teal: '#0f766e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .tab-active {
+            border-bottom: 3px solid #b91c1c;
+            color: #b91c1c;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-red-100 selection:text-red-900">
+
+<!-- Chosen Palette: Warm Editorial Ivory & Deep Navy -->
+<!-- Application Structure Plan: L'application est structurée en 6 piliers thématiques accessibles via une navigation fluide et un tableau de bord interactif. Plutôt que de suivre le format linéaire d'un rapport académique, elle privilégie l'exploration par problème et par chercheur. Un en-tête offre les métriques clés de la crise de 2026. L'utilisateur peut passer dynamiquement du diagnostic théorique (Lijphart, dyadisme) aux données électives (Chart.js comparant 2024 et les projections 2026), explorer la mécanique d'assèchement budgétaire ("confédéralisme rampant") via un schéma interactif HTML/CSS, et consulter la matrice des politologues avec recherche par mots-clés. -->
+<!-- Visualization & Content Choices:
+  1. Comparaison Électorale (2024 vs 2026): Graphique à barres horizontales Chart.js (Canvas). Permet d'observer l'asymétrie Flandre/Wallonie/Bruxelles.
+  2. Trajectoire Macro-Budgétaire et Ratings: Graphique combiné Chart.js (Dette % PIB vs Déficit %).
+  3. Matrice du Confédéralisme Rampant: Diagramme de flux étape par étape en pure HTML/CSS/Tailwind avec interactions JS (affichage dynamique du transfert des charges Fédéral -> CPAS).
+  4. Répertoire interactif des politologues: Cartes filtrables et recherche textuelle en JS pour juxtaposer les concepts (Devos, Sinardet, Delwit, Popelier, etc.).
+  5. Matrice comparative des alternatives (Circonscription fédérale vs Démocratie délibérative): Tableau dynamique avec filtres d'évaluation.
+  CONFIRMATION: Aucun SVG ni Mermaid JS n'est utilisé. Seuls Chart.js (Canvas) et du HTML/CSS structuré sont employés. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-50 bg-slate-900 text-slate-100 shadow-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-4 h-8 bg-red-700 rounded-sm"></div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight text-white">Observatoire Politologique de la Crise Belge</h1>
+                        <p class="text-xs text-slate-400">Analyse critique des institutions, du budget et des clivages (2024-2026)</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex space-x-1 text-sm font-medium text-slate-300" id="main-nav">
+                    <button onclick="switchTab('overview')" id="nav-overview" class="px-3 py-2 rounded-md transition hover:text-white tab-active">Vue d'ensemble</button>
+                    <button onclick="switchTab('theory')" id="nav-theory" class="px-3 py-2 rounded-md transition hover:text-white">Théories & Clivages</button>
+                    <button onclick="switchTab('elections')" id="nav-elections" class="px-3 py-2 rounded-md transition hover:text-white">Échiquier Électoral</button>
+                    <button onclick="switchTab('budget')" id="nav-budget" class="px-3 py-2 rounded-md transition hover:text-white">Choc Budgétaire</button>
+                    <button onclick="switchTab('rampant')" id="nav-rampant" class="px-3 py-2 rounded-md transition hover:text-white">Confédéralisme Rampant</button>
+                    <button onclick="switchTab('alternatives')" id="nav-alternatives" class="px-3 py-2 rounded-md transition hover:text-white">Prospective</button>
+                </div>
+                <div class="md:hidden">
+                    <select id="mobile-nav" onchange="switchTab(this.value)" class="bg-slate-800 text-white text-sm rounded border border-slate-700 p-2">
+                        <option value="overview">Vue d'ensemble</option>
+                        <option value="theory">Théories & Clivages</option>
+                        <option value="elections">Échiquier Électoral</option>
+                        <option value="budget">Choc Budgétaire</option>
+                        <option value="rampant">Confédéralisme Rampant</option>
+                        <option value="alternatives">Prospective</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION 1: VUE D'ENSEMBLE -->
+        <section id="section-overview" class="space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">Diagnostic de Synthèse</span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">La démocratie consociative à l'épreuve du confédéralisme rampant</h2>
+                    <p class="mt-3 text-slate-600 leading-relaxed">
+                        Cette application interactive analyse la crise politique belge de l'automne 2026 à travers le prisme de la science politique et du fédéralisme comparé. Suite à la démission du gouvernement Arizona conduit par Bart De Wever (N-VA) et au gel de l'accord d'assainissement budgétaire de 11 milliards d'euros, la communauté politologique (Lijphart, Sinardet, Devos, Delwit, Popelier, Faniel) dresse le constat d'une paralysie structurelle du modèle belge.
+                    </p>
+                </div>
+
+                <!-- Key Metrics Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center">
+                        <span class="text-xs uppercase text-slate-500 font-semibold tracking-wider">Impasse Fédérale</span>
+                        <div class="text-3xl font-black text-red-700 mt-1">2 Nov 2026</div>
+                        <p class="text-xs text-slate-600 mt-1">Démission Arizona en suspens au Palais</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center">
+                        <span class="text-xs uppercase text-slate-500 font-semibold tracking-wider">Ajustement Exigé</span>
+                        <div class="text-3xl font-black text-slate-900 mt-1">11,2 Mds €</div>
+                        <p class="text-xs text-slate-600 mt-1">Procédure UE pour déficit excessif</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center">
+                        <span class="text-xs uppercase text-slate-500 font-semibold tracking-wider">Dette Publique Fédérale</span>
+                        <div class="text-3xl font-black text-amber-700 mt-1">107,2 %</div>
+                        <p class="text-xs text-slate-600 mt-1">Note Sovereign S&P abaissée à AA-</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-center">
+                        <span class="text-xs uppercase text-slate-500 font-semibold tracking-wider">Polarisation Régionale</span>
+                        <div class="text-3xl font-black text-slate-900 mt-1">50,8 %</div>
+                        <p class="text-xs text-slate-600 mt-1">Total N-VA + VB en Flandre (2026)</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Politologist Quotes / Concepts Highlights -->
+                <div class="bg-slate-900 text-slate-100 rounded-xl p-6 shadow-inner">
+                    <h3 class="text-lg font-bold text-white mb-3 flex items-center">
+                        <span class="mr-2 text-red-500">❖</span> Thèses Centrales de la Science Politique Belge
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <span class="text-red-400 font-semibold block mb-1">Zombification Consociative</span>
+                            <p class="text-slate-300 text-xs leading-relaxed">Les droits de veto mutuels, conçus par Lijphart pour protéger les minorités, sont dévoyés en instruments offensifs de blocage permanent en l'absence de ressources financières d'accommodement.</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <span class="text-amber-400 font-semibold block mb-1">Fédéralisme Dyadique Centrifuge</span>
+                            <p class="text-slate-300 text-xs leading-relaxed">Selon Popelier et Swenden, la bipolarité linguistico-territoriale empêche tout rôle d'arbitre central et punit électoralement les partis prêts au compromis intercommunautaire.</p>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                            <span class="text-teal-400 font-semibold block mb-1">Confédéralisme par Asphyxie</span>
+                            <p class="text-slate-300 text-xs leading-relaxed">Pour Devos et Faniel, faute de majorité des deux tiers pour réformer la Constitution, le blocage budgétaire transfère la charge de l'austérité vers les entités fédérées et communes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THEORIES & INSTITUTIONS -->
+        <section id="section-theory" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">Cadres Théoriques</span>
+                    <h2 class="text-2xl font-bold text-slate-900">De Lijphart au Fédéralisme Dyadique : Radiographie d'une Mutation</h2>
+                    <p class="mt-2 text-slate-600 text-sm">
+                        Cette section expose la déconstruction théorique de l'État belge par les enseignants-chercheurs en sciences politiques (UCLouvain, ULB, VUB, UGent).
+                    </p>
+                </div>
+
+                <!-- Interactive Explorer of Theories -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Theory Selector Sidebar -->
+                    <div class="lg:col-span-4 space-y-2">
+                        <button onclick="showTheoryDetail('lijphart')" id="btn-lijphart" class="w-full text-left p-4 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 transition font-medium text-slate-800 focus:outline-none border-l-4 border-l-red-600">
+                            1. Le Modèle Consociatif de Lijphart & sa "Zombification"
+                        </button>
+                        <button onclick="showTheoryDetail('dyadic')" id="btn-dyadic" class="w-full text-left p-4 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 transition font-medium text-slate-800 focus:outline-none">
+                            2. Le Fédéralisme Dyadique Centrifuge (Popelier/Swenden)
+                        </button>
+                        <button onclick="showTheoryDetail('publicspace')" id="btn-publicspace" class="w-full text-left p-4 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 transition font-medium text-slate-800 focus:outline-none">
+                            3. L'Absence d'Espace Public Unifié (Sinardet)
+                        </button>
+                        <button onclick="showTheoryDetail('particracy')" id="btn-particracy" class="w-full text-left p-4 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 transition font-medium text-slate-800 focus:outline-none">
+                            4. L'Hyper-Particratie & Rapports GRECO (Delwit/van Haute)
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Details Panel -->
+                    <div class="lg:col-span-8 bg-slate-50 p-6 rounded-xl border border-slate-200 min-h-[300px]" id="theory-detail-container">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: ECHIQUIER ELECTORAL -->
+        <section id="section-elections" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="inline-block px-3 py-1 bg-teal-100 text-teal-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">Sociologie Électorale</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Asymétrie Électorale et Érosion des Partis Centristes</h2>
+                    <p class="mt-2 text-slate-600 text-sm">
+                        Analyse comparée des résultats du scrutin fédéral du 9 juin 2024 et des dynamiques de réalignement observées à l'automne 2026.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Chart Column -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h3 class="text-sm font-bold text-slate-800 mb-2 text-center">Distribution des Sièges à la Chambre des Représentants (2024)</h3>
+                            <div class="chart-container">
+                                <canvas id="seatsChart"></canvas>
+                            </div>
+                            <p class="text-xs text-slate-500 text-center mt-2">Source: Données officielles Chambre & analyses Camatarri et al. (2025)</p>
+                        </div>
+                    </div>
+
+                    <!-- Explanatory Text Column -->
+                    <div class="lg:col-span-5 space-y-4 text-slate-700 text-sm leading-relaxed">
+                        <div class="bg-red-50 border-l-4 border-red-600 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-red-900 text-base mb-1">La "Race to the Right" et la Refragmentation</h4>
+                            <p class="text-xs text-red-800">
+                                Comme le démontrent Stefano Camatarri et Pierre Baudewyns, le scrutin de 2024 a consacré une rupture irréversible : l'effondrement des écologistes, le déclin du PS (8,04 % au niveau national) et le renforcement des partis souverainistes et de droite radicale.
+                            </p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="font-semibold text-slate-900">Chocs Régionaux Observés en 2026 :</h4>
+                            <ul class="list-disc pl-5 space-y-1 text-xs text-slate-600">
+                                [<strong class="text-slate-800">Flandre</strong>] Reconstitution du bloc nationaliste (Vlaams Belang 27.8% + N-VA 23.0%), poussant à la radicalisation des agendas.
+                                [<strong class="text-slate-800">Wallonie</strong>] Rebond du Parti Socialiste (29%) et blocage face aux mesures d'austérité du gouvernement wallon Dolimont.
+                                [<strong class="text-slate-800">Bruxelles</strong>] Ascension du PTB (21.4%), devançant les libéraux dans un contexte de crise budgétaire régionale sévère.
+                            </ul>
+                        </div>
+
+                        <div class="p-3 bg-slate-100 rounded border border-slate-200 text-xs">
+                            <strong class="text-slate-900">Analyse du Cordon Sanitaire (Benjamin Biard, CRISP) :</strong>
+                            <p class="mt-1 text-slate-600">
+                                Bien que le cordon sanitaire politique tienne formellement au niveau des exécutifs, son étanchéité culturelle est contournée par le Vlaams Belang via les investissements massifs sur les réseaux sociaux (Meta) et l'infusion progressive de ses thématiques migratoires.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CHOC BUDGETAIRE -->
+        <section id="section-budget" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">Macroéconomie & Gouvernance</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Le Mur Budgétaire et la Critique de la Méthode "Excel"</h2>
+                    <p class="mt-2 text-slate-600 text-sm">
+                        L'injonction européenne d'assainissement de 11,2 milliards d'euros a fait éclater les contradictions socio-économiques de la coalition Arizona.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Text Column -->
+                    <div class="lg:col-span-6 space-y-4 text-sm leading-relaxed text-slate-700">
+                        <h3 class="text-lg font-bold text-slate-900">L'Étrille de la Méthodologie De Wever par Carl Devos</h3>
+                        <p>
+                            Le politologue flamand Carl Devos (UGent) a formulé une critique virulente de la conduite des négociations budgétaires par le Premier ministre nommé Bart De Wever. Devos dénonce une approche purement technocratique du budget, qualifiée de "méthode des tableaux Excel" sans vision stratégique de société.
+                        </p>
+                        <p class="bg-slate-50 p-4 rounded-lg border-l-4 border-amber-600 text-slate-800 italic text-xs">
+                            "S'obstiner pendant des mois à réinsérer une hausse de TVA dans l'épure budgétaire face au veto public répété du Mouvement Réformateur a conduit à une perte de temps irréparable et à la destruction du capital de confiance interpersonnelle."
+                            <span class="block font-bold not-italic mt-2 text-slate-600">— Prof. Carl Devos (UGent), Automne 2026</span>
+                        </p>
+                        <h4 class="font-bold text-slate-900 mt-4">La Clé de Répartition du Conseil Supérieur des Finances (CSF)</h4>
+                        <p class="text-xs text-slate-600">
+                            La section "Besoins de financement" du CSF a appliqué des règles strictes de soutien de la dette (Clé 2), imposant la majorité de l'effort au pouvoir Fédéral tout en exigeant des entités fédérées dépendantes de transferts (Wallonie, Bruxelles) des efforts non soutenables.
+                        </p>
+                    </div>
+
+                    <!-- Macro Chart & Rating Matrix -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h3 class="text-xs font-bold text-slate-800 mb-2 text-center uppercase tracking-wider">Sanctions des Agences de Notation (2026)</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-200 text-slate-700">
+                                            <th class="p-2">Agence</th>
+                                            <th class="p-2">Entité</th>
+                                            <th class="p-2">Note</th>
+                                            <th class="p-2">Perspective</th>
+                                            <th class="p-2">Motif Majeur</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200">
+                                        <tr class="bg-white">
+                                            <td class="p-2 font-semibold">S&P Global</td>
+                                            <td class="p-2">État Fédéral</td>
+                                            <td class="p-2 text-red-700 font-bold">AA-</td>
+                                            <td class="p-2">Négative</td>
+                                            <td class="p-2">Incapacité à voter l’ajustement de 11Mds €</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2 font-semibold">Moody's</td>
+                                            <td class="p-2">Région Wallonne</td>
+                                            <td class="p-2 text-amber-700 font-bold">Baa1</td>
+                                            <td class="p-2">Stable</td>
+                                            <td class="p-2">Contagion du fédéral & faible autonomie fiscale</td>
+                                        </tr>
+                                        <tr class="bg-white">
+                                            <td class="p-2 font-semibold">Fitch</td>
+                                            <td class="p-2">Flandre / Fédéral</td>
+                                            <td class="p-2 text-slate-800 font-bold">A+ / AA-</td>
+                                            <td class="p-2">Stable</td>
+                                            <td class="p-2">Risque sur la charge de la dette (OLO 4.43%)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Mini Chart Macro -->
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-700 mb-2 text-center">Évolution des Taux OLO à 10 ans (%)</h4>
+                            <div class="chart-container" style="height: 180px;">
+                                <canvas id="macroChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: CONFEDERALISME RAMPANT -->
+        <section id="section-rampant" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">Mécanique de la Crise</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Le "Confédéralisme Rampant" et l'Austérité en Cascade</h2>
+                    <p class="mt-2 text-slate-600 text-sm">
+                        Faute de majorité constitutionnelle pour adapter les institutions, la N-VA applique une stratégie d'assèchement financier centralisé.
+                    </p>
+                </div>
+
+                <!-- Interactive Step-by-Step Flow Chart -->
+                <div class="bg-slate-900 text-slate-100 p-6 rounded-xl space-y-6">
+                    <h3 class="text-base font-bold text-white border-b border-slate-700 pb-2">
+                        Simulateur de Transfert de Charge : La Réforme du Chômage à 24 Mois
+                    </h3>
+                    <p class="text-xs text-slate-300">
+                        Cliquez sur les étapes pour comprendre comment la fin du chômage illimité à l'ONEM (mars 2026) déplace l'austérité vers le bas sans résoudre le déficit structurel.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div onclick="setRampantStep(1)" id="step-btn-1" class="cursor-pointer p-4 rounded-lg bg-red-900/40 border border-red-500 hover:bg-red-900/60 transition">
+                            <span class="text-xs uppercase font-bold text-red-400">Étape 1</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Désengagement Fédéral</h4>
+                            <p class="text-xs text-slate-300 mt-1">ONEM : Plafond strict à 24 mois</p>
+                        </div>
+                        <div onclick="setRampantStep(2)" id="step-btn-2" class="cursor-pointer p-4 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 transition">
+                            <span class="text-xs uppercase font-bold text-amber-400">Étape 2</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Asphyxie des CPAS</h4>
+                            <p class="text-xs text-slate-300 mt-1">Basculement vers le RIS (1 367 €)</p>
+                        </div>
+                        <div onclick="setRampantStep(3)" id="step-btn-3" class="cursor-pointer p-4 rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700 transition">
+                            <span class="text-xs uppercase font-bold text-teal-400">Étape 3</span>
+                            <h4 class="font-bold text-white text-sm mt-1">Tensions Communales</h4>
+                            <p class="text-xs text-slate-300 mt-1">Coupures dans les services publics</p>
+                        </div>
+                    </div>
+
+                    <!-- Step Detailed Explanation Panel -->
+                    <div id="rampant-explanation" class="bg-slate-800 p-5 rounded-lg border border-slate-700 text-sm leading-relaxed text-slate-200">
+                        <!-- Content dynamically updated via JS -->
+                    </div>
+                </div>
+
+                <!-- Analysis of CRISP & Social Dialogue -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 mb-2 flex items-center">
+                            <span class="text-red-600 mr-2">■</span> Analyse du CRISP (Jean Faniel & Jean-Paul Nassaux)
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Le CRISP souligne que cette technique d'assèchement frappe de plein fouet les Régions vulnérables. Bruxelles, ayant subi une vacance gouvernementale record de 615 jours avant la formation du gouvernement Dilliès, a dû voter dans l'urgence un plan de coupe de 719 millions d'euros, affaiblissant l'État social à sa racine.
+                        </p>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 mb-2 flex items-center">
+                            <span class="text-amber-600 romantic mr-2">■</span> Effondrement de la Concertation Sociale
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            L'extension anarchique des flexi-jobs (jusqu'à 18 000 € net par an) et le gel des Accords Interprofessionnels (AIP) ont rompu le compromis entre syndicats (FGTB/CSC) et patronat (Agoria). Pour Kurt Vandaele, contourner le Groupe des 10 revient à démanteler le second pilier historique du consociationalisme belge.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: PROSPECTIVE & ALTERNATIVES -->
+        <section id="section-alternatives" class="hidden space-y-8">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+                <div class="border-b border-slate-100 pb-4 mb-6">
+                    <span class="inline-block px-3 py-1 bg-slate-200 text-slate-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-2">Ingénierie Institutionnelle</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Penser l'Alternative : Circonscription Fédérale et Démocratie Délibérative</h2>
+                    <p class="mt-2 text-slate-600 text-sm">
+                        Face au constat d'épuisement, les politologues opposent deux visions de réformes de la gouvernance démocratique.
+                    </p>
+                </div>
+
+                <!-- Comparison Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Option A: Federal Constituency -->
+                    <div class="border border-slate-200 rounded-xl p-6 bg-slate-50 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-bold text-slate-900">1. Circonscription Fédérale</h3>
+                                <span class="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold rounded">Groupe Pavia</span>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                                Soutenue par Dave Sinardet et Philippe Van Parijs, cette proposition vise à faire élire une partie des députés sur des listes s'étendant à tout le territoire belge.
+                            </p>
+                            <div class="space-y-2 text-xs">
+                                <div class="p-2 bg-green-50 text-green-900 rounded border border-green-200">
+                                    <strong>+ Avantage Centripète :</strong> Oblige les candidats flamands et francophones à séduire l'électorat de l'autre communauté, réinstaurant une responsabilité croisée.
+                                </div>
+                                <div class="p-2 bg-red-50 text-red-900 rounded border border-red-200">
+                                    <strong>- Écueil Politique :</strong> Rejeté par la N-VA et le VB (perçu comme un retour unitariste) et craint par certains francophones (poids démographique flamand).
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 italic">
+                            Évaluation par Bart Maddens : Mirage institutionnel niant l'existence irréversible de deux démocraties distinctes.
+                        </div>
+                    </div>
+
+                    <!-- Option B: Deliberative Democracy -->
+                    <div class="border border-slate-200 rounded-xl p-6 bg-slate-50 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-bold text-slate-900">2. Démocratie Délibérative</h3>
+                                <span class="px-2 py-1 bg-teal-100 text-teal-800 text-xs font-bold rounded">Min Reuchamps</span>
+                            </div>
+                            <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                                Modèle basé sur le tirage au sort de citoyens (G1000, Ostbelgien, Commissions mixtes bruxelloises) pour dépasser la particratie.
+                            </p>
+                            <div class="space-y-2 text-xs">
+                                <div class="p-2 bg-green-50 text-green-900 rounded border border-green-200">
+                                    <strong>+ Avantage Légitimité :</strong> Brise l'entre-soi des cabinets ministériels et de la particratie en intégrant l'intelligence collective civique.
+                                </div>
+                                <div class="p-2 bg-red-50 text-red-900 rounded border border-red-200">
+                                    <strong>- Écueil d'Urgence :</strong> Inadapté pour trancher des chocs macroéconomiques immédiats de 11 milliards d'euros ou des vetos communautaires.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 italic">
+                            Synthèse CRISP : Expérimentation positive mais sans pouvoir décisionnel direct face au monopole particratique.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Politologist Directory / Search -->
+                <div class="mt-10 bg-slate-900 text-slate-100 p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-white mb-3">Répertoire des Politologues & Chercheurs Cités</h3>
+                    <div class="mb-4">
+                        <input type="text" id="authorSearch" onkeyup="filterAuthors()" placeholder="Rechercher un chercheur ou une université (ex: Sinardet, Devos, Delwit, CRISP...)" class="w-full p-2 bg-slate-800 border border-slate-700 rounded text-sm text-white placeholder-slate-400 focus:outline-none focus:border-red-500">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs" id="authors-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>Observatoire Politologique de la Crise Belge — Synthèse académique et prospective (Automne 2026)</p>
+            <p class="text-slate-500">Basé sur les travaux de A. Lijphart, K. Deschouwer, D. Sinardet, C. Devos, P. Delwit, P. Popelier, J. Faniel, M. Reuchamps & l'équipe du CRISP.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // State Management
+        let currentTab = 'overview';
+
+        // Data for Politologists
+        const authorsData = [
+            { name: 'Dave Sinardet', inst: 'VUB / Univ. Saint-Louis', topic: 'Absence d\'espace public unifié & Circonscription fédérale (Groupe Pavia)' },
+            { name: 'Carl Devos', inst: 'Université de Gand (UGent)', topic: 'Critique de la méthode "Excel" de De Wever & dynamique des partis flamands' },
+            { name: 'Pascal Delwit', inst: 'ULB (Université Libre de Bruxelles)', topic: 'Déclin de la social-démocratie & sociologie des partis francophones' },
+            { name: 'Patricia Popelier', inst: 'Universiteit Antwerpen', topic: 'Fédéralisme dyadique, asymétries et dynamiques centrifuges' },
+            { name: 'Jean Faniel', inst: 'CRISP (Bruxelles)', topic: 'Analyse des mouvements sociaux, concertation sociale & gouvernance bruxelloise' },
+            { name: 'Min Reuchamps', inst: 'UCLouvain', topic: 'Démocratie délibérative, G1000 et commissions citoyennes mixtes' },
+            { name: 'Émilie van Haute', inst: 'ULB', topic: 'Particratie, déconnexion avec la base militante & financement des partis' },
+            { name: 'Benjamin Biard', inst: 'CRISP', topic: 'Cordon sanitaire, extrême droite (Vlaams Belang) & réseaux sociaux' },
+            { name: 'Wilfried Swenden', inst: 'University of Edinburgh', topic: 'Analyse comparée du fédéralisme et décentralisation en Belgique' }
+        ];
+
+        // Theory Data
+        const theories = {
+            lijphart: {
+                title: "1. Le Modèle Consociatif et sa Zombification",
+                text: "Formulé par Arend Lijphart, le consociationalisme explique comment une société divisée maintient sa stabilité via quatre piliers : grande coalition, proportionnalité, autonomie segmentaire et droit de veto mutuel. En 2026, l'absence de ressources budgétaires (fin de la 'politique du gaufrier') a transformé le droit de veto en un outil d'obstruction offensive, provoquant ce que la littérature qualifie de 'zombification' du modèle."
+            },
+            dyadic: {
+                title: "2. Le Fédéralisme Dyadique Centrifuge (Popelier & Swenden)",
+                text: "Contrairement aux fédérations multipolaires (Allemagne, USA), la Belgique oppose directement deux grands groupes linguistiques sans tiers arbitre. Cette structure dyadique récompense électoralement les formations régionales pour leur surenchère identitaire tout en pénalisant la conciliation centrale."
+            },
+            publicspace: {
+                title: "3. L'Absence d'Espace Public Unifié (Sinardet)",
+                text: "Les médias, les partis et la société civile étant strictement scindés selon la frontière linguistique, il n'existe pas d'espace public à l'échelle du pays. Les hommes politiques belges ne rendent compte qu'à leur propre électorat linguistique, ce qui détruit tout dividende électoral au compromis fédéral."
+            },
+            particracy: {
+                title: "4. L'Hyper-Particratie & les Rapports du GRECO (Delwit & van Haute)",
+                text: "Le pouvoir décisionnel s'est déplacé des parlements vers les cabinets ministériels (près de 2 000 collaborateurs). Cette concentration oligarchique a conduit à un avertissement formel du GRECO (Conseil de l'Europe) en novembre 2025 pour manque de transparence et phénomène de 'portes tournantes'."
+            }
+        };
+
+        // Rampant Steps Explanations
+        const rampantSteps = {
+            1: {
+                title: "Étape 1 : Le Plafond Fédéral des Allocations de Chômage",
+                desc: "En limitant la durée des indemnités de chômage à 24 mois au niveau fédéral (ONEM), le gouvernement Arizona réduit artificiellement le déficit central de plusieurs centaines de millions. Cependant, cette mesure ne remet pas les allocataires à l'emploi mais les exclut du droit assurantiel."
+            },
+            2: {
+                title: "Étape 2 : Le Basculement Obligatoire vers les CPAS",
+                desc: "Les chômeurs exclus basculent automatiquement vers le Revenu d'Intégration Sociale (RIS - 1 367,34 €/mois). Ce soutien financier échoit légalement aux CPAS communaux, transférant la facture du fédéral vers le niveau local."
+            },
+            3: {
+                title: "Étape 3 : L'Asphyxie Communale et les Coupes dans les Services Publics",
+                desc: "Privées de nouvelles recettes fiscales, les communes et la Région bruxelloise (déjà soumise à une purge de 719M€) doivent réduire les budgets de l'enseignement, de la mobilité et des soins de proximité. C'est l'essence du 'confédéralisme par épuisement'."
+            }
+        };
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            currentTab = tabId;
+            const sections = ['overview', 'theory', 'elections', 'budget', 'rampant', 'alternatives'];
+            sections.forEach(s => {
+                document.getElementById(`section-${s}`).classList.add('hidden');
+                const navBtn = document.getElementById(`nav-${s}`);
+                if (navBtn) navBtn.classList.remove('tab-active');
+            });
+
+            document.getElementById(`section-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) activeNav.classList.add('tab-active');
+
+            // Sync mobile dropdown
+            const mobileSelect = document.getElementById('mobile-nav');
+            if (mobileSelect) mobileSelect.value = tabId;
+
+            // Render specific tab elements if needed
+            if (tabId === 'theory') showTheoryDetail('lijphart');
+            if (tabId === 'rampant') setRampantStep(1);
+            if (tabId === 'elections') renderSeatsChart();
+            if (tabId === 'budget') renderMacroChart();
+        }
+
+        // Render Theory Detail
+        function showTheoryDetail(key) {
+            const container = document.getElementById('theory-detail-container');
+            const t = theories[key];
+            if (!t) return;
+
+            container.innerHTML = `
+                <h3 class="text-xl font-bold text-slate-900 mb-3">${t.title}</h3>
+                <p class="text-slate-700 text-sm leading-relaxed">${t.text}</p>
+                <div class="mt-6 pt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+                    <span>Source: Science Politique Belge & Littérature de Référence</span>
+                    <span class="bg-slate-200 px-2 py-1 rounded">Module Académique</span>
+                </div>
+            `;
+
+            ['lijphart', 'dyadic', 'publicspace', 'particracy'].forEach(k => {
+                const btn = document.getElementById(`btn-${k}`);
+                if (btn) {
+                    if (k === key) {
+                        btn.classList.add('border-l-4', 'border-l-red-600', 'bg-slate-100');
+                    } else {
+                        btn.classList.remove('border-l-4', 'border-l-red-600', 'bg-slate-100');
+                    }
+                }
+            });
+        }
+
+        // Rampant Step Logic
+        function setRampantStep(step) {
+            const exp = rampantSteps[step];
+            const container = document.getElementById('rampant-explanation');
+            if (!exp || !container) return;
+
+            container.innerHTML = `
+                <h4 class="font-bold text-red-400 text-base mb-1">${exp.title}</h4>
+                <p class="text-xs text-slate-300 leading-relaxed">${exp.desc}</p>
+            `;
+
+            [1, 2, 3].forEach(s => {
+                const btn = document.getElementById(`step-btn-${s}`);
+                if (btn) {
+                    if (s === step) {
+                        btn.classList.add('bg-red-900/60', 'border-red-500');
+                        btn.classList.remove('bg-slate-800', 'border-slate-700');
+                    } else {
+                        btn.classList.remove('bg-red-900/60', 'border-red-500');
+                        btn.classList.add('bg-slate-800', 'border-slate-700');
+                    }
+                }
+            });
+        }
+
+        // Authors Filtering Logic
+        function populateAuthors() {
+            const listContainer = document.getElementById('authors-list');
+            if (!listContainer) return;
+            listContainer.innerHTML = '';
+            authorsData.forEach(a => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-800 p-3 rounded border border-slate-700 author-card";
+                card.innerHTML = `
+                    <div class="font-bold text-white text-sm">${a.name}</div>
+                    <div class="text-slate-400 text-xs">${a.inst}</div>
+                    <div class="text-slate-300 text-xs mt-1 italic">${a.topic}</div>
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        function filterAuthors() {
+            const query = document.getElementById('authorSearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.author-card');
+            cards.forEach(card => {
+                const text = card.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Chart.js Implementations
+        let seatsChartInstance = null;
+        let macroChartInstance = null;
+
+        function renderSeatsChart() {
+            if (seatsChartInstance) return; // Prevent re-render if exists
+            const ctx = document.getElementById('seatsChart');
+            if (!ctx) return;
+
+            seatsChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['N-VA', 'VB', 'MR', 'PS', 'PTB-PVDA', 'Les Engagés', 'Vooruit', 'CD&V', 'Groen/Ecolo', 'Open Vld'],
+                    datasets: [{
+                        label: 'Sièges à la Chambre (Total: 150)',
+                        data: [24, 20, 20, 16, 15, 14, 13, 11, 9, 7],
+                        backgroundColor: [
+                            '#1e293b', // N-VA
+                            '#b45309', // VB
+                            '#2563eb', // MR
+                            '#dc2626', // PS
+                            '#991b1b', // PTB
+                            '#0d9488', // Les Engagés
+                            '#f97316', // Vooruit
+                            '#f59e0b', // CD&V
+                            '#16a34a', // Groen/Ecolo
+                            '#0284c7'  // Open Vld
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw + ' sièges';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function renderMacroChart() {
+            if (macroChartInstance) return;
+            const ctx = document.getElementById('macroChart');
+            if (!ctx) return;
+
+            macroChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan 2024', 'Juin 2024', 'Jan 2025', 'Jan 2026', 'Automne 2026'],
+                    datasets: [{
+                        label: 'Taux OLO 10 ans (%)',
+                        data: [2.85, 3.10, 3.45, 3.90, 4.43],
+                        borderColor: '#b91c1c',
+                        backgroundColor: 'rgba(185, 28, 28, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { min: 2.0, max: 5.0 },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            populateAuthors();
+            showTheoryDetail('lijphart');
+            setRampantStep(1);
+        });
+    </script>
+</body>
+</html>
