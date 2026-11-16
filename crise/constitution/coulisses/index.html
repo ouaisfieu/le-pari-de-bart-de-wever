@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crise Politique Belge 2026 - Analyse Interactive & Critiques</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stone: {
+                            50: '#f8f5f0',
+                            100: '#f1ece1',
+                            200: '#e3d9c6',
+                            800: '#3c352a',
+                            900: '#252119',
+                        },
+                        belgium: {
+                            black: '#1a1a1a',
+                            yellow: '#f5a623',
+                            red: '#d0021b',
+                            blue: '#1e3a8a',
+                            green: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1ece1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<!-- Chosen Palette: Warm Editorial Neutrals (Stone-50/100) with Political Spectrum Accents (Crimson, Amber, Royal Blue, Emerald) -->
+<!-- Application Structure Plan: Navigation thématique interactive divisée en 5 volets opérationnels : (1) Synthèse & Ultimatum Royal avec compteur d'urgence et métriques macro, (2) Galerie des Acteurs avec fiches psychologiques, casseroles et tactiques, (3) Matrice des Blocages comparant les lignes rouges de l'Axe de Droite et du Pôle Left/Centriste, (4) Simulateur Budgétaire interactif avec graphiques Chart.js dynamiques pour tester les scénarios d'assainissement de 10 Mds €, et (5) Chronique des Petites Phrases & Potins filtrable. Cette structure non linéaire privilégie la clarté et l'analyse critique des relations interpersonnelles sans s'enfermer dans l'ordre linéaire du texte original. -->
+<!-- Visualization & Content Choices: 
+  - Trajectoire Dette/Déficit -> Chart.js Line/Bar combination -> Visualiser le risque d'explosion budgétaire (2025-2031).
+  - Repartition de l'Effort Budgétaire -> Chart.js Doughnut & Bar -> Comparer les visions De Wever vs Bouchez vs Rousseau.
+  - Impact Social du Malus Jambon -> Chart.js Horizontal Bar -> Mettre en relief l'inégalité de genre (37% femmes vs 14% hommes).
+  - Galerie des Acteurs & Potins -> Filtres dynamiques Vanilla JS + Cartes HTML/CSS -> Offrir une lecture fluide des profils sans surcharge visuelle.
+  - Tout composant visuel utilise Tailwind CSS et du HTML sémantique. CONFIRMATION: Aucun graphique SVG ou Mermaid JS n'est utilisé. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<body class="bg-stone-50 text-stone-900 font-sans antialiased selection:bg-amber-200 selection:text-stone-900">
+
+    <!-- Header / Navigation Dynamic -->
+    <header class="sticky top-0 z-50 bg-stone-900 text-stone-100 shadow-xl border-b border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="inline-block w-3 h-3 rounded-full bg-red-600 animate-ping"></span>
+                    <span class="font-bold text-lg tracking-wider text-amber-400 uppercase">ARIZONA CRASH 2026</span>
+                    <span class="hidden md:inline text-xs bg-stone-800 text-stone-300 px-2.5 py-1 rounded-full border border-stone-700">Rapport d'Analyse Critique</span>
+                </div>
+                
+                <!-- Nav Tabs -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2 text-sm font-medium">
+                    <button onclick="switchTab('overview')" id="nav-overview" class="tab-btn px-3 py-2 rounded-md transition-colors bg-amber-500 text-stone-950 font-semibold">Vue d'Ensemble</button>
+                    <button onclick="switchTab('actors')" id="nav-actors" class="tab-btn px-3 py-2 rounded-md transition-colors text-stone-300 hover:text-white hover:bg-stone-800">Acteurs & Égos</button>
+                    <button onclick="switchTab('matrix')" id="nav-matrix" class="tab-btn px-3 py-2 rounded-md transition-colors text-stone-300 hover:text-white hover:bg-stone-800">Matrice des Blocages</button>
+                    <button onclick="switchTab('simulator')" id="nav-simulator" class="tab-btn px-3 py-2 rounded-md transition-colors text-stone-300 hover:text-white hover:bg-stone-800">Simulateur 10Mds€</button>
+                    <button onclick="switchTab('quotes')" id="nav-quotes" class="tab-btn px-3 py-2 rounded-md transition-colors text-stone-300 hover:text-white hover:bg-stone-800">Potins & Virales</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <select onchange="switchTab(this.value)" class="bg-stone-800 text-amber-400 text-sm font-semibold rounded-lg p-2 border border-stone-700 focus:outline-none">
+                        <option value="overview">Vue d'Ensemble</option>
+                        <option value="actors">Acteurs & Égos</option>
+                        <option value="matrix">Matrice des Blocages</option>
+                        <option value="simulator">Simulateur 10Mds€</option>
+                        <option value="quotes">Potins & Virales</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+        <!-- TAB 1: VUE D'ENSEMBLE & ULTIMATUM ROYAL -->
+        <section id="sec-overview" class="tab-content space-y-8">
+            <!-- Banner / Key Stats Header -->
+            <div class="bg-gradient-to-r from-stone-900 via-stone-800 to-stone-900 text-white rounded-2xl p-6 sm:p-8 shadow-2xl border border-stone-700 relative overflow-hidden">
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center space-x-2 bg-red-950/80 text-red-300 text-xs font-mono font-bold px-3 py-1 rounded-full border border-red-800">
+                        <span>CRISE INSTITUTIONNELLE FÉDÉRALE</span>
+                        <span>•</span>
+                        <span>NOVEMBRE 2026</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-stone-100">
+                        La Morphologie d'un Blocage Particratique
+                    </h1>
+                    <p class="text-stone-300 text-base sm:text-lg leading-relaxed">
+                        Formée après 239 jours de négociations, la coalition « Arizona » (N-VA, MR, Les Engagés, CD&V, Vooruit) est au bord de l'implosion. Entre l'usure de Bart De Wever, les vétos du MR, la fronde sociale et la menace des douzièmes provisoires, découvrez l'envers des cartes.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-4 text-xs font-mono">
+                        <div class="bg-stone-800/90 border border-stone-700 px-3 py-2 rounded-lg">
+                            <span class="text-stone-400 block">Déficit Public 2025</span>
+                            <span class="text-red-400 text-lg font-bold">5.2% du PIB</span>
+                        </div>
+                        <div class="bg-stone-800/90 border border-stone-700 px-3 py-2 rounded-lg">
+                            <span class="text-stone-400 block">Effort Requis (2029)</span>
+                            <span class="text-amber-400 text-lg font-bold">10 Mds €</span>
+                        </div>
+                        <div class="bg-stone-800/90 border border-stone-700 px-3 py-2 rounded-lg">
+                            <span class="text-stone-400 block">Rapport d'Étape Royal</span>
+                            <span class="text-emerald-400 text-lg font-bold">16 Novembre 2026</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intro Section Contextual Explanation -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 space-y-4">
+                <h2 class="text-xl font-bold text-stone-800 border-b border-stone-100 pb-2 flex items-center gap-2">
+                    <span class="text-amber-600">📌</span> Contextualisation du Désastre Politique
+                </h2>
+                <p class="text-stone-700 leading-relaxed">
+                    Cette section offre un cadrage analytique de la crise majeure traversée par l'exécutif belge. Alors que la Belgique fait l'objet d'une Procédure pour Déficit Excessif (PDE) de la part de l'Union Européenne, les 5 partis au pouvoir s'avèrent incapables de s'entendre sur la clé de répartition d'un effort de 10 milliards d'euros. Le 2 novembre 2026, Bart De Wever a remis sa démission au roi Philippe. Contre toute attente, le souverain l'a maintenue en suspens avant de la refuser le 6 novembre, renvoyant les protagonistes à la table des négociations avec un ultimatum fixé au 16 novembre.
+                </p>
+            </div>
+
+            <!-- Dynamic Countdown & Royal Status Board -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Royal Status -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-800">Arbitrage Royal</span>
+                        <span class="px-2 py-0.5 bg-amber-200 text-amber-900 text-xs font-bold rounded">Démission Refusée</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-900">Le Sursis du Palais</h3>
+                    <p class="text-sm text-stone-700">
+                        Le roi Philippe a contraint De Wever et les 5 présidents à trouver un "juste équilibre" entre cohésion sociale et assainissement macroéconomique.
+                    </p>
+                    <div class="text-xs font-semibold text-amber-900 bg-amber-100 p-2 rounded border border-amber-200">
+                        🗓️ Échéance clé : Rapport d'étape du 16 Novembre.
+                    </div>
+                </div>
+
+                <!-- Financial Threat -->
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-xl p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-red-800">Menace Européenne</span>
+                        <span class="px-2 py-0.5 bg-red-200 text-red-900 text-xs font-bold rounded">PDE Activée</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-900">Le Mur des Douzièmes</h3>
+                    <p class="text-sm text-stone-700">
+                        Sans budget voté avant le 31 décembre, le pays bascule sous le régime archaïque des douzièmes provisoires, bloquant tout nouvel investissement.
+                    </p>
+                    <div class="text-xs font-semibold text-red-900 bg-red-100 p-2 rounded border border-red-200">
+                        📉 Taux OLO 10 ans : 4.46% (Pression des marchés).
+                    </div>
+                </div>
+
+                <!-- Social Threat -->
+                <div class="bg-stone-100 border-l-4 border-stone-700 rounded-xl p-5 shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold uppercase tracking-wider text-stone-800">Front Syndical</span>
+                        <span class="px-2 py-0.5 bg-stone-300 text-stone-900 text-xs font-bold rounded">Grève Nationale</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-900">La Rue en Ébullition</h3>
+                    <p class="text-sm text-stone-700">
+                        FGTB et CSC organisent un blocage national du 23 au 26 novembre contre le "Malus Jambon" et les coupes dans la santé.
+                    </p>
+                    <div class="text-xs font-semibold text-stone-900 bg-stone-200 p-2 rounded border border-stone-300">
+                        ✊ Contre-plan syndical : 21.2 Mds € sur le capital.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trajectory Chart Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h3 class="text-lg font-bold text-stone-900">Projection de la Dette & du Déficit (2025 - 2031)</h3>
+                        <p class="text-xs text-stone-500">Données du Bureau fédéral du Plan & BNB (Novembre 2026 - Sans réformes structurelles)</p>
+                    </div>
+                    <span class="text-xs bg-red-100 text-red-800 font-bold px-2.5 py-1 rounded-full w-max">Avertissement Moody's & Fitch</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="overviewChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 2: GALERIE DES ACTEURS ET ÉGOS -->
+        <section id="sec-actors" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-900">Galerie Analytique des Protagonistes</h2>
+                        <p class="text-sm text-stone-600">Dissection des profils psychologiques, stratégies de communication, casseroles et "potins" de coulisses.</p>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="flex flex-wrap gap-2 text-xs font-medium" id="actor-filters">
+                        <button onclick="filterActors('all')" class="filter-btn active px-3 py-1.5 rounded-lg bg-stone-900 text-white">Tous les Acteurs</button>
+                        <button onclick="filterActors('droite')" class="filter-btn px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200">Axe de Droite (N-VA/MR)</button>
+                        <button onclick="filterActors('gauche')" class="filter-btn px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200">Centre-Gauche (Vooruit/Engagés/CD&V)</button>
+                        <button onclick="filterActors('externe')" class="filter-btn px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200">Opposants & Intervenants</button>
+                    </div>
+                </div>
+                <p class="text-sm text-stone-600 italic">
+                    Note de l'architecte de l'information : Dans la particratie belge, les présidents de parti non ministres exercent souvent un pouvoir de blocage supérieur à celui des ministres siégeant au gouvernement restreint (kern).
+                </p>
+            </div>
+
+            <!-- Actors Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="actors-grid">
+                <!-- Dynamically populated or rendered via JS for clean filtering -->
+            </div>
+        </section>
+
+
+        <!-- TAB 3: MATRICE DES BLOCAGES & AXES -->
+        <section id="sec-matrix" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 space-y-4">
+                <h2 class="text-2xl font-bold text-stone-900 border-b border-stone-100 pb-2">
+                    La Matrice du Blocage : Deux Blocs Irréconciliables
+                </h2>
+                <p class="text-stone-700 text-sm leading-relaxed">
+                    Cette section analyse l'opposition structurale entre l'Axe de Droite (N-VA / MR), focalisé sur la réduction des dépenses publiques et le refus d'imposer les entreprises, et l'Axe Social-Centriste (Vooruit / Les Engagés / CD&V), qui exige une contribution des plus-values du capital et la préservation de la santé.
+                </p>
+            </div>
+
+            <!-- Split Axis Comparison Table / Dynamic Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Right Axis -->
+                <div class="bg-gradient-to-b from-blue-50 to-white rounded-2xl p-6 border border-blue-200 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between border-b border-blue-200 pb-3">
+                        <div>
+                            <span class="text-xs font-bold text-blue-800 uppercase tracking-wider">Axe de Droite</span>
+                            <h3 class="text-xl font-bold text-stone-900">N-VA & Mouvement Réformateur</h3>
+                        </div>
+                        <span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">Ligne Offensives</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-xl border border-blue-100 shadow-sm space-y-2">
+                            <h4 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                                Doctrine Fiscale du MR (Georges-Louis Bouchez)
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">
+                                Refus catégorique de toute hausse de la fiscalité sur le capital ou la consommation. Veto absolu posé sur la hausse de la TVA à 22%. Exigence d'un assainissement basé à 100% sur les coupes dans l'État et la flexibilisation du travail.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-white rounded-xl border border-blue-100 shadow-sm space-y-2">
+                            <h4 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                                La Méthode De Wever (N-VA)
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">
+                                Gestion technocratique du budget traitée "comme une feuille Excel". Usure des partenaires par la réintroduction successive de propositions rejetées. Pragmatisme guidé par l'objectif ultime de prouver l'obsolescence de l'État belge.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-white rounded-xl border border-blue-100 shadow-sm space-y-2">
+                            <h4 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-red-600"></span>
+                                Mesure Phare : Le "Malus Jambon"
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">
+                                Pénalité de 5% par an en cas de retraite anticipée. Exigence de 42 ans de carrière (7 020 jours prestés) pour y échapper. Mesure perçue comme un casus belli par les syndicats et la gauche.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Left-Center Axis -->
+                <div class="bg-gradient-to-b from-emerald-50 to-white rounded-2xl p-6 border border-emerald-200 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between border-b border-emerald-200 pb-3">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Axe Social-Centriste</span>
+                            <h3 class="text-xl font-bold text-stone-900">Vooruit & Les Engagés (+ CD&V)</h3>
+                        </div>
+                        <span class="px-3 py-1 bg-emerald-600 text-white text-xs font-bold rounded-full">Ligne Défensive</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-xl border border-emerald-100 shadow-sm space-y-2">
+                            <h4 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                Le Veto Social de Vooruit (Conner Rousseau / Vandenbroucke)
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">
+                                Hantise de rééditer l'expérience "Paars" (compromis néolibéral). Rejet strict des coupes dans la santé (maintien de la norme > 3.7%) et exigence de 1.5 Mds € de recettes sur les plus-values boursières.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-white rounded-xl border border-emerald-100 shadow-sm space-y-2">
+                            <h4 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                La "Fiscale Horrorlijst" des Engagés (Yvan Verougstraete)
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">
+                                Stratégie d'attaque managériale : dépôt d'une liste de taxes sur le capital (15% plus-values, TOB, Exit Tax, inclusion des actions nominatives) pour paralyser l'intransigeance du MR.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-white rounded-xl border border-emerald-100 shadow-sm space-y-2">
+                            <h4 class="font-bold text-stone-800 text-sm flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-amber-600"></span>
+                                Le Facteur d'Ingérence Externe : "Anders" (Open VLD)
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">
+                                Frédéric De Gucht propose d'éjecter Vooruit et de former une majorité alternative "Anders + N-VA + MR + Engagés + CD&V" (76 sièges sur 150), accentuant la pression psychologique.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Malus Jambon Gender Impact Chart -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-stone-900">Analyse Inégalitaire du "Malus Jambon" (Pensions)</h3>
+                        <p class="text-xs text-stone-500">Pourcentage des travailleurs ciblés touchés par la pénalité de 5% (Source : Études Syndicales 2026)</p>
+                    </div>
+                    <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2.5 py-1 rounded-full">Recours à la Cour Constitutionnelle</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="malusChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 4: SIMULATEUR BUDGETAIRE ET GRAPHISMES -->
+        <section id="sec-simulator" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 space-y-4">
+                <h2 class="text-2xl font-bold text-stone-900 border-b border-stone-100 pb-2">
+                    Simulateur de Compromis Budgétaire (10 Milliards €)
+                </h2>
+                <p class="text-stone-700 text-sm leading-relaxed">
+                    Dans ce module interactif, testez les différentes formules de répartition de l'effort budgétaire. Ajustez les curseurs pour voir comment varie la faisabilité politique au sein de la coalition Arizona et observez l'impact sur les jauges de tension.
+                </p>
+            </div>
+
+            <!-- Interactive Simulator Tool -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Controls Column -->
+                <div class="lg:col-span-5 bg-stone-900 text-white rounded-2xl p-6 space-y-6 shadow-xl">
+                    <h3 class="text-lg font-bold text-amber-400 border-b border-stone-800 pb-3">
+                        🎛️ Modéliser l'Effort de 10 Mds €
+                    </h3>
+
+                    <!-- Sliders -->
+                    <div class="space-y-5 text-sm">
+                        <!-- Slider 1: Cuts in Expenses -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between font-medium">
+                                <span>Coupes Dépenses & État :</span>
+                                <span id="val-cuts" class="text-amber-400 font-bold">5.0 Mds €</span>
+                            </div>
+                            <input type="range" id="sim-cuts" min="1" max="9" step="0.5" value="5" oninput="updateSimulator()" class="w-full accent-amber-500 bg-stone-700 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-stone-400">
+                                <span>Ligne Vooruit (Faible)</span>
+                                <span>Ligne MR (Maximale)</span>
+                            </div>
+                        </div>
+
+                        <!-- Slider 2: Taxes on Capital -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between font-medium">
+                                <span>Taxes Capital / Plus-Values :</span>
+                                <span id="val-taxes" class="text-amber-400 font-bold">2.5 Mds €</span>
+                            </div>
+                            <input type="range" id="sim-taxes" min="0" max="5" step="0.5" value="2.5" oninput="updateSimulator()" class="w-full accent-amber-500 bg-stone-700 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-stone-400">
+                                <span>Veto MR (0 Mds)</span>
+                                <span>Exigence Vooruit/Engagés (3+ Mds)</span>
+                            </div>
+                        </div>
+
+                        <!-- Slider 3: Healthcare Savings -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between font-medium">
+                                <span>Économies Santé / Sécurité Sociale :</span>
+                                <span id="val-health" class="text-amber-400 font-bold">2.5 Mds €</span>
+                            </div>
+                            <input type="range" id="sim-health" min="0.5" max="4" step="0.5" value="2.5" oninput="updateSimulator()" class="w-full accent-amber-500 bg-stone-700 rounded-lg cursor-pointer">
+                            <div class="flex justify-between text-[10px] text-stone-400">
+                                <span>Protection Vandenbroucke</span>
+                                <span>Norme N-VA 1%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Presets -->
+                    <div class="pt-4 border-t border-stone-800 space-y-2">
+                        <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block">Appliquer un Scénario Type :</span>
+                        <div class="grid grid-cols-3 gap-2 text-xs">
+                            <button onclick="applyPreset('dewever')" class="p-2 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded text-center transition">Plan De Wever</button>
+                            <button onclick="applyPreset('bouchez')" class="p-2 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded text-center transition">Plan Bouchez</button>
+                            <button onclick="applyPreset('rousseau')" class="p-2 bg-stone-800 hover:bg-stone-700 text-stone-200 rounded text-center transition">Plan Rousseau</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulation Dynamic Feedback Column -->
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Total Counter Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                        <div>
+                            <span class="text-xs font-bold text-stone-500 uppercase tracking-wider">Total de l'effort modélisé</span>
+                            <div id="sim-total-display" class="text-4xl font-extrabold text-stone-900">10.0 Mds €</div>
+                            <p id="sim-status-text" class="text-xs text-emerald-600 font-semibold mt-1">✓ Atteint l'objectif des 10 Mds exigé par l'UE</p>
+                        </div>
+                        
+                        <!-- Tension Meter -->
+                        <div class="w-full sm:w-1/2 space-y-2">
+                            <div class="flex justify-between text-xs font-bold">
+                                <span>Tension au Kern :</span>
+                                <span id="tension-score" class="text-red-600">Critique (85%)</span>
+                            </div>
+                            <div class="w-full bg-stone-200 h-3 rounded-full overflow-hidden">
+                                <div id="tension-bar" class="bg-red-600 h-full transition-all duration-500" style="width: 85%;"></div>
+                            </div>
+                            <p id="tension-desc" class="text-[11px] text-stone-500 italic">Risque d'explosion imminente de la coalition.</p>
+                        </div>
+                    </div>
+
+                    <!-- Simulator Breakdown Chart -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 space-y-4">
+                        <h4 class="text-md font-bold text-stone-900">Répartition Visuelle du Compromis</h4>
+                        <div class="chart-container">
+                            <canvas id="simulatorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 5: PETITES PHRASES, POTINS ET MEDIA SCANDALS -->
+        <section id="sec-quotes" class="tab-content hidden space-y-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-stone-200 space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-stone-900">Verbatim, Coulisses & Scandales Médias</h2>
+                        <p class="text-sm text-stone-600">L'analyse critique des sorties médiatiques, piques assassines et controverses extra-politiques.</p>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="flex flex-wrap gap-2 text-xs font-medium" id="quote-filters">
+                        <button onclick="filterQuotes('all')" class="q-btn active px-3 py-1.5 rounded-lg bg-stone-900 text-white">Tout</button>
+                        <button onclick="filterQuotes('clette')" class="q-btn px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200">Petites Phrases</button>
+                        <button onclick="filterQuotes('foot')" class="q-btn px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200">Affaire Francs Borains</button>
+                        <button onclick="filterQuotes('ultimatum')" class="q-btn px-3 py-1.5 rounded-lg bg-stone-100 text-stone-700 hover:bg-stone-200">Pression Kern & UE</button>
+                    </div>
+                </div>
+                <p class="text-sm text-stone-700 leading-relaxed">
+                    Cette section regroupe les éléments qualitatifs du rapport : réparties virales, déclarations nocturnes et révélations journalistiques ayant fragilisé le capital confiance entre les leaders.
+                </p>
+            </div>
+
+            <!-- Quotes Deck Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="quotes-grid">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 border-t border-stone-800 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <p class="text-xs text-stone-500 font-mono">
+                Rapport d'analyse analytique et critique des relations interpersonnelles • Crise Politique Belge Novembre 2026
+            </p>
+            <p class="text-xs text-stone-600">
+                Basé sur les données du CRISP, de la BNB, du Bureau Fédéral du Plan et les investigations de Médor, De Tijd, Le Soir.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Data Store: Actors Profile
+        const actorsData = [
+            {
+                id: 'dewever',
+                name: 'Bart De Wever',
+                role: 'Premier Ministre (N-VA)',
+                category: 'droite',
+                avatarBg: 'bg-amber-100 text-amber-900 border-amber-300',
+                profile: 'Stratège nationaliste confronté au paradoxe de diriger l\'État qu\'il veut démanteler. Méthode technocratique et épuisement personnel.',
+                scandal: 'Accusé par Carl Devos de gérer le budget comme une simple "feuille Excel" sans sens politique.',
+                quote: '« La dette, c\'est vous qui la creusez : c\'est l\'effet boule de neige de la clette ! »',
+                lineRed: 'Préservation des réformes structurelles et du confédéralisme rampant.',
+                badge: 'Premier Ministre'
+            },
+            {
+                id: 'bouchez',
+                name: 'Georges-Louis Bouchez',
+                role: 'Président du MR',
+                category: 'droite',
+                avatarBg: 'bg-blue-100 text-blue-900 border-blue-300',
+                profile: 'Disrupteur libéral assumé. Omniprésence médiatique, hyper-personalisation du pouvoir et affrontements systématiques.',
+                scandal: 'Sauvetage des Francs Borains (1.125M€ de 3P Invest) et nomination d\'Axel Miller à la SFPIM (Enquête Médor).',
+                quote: '« Un président de club a soit des relations, soit du fric, soit les deux. Moi, j\'ai des relations. »',
+                lineRed: 'Veto absolu sur toute nouvelle taxe (TVA, Capital, Entreprises).',
+                badge: 'Le Disrupteur'
+            },
+            {
+                id: 'rousseau',
+                name: 'Conner Rousseau',
+                role: 'Président de Vooruit',
+                category: 'gauche',
+                avatarBg: 'bg-red-100 text-red-900 border-red-300',
+                profile: 'Jeune leader socialiste flamand sous la pression constante de sa gauche (PTB) et des syndicats (FGTB).',
+                scandal: 'A qualifié les douzièmes provisoires de "pas la fin du monde", provoquant l\'ire de De Wever.',
+                quote: '« Nous ne serons pas les dindons de la farce de l\'austérité de droite. »',
+                lineRed: 'Prélèvement de 1.5 Mds € sur les plus-values et défense de l\'index.',
+                badge: 'Pôle Social'
+            },
+            {
+                id: 'verougstraete',
+                name: 'Yvan Verougstraete',
+                role: 'Président des Engagés',
+                category: 'gauche',
+                avatarBg: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+                profile: 'Ex-PDG de Medi-Market (Manager de l\'Année 2019). Posture managériale offensive et tactique.',
+                scandal: 'A orchestré le dépôt de la "Fiscale Horrorlijst" pour paralyser la stratégie libérale.',
+                quote: '« Nous avons une équipe et un entraîneur, et c\'est avec cette équipe que nous devons trouver la solution. »',
+                lineRed: 'Protection des services publics et équilibre juste capital/travail.',
+                badge: 'Centre Réformateur'
+            },
+            {
+                id: 'vandenbroucke',
+                name: 'Frank Vandenbroucke',
+                role: 'Vice-Premier Ministre (Vooruit)',
+                category: 'gauche',
+                avatarBg: 'bg-red-50 text-red-800 border-red-200',
+                profile: 'Technocrate de l\'ombre et gardien de la santé publique. Rigueur glaciale face aux ultimatums.',
+                scandal: 'Désaveu direct de De Wever en refusant de signer un acord budgétaire bâclé à 4h du matin.',
+                quote: '« Nous n\'allons rassurer personne avec un travail bâclé. »',
+                lineRed: 'Maintien de la norme de croissance de la santé au-dessus de 3.7%.',
+                badge: 'Ministre Santé'
+            },
+            {
+                id: 'magnette',
+                name: 'Paul Magnette',
+                role: 'Président du PS (Opposition)',
+                category: 'externe',
+                avatarBg: 'bg-stone-200 text-stone-900 border-stone-400',
+                profile: 'Chef de l\'opposition francophone. Attaque au bazooka idéologique sur l\'Arizona.',
+                scandal: 'Publication du contre-essai "Prospérité" ciblant directement le livre de Bart De Wever.',
+                quote: '« Ils ont fait totalement fausse route. Espérons qu\'ils changent de voie pendant ce sursis royal. »',
+                lineRed: 'Refus absolu du Malus Jambon et des coupes sociales.',
+                badge: 'Opposition PS'
+            }
+        ];
+
+        // Data Store: Quotes and Gossip
+        const quotesData = [
+            {
+                author: 'Bart De Wever',
+                category: 'clette',
+                text: '« La dette, c\'est vous qui la creusez : c\'est l\'effet boule de neige de la clette ! »',
+                context: 'Lancé à la Chambre fin octobre 2026 en réponse aux attaques socialistes sur le déficit.',
+                impact: 'Sortie virale illustrant l\'épuisement psychologique du Premier ministre.'
+            },
+            {
+                author: 'Georges-Louis Bouchez',
+                category: 'foot',
+                text: '« Un président de club a soit des relations, soit du fric, soit les deux. Moi, j\'ai des relations. »',
+                context: 'Enquête de la revue Médor sur l\'implication financière de Bouchez au Francs Borains.',
+                impact: 'Alimente les critiques sur la porosité entre intérêts privés et mandat public.'
+            },
+            {
+                author: 'Frank Vandenbroucke',
+                category: 'ultimatum',
+                text: '« Nous n\'allons rassurer personne avec un travail bâclé, avec un accord de dernière minute comme on en voit souvent. »',
+                context: 'Déclaration coup de poing en plein kern après l\'ultimatum nocturne de De Wever.',
+                impact: 'Désaveu majeur de la méthode de négociations du Premier ministre.'
+            },
+            {
+                author: 'Presse Flamande (De Tijd / HLN)',
+                category: 'ultimatum',
+                text: '« La "Fiscale Horrorlijst" des Engagés effraie le Voka et le patronat. »',
+                context: 'Révélation des propositions de taxation du capital déposées par Yvan Verougstraete.',
+                impact: 'A provoqué un tollé à droite et figé la posture du MR.'
+            },
+            {
+                author: 'Bert Engelaar (FGTB)',
+                category: 'clette',
+                text: '« L\'index est à qui ? À nous ! Les pensions sont à qui ? À nous ! »',
+                context: 'Discours devant les militants lors de la préparation de la grève nationale de novembre 2026.',
+                impact: 'Mobilisation syndicale maximale contre la réforme des pensions (Malus Jambon).'
+            },
+            {
+                author: 'Frédéric De Gucht (Anders)',
+                category: 'ultimatum',
+                text: '« Stilstaan is failliet gaan (Rester immobile, c\'est la faillite). »',
+                context: 'Proposition d\'une coalition alternative "Anders" éjectant Vooruit pour sauver le budget.',
+                impact: 'Ingérence libérale flamande ayant secoué les équilibres psychologiques.'
+            }
+        ];
+
+        // Global Chart Instances
+        let overviewChartInstance = null;
+        let malusChartInstance = null;
+        let simulatorChartInstance = null;
+
+        // Dynamic Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-stone-950', 'font-semibold');
+                btn.classList.add('text-stone-300', 'hover:text-white', 'hover:bg-stone-800');
+            });
+
+            const activeSec = document.getElementById(`sec-${tabId}`);
+            if (activeSec) activeSec.classList.remove('hidden');
+
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-stone-300', 'hover:text-white', 'hover:bg-stone-800');
+                activeNav.classList.add('bg-amber-500', 'text-stone-950', 'font-semibold');
+            }
+
+            // Trigger chart rendering when tabs become visible
+            if (tabId === 'overview' && !overviewChartInstance) renderOverviewChart();
+            if (tabId === 'matrix' && !malusChartInstance) renderMalusChart();
+            if (tabId === 'simulator' && !simulatorChartInstance) renderSimulatorChart();
+        }
+
+        // Render Actors Cards
+        function renderActors(filter = 'all') {
+            const container = document.getElementById('actors-grid');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' ? actorsData : actorsData.filter(a => a.category === filter);
+
+            filtered.forEach(actor => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl p-6 shadow-sm border border-stone-200 flex flex-col justify-between space-y-4 hover:shadow-md transition-shadow';
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-1 text-xs font-bold rounded-full border ${actor.avatarBg}">${actor.badge}</span>
+                            <span class="text-xs text-stone-400 font-mono">${actor.role}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-stone-900">${actor.name}</h3>
+                        <p class="text-xs text-stone-600 leading-relaxed"><strong class="text-stone-800">Profil :</strong> ${actor.profile}</p>
+                        
+                        <div class="p-3 bg-stone-50 rounded-xl border border-stone-100 text-xs space-y-1">
+                            <span class="font-bold text-red-700 block">💥 Casserole / Point Chaud :</span>
+                            <p class="text-stone-600">${actor.scandal}</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-stone-100 space-y-2">
+                        <p class="text-xs italic text-stone-700 bg-amber-50 p-2.5 rounded border border-amber-100">${actor.quote}</p>
+                        <div class="text-[11px] text-stone-500"><strong class="text-stone-700">Ligne Rouge :</strong> ${actor.lineRed}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterActors(cat) {
+            document.querySelectorAll('#actor-filters button').forEach(b => {
+                b.classList.remove('bg-stone-900', 'text-white');
+                b.classList.add('bg-stone-100', 'text-stone-700');
+            });
+            event.target.classList.remove('bg-stone-100', 'text-stone-700');
+            event.target.classList.add('bg-stone-900', 'text-white');
+            renderActors(cat);
+        }
+
+        // Render Quotes Grid
+        function renderQuotes(filter = 'all') {
+            const container = document.getElementById('quotes-grid');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' ? quotesData : quotesData.filter(q => q.category === filter);
+
+            filtered.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl p-5 shadow-sm border border-stone-200 space-y-3';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-stone-900 text-sm">${q.author}</span>
+                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 bg-stone-100 text-stone-600 rounded">
+                            ${q.category === 'clette' ? 'Petite Phrase' : q.category === 'foot' ? 'Scandale Foot' : 'Tension Kern'}
+                        </span>
+                    </div>
+                    <blockquote class="text-base font-semibold text-stone-800 border-l-4 border-amber-500 pl-3 py-1 italic">
+                        ${q.text}
+                    </blockquote>
+                    <div class="text-xs text-stone-500 space-y-1">
+                        <p><strong class="text-stone-700">Contexte :</strong> ${q.context}</p>
+                        <p><strong class="text-stone-700">Impact :</strong> ${q.impact}</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterQuotes(cat) {
+            document.querySelectorAll('#quote-filters button').forEach(b => {
+                b.classList.remove('bg-stone-900', 'text-white');
+                b.classList.add('bg-stone-100', 'text-stone-700');
+            });
+            event.target.classList.remove('bg-stone-100', 'text-stone-700');
+            event.target.classList.add('bg-stone-900', 'text-white');
+            renderQuotes(cat);
+        }
+
+        // Charts Logic
+        function renderOverviewChart() {
+            const ctx = document.getElementById('overviewChart').getContext('2d');
+            overviewChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2024', '2025', '2026 (Crise)', '2027 (Proj)', '2029 (Cible UE)', '2031 (Sans Réformes)'],
+                    datasets: [
+                        {
+                            label: 'Dette Publique (% du PIB)',
+                            data: [105.0, 106.2, 110.4, 114.1, 118.5, 121.8],
+                            borderColor: '#d0021b',
+                            backgroundColor: 'rgba(208, 2, 27, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            yAxisID: 'yDette',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Déficit Public (% du PIB)',
+                            data: [-4.6, -5.2, -5.5, -5.8, -6.0, -6.3],
+                            borderColor: '#f5a623',
+                            backgroundColor: 'rgba(245, 166, 35, 0.2)',
+                            borderWidth: 2,
+                            type: 'bar',
+                            yAxisID: 'yDeficit'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    scales: {
+                        yDette: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Dette (% PIB)' },
+                            suggestedMin: 95,
+                            suggestedMax: 130
+                        },
+                        yDeficit: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Déficit (% PIB)' },
+                            grid: { drawOnChartArea: false },
+                            suggestedMin: -8,
+                            suggestedMax: 0
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderMalusChart() {
+            const ctx = document.getElementById('malusChart').getContext('2d');
+            malusChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Femmes (Carrières incomplètes)', 'Hommes (Carrières continues)', 'Cadres / Universitaires', 'Métiers Pénibles'],
+                    datasets: [{
+                        label: '% des travailleurs risquant d\'imputer le Malus (5%/an)',
+                        data: [37, 14, 4, 42],
+                        backgroundColor: ['#d0021b', '#1e3a8a', '#059669', '#f5a623'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            max: 50,
+                            title: { display: true, text: 'Pourcentage de la catégorie affecté (%)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderSimulatorChart() {
+            const ctx = document.getElementById('simulatorChart').getContext('2d');
+            simulatorChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Coupes État & Structure', 'Taxation du Capital', 'Économies Santé & Secu'],
+                    datasets: [{
+                        data: [5.0, 2.5, 2.5],
+                        backgroundColor: ['#1e3a8a', '#059669', '#d0021b'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        // Simulator Interactive Functions
+        function updateSimulator() {
+            const cuts = parseFloat(document.getElementById('sim-cuts').value);
+            const taxes = parseFloat(document.getElementById('sim-taxes').value);
+            const health = parseFloat(document.getElementById('sim-health').value);
+
+            document.getElementById('val-cuts').innerText = cuts.toFixed(1) + ' Mds €';
+            document.getElementById('val-taxes').innerText = taxes.toFixed(1) + ' Mds €';
+            document.getElementById('val-health').innerText = health.toFixed(1) + ' Mds €';
+
+            const total = cuts + taxes + health;
+            const totalDisplay = document.getElementById('sim-total-display');
+            totalDisplay.innerText = total.toFixed(1) + ' Mds €';
+
+            const statusText = document.getElementById('sim-status-text');
+            if (total >= 10.0) {
+                statusText.className = 'text-xs text-emerald-600 font-semibold mt-1';
+                statusText.innerText = '✓ Atteint l\'objectif des 10 Mds € exigé par l\'UE';
+            } else {
+                statusText.className = 'text-xs text-red-600 font-semibold mt-1';
+                statusText.innerText = `⚠️ Insuffisant (${(10.0 - total).toFixed(1)} Mds € manquants pour la PDE)`;
+            }
+
+            // Tension Logic
+            let tension = 50;
+            if (taxes < 1.0) tension += 20; // Vooruit / Engagés rages
+            if (taxes > 3.0) tension += 30; // MR Veto
+            if (health > 3.0) tension += 20; // Vandenbroucke Veto
+            if (cuts > 7.0) tension += 25; // Social Unrest
+            tension = Math.min(100, Math.max(10, tension));
+
+            const tensionBar = document.getElementById('tension-bar');
+            const tensionScore = document.getElementById('tension-score');
+            const tensionDesc = document.getElementById('tension-desc');
+
+            tensionBar.style.width = tension + '%';
+            if (tension > 75) {
+                tensionBar.className = 'bg-red-600 h-full transition-all duration-500';
+                tensionScore.className = 'text-red-600 font-bold';
+                tensionScore.innerText = `Critique (${tension}%)`;
+                tensionDesc.innerText = 'Impasse totale : Veto du MR ou veto de Vooruit activé.';
+            } else if (tension > 45) {
+                tensionBar.className = 'bg-amber-500 h-full transition-all duration-500';
+                tensionScore.className = 'text-amber-600 font-bold';
+                tensionScore.innerText = `Modérée (${tension}%)`;
+                tensionDesc.innerText = 'Zone de compromis boiteux sous contrainte royale.';
+            } else {
+                tensionBar.className = 'bg-emerald-600 h-full transition-all duration-500';
+                tensionScore.className = 'text-emerald-600 font-bold';
+                tensionScore.innerText = `Optimale (${tension}%)`;
+                tensionDesc.innerText = 'Équilibre rare mais politiquement fragile.';
+            }
+
+            // Update Chart
+            if (simulatorChartInstance) {
+                simulatorChartInstance.data.datasets[0].data = [cuts, taxes, health];
+                simulatorChartInstance.update();
+            }
+        }
+
+        function applyPreset(type) {
+            if (type === 'dewever') {
+                document.getElementById('sim-cuts').value = 5.5;
+                document.getElementById('sim-taxes').value = 1.5;
+                document.getElementById('sim-health').value = 3.0;
+            } else if (type === 'bouchez') {
+                document.getElementById('sim-cuts').value = 7.5;
+                document.getElementById('sim-taxes').value = 0.0;
+                document.getElementById('sim-health').value = 2.5;
+            } else if (type === 'rousseau') {
+                document.getElementById('sim-cuts').value = 3.5;
+                document.getElementById('sim-taxes').value = 4.5;
+                document.getElementById('sim-health').value = 2.0;
+            }
+            updateSimulator();
+        }
+
+        // Init App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderActors();
+            renderQuotes();
+            renderOverviewChart();
+        });
+    </script>
+</body>
+</html>
