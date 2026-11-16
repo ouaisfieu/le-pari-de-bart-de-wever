@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cas d'étude : Le confédéralisme rampant en Belgique (2024-2026)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #1C1917;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 310px;
+      max-height: 380px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 340px;
+      }
+    }
+    .nav-pill.active {
+      background-color: #1E3A5F;
+      color: #FFFFFF;
+    }
+    .tab-btn.active {
+      border-bottom: 3px solid #1E3A5F;
+      color: #1E3A5F;
+      font-weight: 600;
+    }
+    .mechanism-card.active {
+      border-color: #1E3A5F;
+      background-color: #F0F4F8;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-stone-900">
+<!-- Chosen Palette: Warm Alabaster & Slate Institutional (Background #FAF8F5, Surface #FFFFFF, Primary Slate #1E3A5F, Accent Amber #B45309, Alert Terracotta #991B1B) -->
+<!-- Application Structure Plan: L'application est structurée en 4 modules thématiques et interactifs accessibles via une barre de navigation fixe, conçus pour guider l'utilisateur du cadre constitutionnel vers les mécanismes opérationnels puis vers les limites politiques de la stratégie de Bart De Wever : (1) Verrou Arithmétique & Cadre Conceptuel (comparateur d'hémicycle et matrice institutionnelle interactive), (2) Stratégie à Deux Temps (chronologie filtrable 2024-2026 explorant le basculement du contournement juridique vers la contrainte budgétaire), (3) Les 4 Leviers Opérationnels (explorateur détaillé accompagné de graphiques comparatifs sur l'asymétrie du marché du travail/CPAS et la dissociation budgétaire Entité I/II), et (4) Contre-pouvoirs & Horizon 2029 (analyse de l'arrêt 96/2026 de la Cour constitutionnelle, crise de novembre 2026 et projections électorales centrifuges par région). Cette architecture non linéaire privilégie la compréhension des liens de cause à effet entre finances publiques et réforme de l'État. -->
+<!-- Visualization & Content Choices: 1. Hémicycle de la Chambre (Chart.js Doughnut semi-circulaire) -> Compare les 81 sièges de la coalition Arizona au seuil constitutionnel des 100 sièges (2/3), justifiant le recours aux lois ordinaires. 2. Matrice Conceptuelle (Grille HTML/JS interactive) -> Permet d'isoler chaque dimension entre Fédéralisme, Confédéralisme rampant et Confédération. 3. Chronologie Stratégique (Filtres JS + cartes dynamiques) -> Distingue le Temps 1 (asymétrie) du Temps 2 (étau budgétaire). 4. Impact Régional Chômage & CPAS (Chart.js Barres groupées) -> Visualise la divergence Flandre/Wallonie/Bruxelles (taux d'emploi, chute des indemnisés, recours au CPAS). 5. Dissociation Budgétaire & Dette (Chart.js Barres/Comparateur) -> Illustre le déséquilibre Entité I (-4,0 % PIB) vs Entité II (-1,5 % PIB) et la trajectoire de la dette (107 % à 122 %). 6. Polarisation Électorale Automne 2026 (Chart.js Barres interactives par région) -> Montre la fragmentation centrifuge (VB/N-VA en Flandre, PS/MR en Wallonie, PTB à Bruxelles). -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+  <header class="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur border-b border-stone-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 gap-3">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[#1E3A5F] text-white font-bold text-lg">BE</span>
+          <div>
+            <h1 class="text-base sm:text-lg font-bold text-stone-900 leading-tight">Confédéralisme rampant &amp; stratégie Arizona</h1>
+            <p class="text-xs text-stone-500">Cas d'étude institutionnel et budgétaire (2024 – 16 novembre 2026)</p>
+          </div>
+        </div>
+        <nav class="flex flex-wrap gap-1.5 text-xs sm:text-sm" aria-label="Navigation principale">
+          <a href="#section-verrou" class="nav-pill active px-3 py-1.5 rounded-full font-medium text-stone-700 hover:bg-stone-200 transition">1. Verrou &amp; Concepts</a>
+          <a href="#section-strategie" class="nav-pill px-3 py-1.5 rounded-full font-medium text-stone-700 hover:bg-stone-200 transition">2. Stratégie en 2 temps</a>
+          <a href="#section-mecanismes" class="nav-pill px-3 py-1.5 rounded-full font-medium text-stone-700 hover:bg-stone-200 transition">3. Les 4 mécanismes</a>
+          <a href="#section-limites" class="nav-pill px-3 py-1.5 rounded-full font-medium text-stone-700 hover:bg-stone-200 transition">4. Limites &amp; Horizon 2029</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-14">
+
+    <section class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+      <div class="max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold mb-4">
+          <span>&#9878;</span> Synthèse exécutive — Situation au 16 novembre 2026
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight mb-4">
+          Transformer l'État sans réviser la Constitution : le pari de Bart De Wever
+        </h2>
+        <p class="text-stone-600 text-base leading-relaxed mb-6">
+          Investi Premier ministre le 3 février 2025 à la tête de la coalition « Arizona » (N-VA, MR, Les Engagés, Vooruit et CD&amp;V), le nationaliste flamand Bart De Wever est confronté à un blocage parlementaire : sa majorité ne dispose pas des deux tiers des sièges requis pour instaurer le confédéralisme par voie constitutionnelle. Pour contourner cet obstacle, l'exécutif déploie un <strong>« confédéralisme rampant »</strong> (<em>sluipend confederalisme</em>) fondé sur l'usage asymétrique des lois ordinaires, le déversement des charges sociales vers les régions et communes, et la mise sous pression financière de l'État fédéral en vue de l'échéance électorale de 2029.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+        <div class="bg-[#FAF8F5] rounded-xl p-4 border border-stone-200">
+          <div class="text-xs font-semibold uppercase tracking-wider text-stone-500">Arithmétique Chambre</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-extrabold text-[#1E3A5F]">81 / 150</span>
+            <span class="text-xs font-medium text-amber-800 bg-amber-100 px-2 py-0.5 rounded">Seuil 2/3 : 100</span>
+          </div>
+          <p class="mt-2 text-xs text-stone-600">Majorité ordinaire acquise, mais déficit de 18 à 19 sièges pour toute réforme institutionnelle spéciale.</p>
+        </div>
+
+        <div class="bg-[#FAF8F5] rounded-xl p-4 border border-stone-200">
+          <div class="text-xs font-semibold uppercase tracking-wider text-stone-500">Déficit Entité I (2025)</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-extrabold text-[#991B1B]">-4,0 % PIB</span>
+            <span class="text-xs font-medium text-stone-600">(-25,5 Md€)</span>
+          </div>
+          <p class="mt-2 text-xs text-stone-600">Contre -1,5 % pour l'Entité II (régions/communautés). Déficit public global à 5,2 % et dette à 107 %.</p>
+        </div>
+
+        <div class="bg-[#FAF8F5] rounded-xl p-4 border border-stone-200">
+          <div class="text-xs font-semibold uppercase tracking-wider text-stone-500">Chute chômeurs indemnisés</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-extrabold text-[#B45309]">-50,5 %</span>
+            <span class="text-xs font-medium text-stone-600">à Bruxelles</span>
+          </div>
+          <p class="mt-2 text-xs text-stone-600">Contre -45,0 % en Wallonie et -22,8 % en Flandre sur un an (ONEM), reportant la charge sur les CPAS.</p>
+        </div>
+
+        <div class="bg-[#FAF8F5] rounded-xl p-4 border border-stone-200">
+          <div class="text-xs font-semibold uppercase tracking-wider text-stone-500">Impasse budgétaire 2026</div>
+          <div class="mt-1 flex items-baseline gap-2">
+            <span class="text-2xl font-extrabold text-stone-900">10 Md€</span>
+            <span class="text-xs font-medium text-red-800 bg-red-100 px-2 py-0.5 rounded">Sursis au 23 nov.</span>
+          </div>
+          <p class="mt-2 text-xs text-stone-600">Démission remise le 2 nov., refusée le 6 nov., rejet de Vooruit le 15 nov. et nouveau délai royal le 16 nov.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-verrou" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+        <div class="mb-6">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1E3A5F]">Section 1 — Fondements juridiques &amp; parlementaires</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-stone-900 mt-1">Le verrou constitutionnel et le spectre du confédéralisme</h2>
+          <p class="text-stone-600 text-sm sm:text-base mt-2 leading-relaxed">
+            Cette section éclaire pourquoi le gouvernement Arizona privilégie une transformation indirecte plutôt qu'une réforme constitutionnelle frontale. D'une part, la composition de la Chambre issue du scrutin du 9 juin 2024 prive la coalition de la majorité des deux tiers et des majorités par groupe linguistique indispensables pour modifier les lois spéciales. D'autre part, la notion de « confédéralisme rampant » désigne un espace hybride entre l'État fédéral de 1993 et la confédération souveraine souhaitée à terme par la N-VA (alors que seuls ~10 % des Flamands soutiennent le séparatisme pur).
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-5 bg-[#FAF8F5] rounded-xl p-5 border border-stone-200">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-stone-900 text-base">Hémicycle fédéral (150 sièges)</h3>
+              <select id="seat-view-selector" class="text-xs bg-white border border-stone-300 rounded-lg px-2.5 py-1.5 font-medium text-stone-700 focus:outline-none focus:border-[#1E3A5F]">
+                <option value="coalition">Coalition Arizona vs Opposition</option>
+                <option value="parties">Détail par parti (Arizona)</option>
+              </select>
+            </div>
+            <p class="text-xs text-stone-500 mb-4">
+              Comparaison entre les forces de la coalition (81 sièges) et le seuil constitutionnel des 100 sièges requis pour toute révision institutionnelle.
+            </p>
+            <div class="chart-container" style="height: 250px;">
+              <canvas id="parliamentChart"></canvas>
+            </div>
+            <div id="parliament-insight" class="mt-4 p-3 bg-white rounded-lg border border-stone-200 text-xs text-stone-700 leading-relaxed">
+              <strong>Verrou mathématique :</strong> Avec 81 sièges (82 selon certains décomptes initiaux, 80 en cours de législature), la coalition Arizona dépasse la majorité simple (76) mais reste bloquée à 19 sièges du seuil des deux tiers (100). L'appoint du PS (16 sièges) demeure indispensable pour toute loi spéciale.
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <h3 class="font-bold text-stone-900 text-base">Matrice comparative des modèles institutionnels</h3>
+              <div class="flex flex-wrap gap-1.5" id="matrix-filters">
+                <button data-dim="all" class="matrix-btn active px-2.5 py-1 text-xs rounded-md bg-[#1E3A5F] text-white font-medium">Toutes dimensions</button>
+                <button data-dim="norme" class="matrix-btn px-2.5 py-1 text-xs rounded-md bg-stone-100 text-stone-700 hover:bg-stone-200 font-medium">Normes</button>
+                <button data-dim="lois" class="matrix-btn px-2.5 py-1 text-xs rounded-md bg-stone-100 text-stone-700 hover:bg-stone-200 font-medium">Lois</button>
+                <button data-dim="budget" class="matrix-btn px-2.5 py-1 text-xs rounded-md bg-stone-100 text-stone-700 hover:bg-stone-200 font-medium">Finances</button>
+                <button data-dim="citoyen" class="matrix-btn px-2.5 py-1 text-xs rounded-md bg-stone-100 text-stone-700 hover:bg-stone-200 font-medium">Représentation</button>
+              </div>
+            </div>
+            <p class="text-xs text-stone-500">
+              Cliquez sur un filtre thématique pour comparer le cadre juridique actuel, les inflexions pratiques observées entre 2024 et 2026, et l'aboutissement confédéral théorique.
+            </p>
+
+            <div class="overflow-x-auto border border-stone-200 rounded-xl">
+              <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                <thead>
+                  <tr class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                    <th class="p-3 font-bold w-1/5">Dimension</th>
+                    <th class="p-3 font-bold w-1/4">Fédéralisme (1993)</th>
+                    <th class="p-3 font-bold w-3/10 bg-amber-50/80 text-amber-950">Confédéralisme rampant (2024-2026)</th>
+                    <th class="p-3 font-bold w-1/4">Confédération classique</th>
+                  </tr>
+                </thead>
+                <tbody id="matrix-body" class="divide-y divide-stone-200 bg-white">
+                </tbody>
+              </table>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+              <div class="p-3 rounded-lg bg-stone-50 border border-stone-200 text-xs">
+                <span class="font-bold text-stone-900 block mb-1">&#9670; Lecture francophone</span>
+                Dénonce un contournement progressif des garde-fous spéciaux protégeant les minorités et la solidarité fédérale.
+              </div>
+              <div class="p-3 rounded-lg bg-amber-50/60 border border-amber-200 text-xs">
+                <span class="font-bold text-amber-950 block mb-1">&#9670; Lecture nationaliste</span>
+                Voit une transition pragmatique vers l'autonomie des entités sans heurter l'attachement majoritaire à la Belgique.
+              </div>
+              <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs">
+                <span class="font-bold text-[#1E3A5F] block mb-1">&#9670; Lecture juridique</span>
+                Hypothèse analytique décrivant l'accumulation de pratiques asymétriques dans un cadre formellement fédéral.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-strategie" class="scroll-mt-24">
+      <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+          <div class="max-w-3xl">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#B45309]">Section 2 — Séquence politique (2024 – 2026)</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-stone-900 mt-1">La stratégie à deux temps : contourner, puis contraindre par le budget</h2>
+            <p class="text-stone-600 text-sm sm:text-base mt-2 leading-relaxed">
+              Sous une rhétorique d'accord de gouvernement prudemment fédéraliste (« fédéralisme de réforme renforcé »), Bart De Wever déploie une méthode séquentielle. Utilisez les filtres ci-dessous pour explorer comment l'exécutif est passé d'un <strong>Temps 1</strong> axé sur l'élargissement discret de l'autonomie régionale par lois ordinaires (2025) à un <strong>Temps 2</strong> où l'impasse budgétaire devient l'argument central pour justifier une refonte de l'État en 2029.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 shrink-0" id="timeline-filters">
+            <button data-phase="all" class="phase-btn active px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#1E3A5F] text-white">Toute la séquence</button>
+            <button data-phase="temps1" class="phase-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200">Temps 1 : Asymétrie</button>
+            <button data-phase="temps2" class="phase-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-stone-100 text-stone-700 hover:bg-stone-200">Temps 2 : Étau budgétaire</button>
+          </div>
+        </div>
+
+        <div id="timeline-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        </div>
+      </div>
+    </section>
+
+    <section id="section-mecanismes" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+        <div class="mb-6 max-w-4xl">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#1E3A5F]">Section 3 — Opérationnalisation concrète</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-stone-900 mt-1">Les quatre mécanismes du confédéralisme rampant</h2>
+          <p class="text-stone-600 text-sm sm:text-base mt-2 leading-relaxed">
+            Plutôt que d'ouvrir un conflit communautaire frontal, la transformation s'opère via quatre leviers techniques qui modifient l'équilibre réel des pouvoirs et des ressources. Sélectionnez chacun des quatre mécanismes ci-dessous pour en examiner le fonctionnement juridique et consulter les données empiriques associées sur le marché du travail, les CPAS et les finances publiques.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6" id="mechanism-selector">
+          <button data-mech="0" class="mechanism-card active text-left p-4 rounded-xl border-2 border-[#1E3A5F] bg-[#F0F4F8] transition">
+            <div class="text-xs font-bold text-[#1E3A5F] mb-1">Mécanisme 01</div>
+            <div class="font-bold text-stone-900 text-sm">Exercice asymétrique des compétences</div>
+            <div class="text-xs text-stone-600 mt-1">Application différenciée de normes fédérales par région.</div>
+          </button>
+          <button data-mech="1" class="mechanism-card text-left p-4 rounded-xl border-2 border-stone-200 bg-white hover:border-stone-300 transition">
+            <div class="text-xs font-bold text-[#B45309] mb-1">Mécanisme 02</div>
+            <div class="font-bold text-stone-900 text-sm">Déversement social (Réforme chômage)</div>
+            <div class="text-xs text-stone-600 mt-1">Plafonnement à 24 mois et transfert vers les CPAS locaux.</div>
+          </button>
+          <button data-mech="2" class="mechanism-card text-left p-4 rounded-xl border-2 border-stone-200 bg-white hover:border-stone-300 transition">
+            <div class="text-xs font-bold text-[#991B1B] mb-1">Mécanisme 03</div>
+            <div class="font-bold text-stone-900 text-sm">Dissociation budgétaire Entité I / II</div>
+            <div class="text-xs text-stone-600 mt-1">Asphyxie du niveau central et plans d'austérité en silos.</div>
+          </button>
+          <button data-mech="3" class="mechanism-card text-left p-4 rounded-xl border-2 border-stone-200 bg-white hover:border-stone-300 transition">
+            <div class="text-xs font-bold text-stone-700 mb-1">Mécanisme 04</div>
+            <div class="font-bold text-stone-900 text-sm">Inter-exécutifs &amp; Article 195</div>
+            <div class="text-xs text-stone-600 mt-1">Comité de concertation renforcé et suppression du Sénat.</div>
+          </button>
+        </div>
+
+        <div id="mechanism-detail-box" class="bg-[#FAF8F5] rounded-xl border border-stone-200 p-5 sm:p-6 mb-8">
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-2">
+          <div class="bg-[#FAF8F5] rounded-xl p-5 border border-stone-200 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <h3 class="font-bold text-stone-900 text-base">Asymétrie territoriale : Emploi, Chômage et CPAS (2026)</h3>
+                <select id="labor-metric-select" class="text-xs bg-white border border-stone-300 rounded-lg px-2.5 py-1.5 font-medium text-stone-700">
+                  <option value="rates">Taux d'emploi vs Chômage BIT (T2 2026)</option>
+                  <option value="impact">Chute indemnisés &amp; Recours CPAS</option>
+                </select>
+              </div>
+              <p class="text-xs text-stone-600 mb-4">
+                Une règle fédérale uniforme (limitation des allocations à 24 mois) produit des chocs socio-budgétaires radicalement opposés entre le nord et le sud du pays.
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="laborChart"></canvas>
+            </div>
+            <div class="mt-3 text-xs text-stone-500 border-t border-stone-200 pt-2">
+              Sources : Statbel (T2 2026), ONEM (comparaison sept. 2025), fédérations de CPAS (VVSG, UVCW, Brulocalis). RIS isolé au 1er sept. 2026 : 1 367,34 €/mois.
+            </div>
+          </div>
+
+          <div class="bg-[#FAF8F5] rounded-xl p-5 border border-stone-200 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <h3 class="font-bold text-stone-900 text-base">Déséquilibre budgétaire : Entité I vs Entité II</h3>
+                <select id="fiscal-metric-select" class="text-xs bg-white border border-stone-300 rounded-lg px-2.5 py-1.5 font-medium text-stone-700">
+                  <option value="deficit">Soldes budgétaires 2025 (% du PIB)</option>
+                  <option value="debt">Trajectoire de dette publique (% du PIB)</option>
+                </select>
+              </div>
+              <p class="text-xs text-stone-600 mb-4">
+                L'Entité I (Fédéral + Sécu) concentre l'essentiel du déficit (-4,0 % du PIB), tandis que l'extinction du mécanisme de transition (2025-2034) met sous tension la FWB (dette à 97,6 % de ses recettes).
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="fiscalChart"></canvas>
+            </div>
+            <div class="mt-3 text-xs text-stone-500 border-t border-stone-200 pt-2">
+              Sources : Chambre des représentants, SPF BOSA (2026), Bureau du Plan, BNB, S&amp;P Global Ratings (dégradation AA à AA- le 24 avril 2026, OLO 10 ans à 4,43 %).
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="section-limites" class="scroll-mt-24">
+      <div class="bg-white rounded-2xl border border-stone-200 p-6 sm:p-8 shadow-sm">
+        <div class="mb-6 max-w-4xl">
+          <span class="text-xs font-bold uppercase tracking-wider text-[#991B1B]">Section 4 — Contre-pouvoirs, crise de novembre 2026 &amp; paradoxe</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-stone-900 mt-1">Les limites du contournement et l'équation explosive de 2029</h2>
+          <p class="text-stone-600 text-sm sm:text-base mt-2 leading-relaxed">
+            À l'automne 2026, la stratégie de Bart De Wever se heurte à une triple résistance : juridique avec l'arrêt de la Cour constitutionnelle du 10 septembre 2026, politique avec le blocage socialiste et libéral autour des 10 milliards d'économies, et électorale avec une polarisation centrifuge qui menace de rendre le pays ingouvernable avant même d'atteindre 2029.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-6 space-y-4">
+            <h3 class="font-bold text-stone-900 text-base">Les quatre points de rupture de la méthode Arizona</h3>
+            <div class="space-y-3" id="vulnerabilities-accordion">
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 bg-[#FAF8F5] rounded-xl p-5 border border-stone-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <h3 class="font-bold text-stone-900 text-base">Polarisation électorale centrifuge (Automne 2026)</h3>
+              <div class="flex gap-1" id="region-poll-tabs">
+                <button data-region="flandre" class="poll-tab active px-2.5 py-1 text-xs rounded-md bg-[#1E3A5F] text-white font-semibold">Flandre</button>
+                <button data-region="wallonie" class="poll-tab px-2.5 py-1 text-xs rounded-md bg-white border border-stone-300 text-stone-700 font-semibold">Wallonie</button>
+                <button data-region="bruxelles" class="poll-tab px-2.5 py-1 text-xs rounded-md bg-white border border-stone-300 text-stone-700 font-semibold">Bruxelles</button>
+              </div>
+            </div>
+            <p class="text-xs text-stone-600 mb-4">
+              Projections du baromètre Ipsos / Le Soir (automne 2026) : la divergence entre le nord dominé par la droite nationaliste et le sud orienté à gauche durcit le veto francophone face à toute réforme confédérale.
+            </p>
+            <div class="chart-container" style="height: 270px;">
+              <canvas id="pollChart"></canvas>
+            </div>
+            <div id="poll-commentary" class="mt-4 p-3 bg-white rounded-lg border border-stone-200 text-xs text-stone-700 leading-relaxed">
+              <strong>En Flandre :</strong> Le Vlaams Belang reste en tête (~25,1 %) devant la N-VA (~22,0 %), tandis que les libéraux flamands (Anders, ex-Open VLD) chutent sous les 7 %, réduisant les options d'une coalition alternative au fédéral.
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-5 rounded-xl bg-stone-900 text-stone-100">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="space-y-1 max-w-3xl">
+              <div class="text-xs font-bold uppercase tracking-wider text-amber-400">Conclusion analytique — Le paradoxe de l'Arizona</div>
+              <p class="text-sm text-stone-200 leading-relaxed">
+                Le confédéralisme rampant permet d'opérer une décentralisation fonctionnelle silencieuse par le budget et le droit ordinaire. Toutefois, en accélérant l'épuisement financier et politique du compromis fédéral central, Bart De Wever s'expose à déclencher une crise de gouvernabilité — douzièmes provisoires ou élections anticipées — avant d'avoir réuni les majorités nécessaires pour verrouiller la septième réforme de l'État en 2029.
+              </p>
+            </div>
+            <div class="shrink-0 text-right">
+              <span class="inline-block px-3 py-1.5 rounded-lg bg-stone-800 border border-stone-700 text-xs font-mono text-amber-300">
+                Échéance critique : 23 nov. 2026
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-stone-200 bg-white py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-stone-500">
+      <div>Synthèse interactive basée sur l'étude de cas « Le confédéralisme rampant en Belgique et la stratégie de Bart De Wever (2024-2026) ».</div>
+      <div>Sources : Chambre des représentants, Cour constitutionnelle (arrêt 96/2026), Statbel, ONEM, SPF BOSA, CRISP, Jus Politicum.</div>
+    </div>
+  </footer>
+
+  <script>
+    function wrapLabel(label, maxLen = 16) {
+      if (label.length <= maxLen) return label;
+      const words = label.split(' ');
+      const lines = [];
+      let current = '';
+      words.forEach(word => {
+        if ((current + (current ? ' ' : '') + word).length <= maxLen) {
+          current += (current ? ' ' : '') + word;
+        } else {
+          if (current) lines.push(current);
+          current = word;
+        }
+      });
+      if (current) lines.push(current);
+      return lines;
+    }
+
+    const commonTooltipOptions = {
+      callbacks: {
+        title: function(tooltipItems) {
+          const item = tooltipItems[0];
+          const label = item.chart.data.labels[item.dataIndex];
+          return Array.isArray(label) ? label.join(' ') : label;
+        }
+      }
+    };
+
+    const matrixData = [
+      {
+        dim: 'norme',
+        label: 'Fondement normatif',
+        fed: 'Constitution (majorité des 2/3) et lois spéciales (2/3 + majorité par groupe linguistique).',
+        rampant: 'Révision préparée via l’art. 195 et aménagements par lois ordinaires ou lois-programmes.',
+        confed: 'Traité international conclu entre États souverains.'
+      },
+      {
+        dim: 'lois',
+        label: 'Hiérarchie des lois',
+        fed: 'Équipollence des lois, décrets et ordonnances ; compétences implicites encadrées.',
+        rampant: 'Exercice asymétrique de compétences fédérales et « ententes asymétriques » territoriales.',
+        confed: 'Primauté des États membres et application différenciée par État.'
+      },
+      {
+        dim: 'budget',
+        label: 'Décision & financement',
+        fed: 'Vote majoritaire fédéral ; Loi spéciale de financement (LSF) et mécanisme de transition.',
+        rampant: 'Arbitrages reportés sur l’inter-exécutifs ; asphyxie de l’Entité I, extinction LSF (2025-2034) et report sur les CPAS.',
+        confed: 'Unanimité requise entre États souverains ; contributions négociées.'
+      },
+      {
+        dim: 'citoyen',
+        label: 'Lien avec le citoyen',
+        fed: 'Élections fédérales directes en circonscriptions unilingues ; Sénat des entités depuis 2014.',
+        rampant: 'Absence de circonscription fédérale, suppression programmée du Sénat, gouvernance inter-exécutifs.',
+        confed: 'Délégations indirectes désignées par les États membres.'
+      }
+    ];
+
+    function renderMatrix(filterDim = 'all') {
+      const tbody = document.getElementById('matrix-body');
+      const filtered = filterDim === 'all' ? matrixData : matrixData.filter(r => r.dim === filterDim);
+      tbody.innerHTML = filtered.map(row => `
+        <tr class="hover:bg-stone-50 transition">
+          <td class="p-3 font-bold text-stone-900 align-top">${row.label}</td>
+          <td class="p-3 text-stone-600 align-top">${row.fed}</td>
+          <td class="p-3 bg-amber-50/40 text-stone-900 font-medium align-top border-x border-amber-100">${row.rampant}</td>
+          <td class="p-3 text-stone-600 align-top">${row.confed}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.querySelectorAll('.matrix-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.matrix-btn').forEach(b => {
+          b.classList.remove('active', 'bg-[#1E3A5F]', 'text-white');
+          b.classList.add('bg-stone-100', 'text-stone-700');
+        });
+        btn.classList.add('active', 'bg-[#1E3A5F]', 'text-white');
+        btn.classList.remove('bg-stone-100', 'text-stone-700');
+        renderMatrix(btn.dataset.dim);
+      });
+    });
+
+    const timelineEvents = [
+      {
+        date: '9 juin – 26 juil. 2024',
+        phase: 'temps1',
+        tag: 'Temps 1 • Point de départ',
+        title: 'Fragmentation électorale & procédure UE',
+        desc: 'La N-VA (24 sièges) et le MR (19-20 sièges) dominent chacun leur versant linguistique, mais sans majorité des 2/3. L’UE ouvre une procédure pour déficit excessif exigeant 11 Md€ d’ajustement.'
+      },
+      {
+        date: '3 fév. – 19 mars 2025',
+        phase: 'temps1',
+        tag: 'Temps 1 • Contournement',
+        title: 'Investiture Arizona & cap asymétrique',
+        desc: 'Après 239 jours de négociation, l’accord prône un « fédéralisme de réforme renforcé ». Le 19 mars, Bart De Wever défend devant la Chambre les politiques asymétriques et les accords de coopération sanctionnables.'
+      },
+      {
+        date: '18 juil. – 25 sept. 2025',
+        phase: 'temps1',
+        tag: 'Temps 1 • Lois ordinaires',
+        title: 'Réforme du chômage & révision art. 195',
+        desc: 'La loi-programme plafonne les allocations à 24 mois (en vigueur en mars 2026). Le 25 septembre, une proposition de révision de l’article 195 est déposée au Sénat en vue de sa suppression.'
+      },
+      {
+        date: '24 nov. 2025',
+        phase: 'temps2',
+        tag: 'Temps 2 • Première alerte',
+        title: 'Compromis budgétaire de 9,2 Md€',
+        desc: 'Après un sursis royal de 50 jours, la coalition arrache un premier paquet d’économies. Les tensions montent sur le sous-financement des compensations accordées aux CPAS.'
+      },
+      {
+        date: '10 – 16 sept. 2026',
+        phase: 'temps2',
+        tag: 'Temps 2 • Basculement',
+        title: 'Arrêt 96/2026 & ultimatum institutionnel',
+        desc: 'La Cour constitutionnelle valide la limitation du chômage mais annule le régime transitoire discriminatoire. Le 16 sept., De Wever déclare qu’après une ultime ronde, il faudra réformer l’État.'
+      },
+      {
+        date: '2 – 16 nov. 2026',
+        phase: 'temps2',
+        tag: 'Temps 2 • Crise ouverte',
+        title: 'Démission refusée et sursis royal',
+        desc: 'Bloquée sur 10 Md€ d’efforts (taxes vs coupes sociales), la coalition implose. Démission remise le 2 nov., refusée par le Roi le 6 nov., rejet de Vooruit le 15 nov. et délai d’une semaine accordé le 16 nov.'
+      }
+    ];
+
+    function renderTimeline(phase = 'all') {
+      const container = document.getElementById('timeline-container');
+      const items = phase === 'all' ? timelineEvents : timelineEvents.filter(e => e.phase === phase);
+      container.innerHTML = items.map(ev => `
+        <div class="p-4 rounded-xl border ${ev.phase === 'temps1' ? 'border-stone-200 bg-[#FAF8F5]' : 'border-amber-200 bg-amber-50/40'} flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-[11px] font-bold uppercase tracking-wide ${ev.phase === 'temps1' ? 'text-[#1E3A5F]' : 'text-[#B45309]'}">${ev.tag}</span>
+            </div>
+            <div class="text-xs font-mono text-stone-500 mb-1">${ev.date}</div>
+            <h3 class="font-bold text-stone-900 text-sm mb-2">${ev.title}</h3>
+            <p class="text-xs text-stone-600 leading-relaxed">${ev.desc}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.querySelectorAll('.phase-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.phase-btn').forEach(b => {
+          b.classList.remove('active', 'bg-[#1E3A5F]', 'text-white');
+          b.classList.add('bg-stone-100', 'text-stone-700');
+        });
+        btn.classList.add('active', 'bg-[#1E3A5F]', 'text-white');
+        btn.classList.remove('bg-stone-100', 'text-stone-700');
+        renderTimeline(btn.dataset.phase);
+      });
+    });
+
+    const mechanismsData = [
+      {
+        title: '1. L’exercice asymétrique des compétences fédérales',
+        subtitle: 'Modifier la répartition réelle des compétences sans loi spéciale',
+        analysis: 'Qualifiée par les constitutionnalistes M. Nève de Mévergnies et C. Romainville (Jus Politicum, 2025) de « modification de la répartition des compétences qui ne dit pas son nom », cette technique maintient formellement une matière au niveau fédéral tout en organisant son application différenciée selon les régions.',
+        examples: [
+          'Activation des chômeurs temporaires confiée plus rapidement aux services régionaux (VDAB, Forem, Actiris).',
+          'Faculté offerte aux régions d’intégrer totalement les CPAS aux communes via l’adaptation de la législation organique.',
+          'Orientation proactive des acteurs étrangers vers les entités fédérées pour les matières mixtes et propres.'
+        ],
+        impact: 'Contourne le verrou des 100 sièges à la Chambre tout en satisfaisant les revendications flamandes d’autonomie opérationnelle.'
+      },
+      {
+        title: '2. Le déversement social par la réforme du chômage',
+        subtitle: 'Une norme fédérale uniforme aux effets territoriaux massivement asymétriques',
+        analysis: 'Adoptée dans la loi-programme du 18 juillet 2025 (en vigueur au 1er mars 2026 après six vagues transitoires), la limitation des allocations à 24 mois et des allocations d’insertion à 12 mois opère un retrait massif de la Sécurité sociale fédérale.',
+        examples: [
+          'Chute des chômeurs indemnisés sur un an : -50,5 % à Bruxelles et -45,0 % en Wallonie contre -22,8 % en Flandre (ONEM).',
+          'Report vers les CPAS : près de 49 % des exclus en Wallonie et 43,9 % à Bruxelles sollicitent le RIS (1 367,34 €/mois pour un isolé), contre 34 à 36 % en Flandre.',
+          'À Molenbeek seule, 1 740 exclus représentent un surcoût estimé à 16,3 M€ malgré les lois de compensation de nov. 2025 et mai 2026.'
+        ],
+        impact: 'Transfère mécaniquement la charge financière et administrative de la précarité de l’État fédéral vers les communes et régions francophones.'
+      },
+      {
+        title: '3. La dissociation budgétaire entre Entité I et Entité II',
+        subtitle: 'Asphyxie financière du centre et austérité en silos concurrentiels',
+        analysis: 'En l’absence de règle interne contraignante répartissant l’effort budgétaire (pointée par la Commission européenne), l’assainissement s’effectue de manière cloisonnée alors que la dette publique atteint 107 % du PIB (projetée à 122 % en 2031) et que S&P a dégradé la note belge de AA à AA- le 24 avril 2026.',
+        examples: [
+          'L’Entité I (Fédéral + Sécurité sociale) affiche un déficit de -4,0 % du PIB (-25,5 Md€), contre -1,5 % pour l’Entité II agrégée.',
+          'Extinction programmée (2025-2034) du mécanisme de transition de la 6e réforme de l’État, fragilisant la FWB (dette de 12,78 Md€, soit 97,59 % de ses recettes).',
+          'Plans de rigueur séparés : 719 M€ d’économies à Bruxelles (gouvernement Dilliès après 615 jours de crise), 538 M€ en Wallonie (Dolimont) et hausse du minerval en FWB à 1 194 €.'
+        ],
+        impact: 'Installe de facto une responsabilisation financière séparée des entités avant même toute renégociation de la Loi spéciale de financement.'
+      },
+      {
+        title: '4. La gouvernance inter-exécutifs et la révision de l’article 195',
+        subtitle: 'Déplacement du centre de gravité des assemblées vers les sommets exécutifs',
+        analysis: 'La décision politique migre du Parlement fédéral vers le Comité de concertation, tandis que la proposition de révision de l’article 195 déposée au Sénat le 25 septembre 2025 prépare la suppression de la chambre haute.',
+        examples: [
+          'Multiplication des arbitrages en Comité de concertation et projet d’accords de coopération assortis de sanctions financières.',
+          'Durcissement des critères d’accès des anciens parlementaires à la Cour constitutionnelle (diplôme de droit et 8 ans d’expérience) et abrogation de la sonnette d’alarme idéologique.',
+          'Suppression envisagée du Sénat des entités sans création de circonscription électorale fédérale.'
+        ],
+        impact: 'Rapproche le fonctionnement de l’État belge d’un directoire intergouvernemental typique d’une confédération.'
+      }
+    ];
+
+    function renderMechanismDetail(idx) {
+      const m = mechanismsData[idx];
+      const box = document.getElementById('mechanism-detail-box');
+      box.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div class="lg:col-span-7 space-y-3">
+            <div class="text-xs font-bold uppercase tracking-wider text-[#1E3A5F]">${m.subtitle}</div>
+            <h3 class="text-lg sm:text-xl font-bold text-stone-900">${m.title}</h3>
+            <p class="text-sm text-stone-700 leading-relaxed">${m.analysis}</p>
+            <div class="p-3 rounded-lg bg-white border border-stone-200 text-xs text-stone-800">
+              <strong class="text-[#B45309]">Effet confédéral :</strong> ${m.impact}
+            </div>
+          </div>
+          <div class="lg:col-span-5 bg-white p-4 rounded-xl border border-stone-200">
+            <div class="text-xs font-bold uppercase tracking-wider text-stone-500 mb-2.5">Indicateurs &amp; applications clés</div>
+            <ul class="space-y-2.5 text-xs text-stone-700">
+              ${m.examples.map(ex => `<li class="flex items-start gap-2"><span class="text-[#1E3A5F] font-bold">&#9656;</span><span>${ex}</span></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    }
+
+    document.querySelectorAll('.mechanism-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.mechanism-card').forEach(c => {
+          c.classList.remove('active', 'border-[#1E3A5F]', 'bg-[#F0F4F8]');
+          c.classList.add('border-stone-200', 'bg-white');
+        });
+        card.classList.add('active', 'border-[#1E3A5F]', 'bg-[#F0F4F8]');
+        card.classList.remove('border-stone-200', 'bg-white');
+        renderMechanismDetail(parseInt(card.dataset.mech, 10));
+      });
+    });
+
+    const vulnerabilitiesData = [
+      {
+        title: '1. La censure partielle de la Cour constitutionnelle (Arrêt 96/2026)',
+        badge: 'Frein juridique',
+        badgeColor: 'bg-blue-100 text-blue-900',
+        content: 'Le 10 septembre 2026, tout en validant sur le fond le plafonnement des allocations de chômage au nom de l’intérêt général (objectif d’emploi de 80 %), la Cour annule le régime transitoire appliqué aux chômeurs de 3e période exclus lors des trois premières vagues de 2026, jugé discriminatoire. L’ONEM et les CPAS doivent rétablir des droits et organiser une subrogation complexe, prouvant que la loi ordinaire reste soumise au contrôle d’égalité.'
+      },
+      {
+        title: '2. La fracture sociale-libérale de novembre 2026 (10 Md€)',
+        badge: 'Blocage interne',
+        badgeColor: 'bg-red-100 text-red-900',
+        content: 'Incapable de boucler 10 milliards d’euros d’efforts d’ici 2029, l’Arizona se déchire entre le MR/N-VA (hostiles aux taxes nouvelles, favorables aux coupes dans la santé et les pensions) et Vooruit/Les Engagés (exigeant une hausse de la taxe sur les plus-values et les opérations boursières). Malgré la démission remise le 2 novembre (refusée le 6) et un compromis à quatre le 15 novembre rejeté par Vooruit, la Belgique risque le régime des douzièmes provisoires début 2027.'
+      },
+      {
+        title: '3. L’usure sociale et les tensions internes à la N-VA',
+        badge: 'Usure politique',
+        badgeColor: 'bg-amber-100 text-amber-900',
+        content: 'Après le malus de 5 % par année d’anticipation sur les pensions instauré en juin 2026, les grèves générales (FGTB/CSC) et le blocage du Groupe des 10, des signes de lassitude émergent jusque dans les rangs de la N-VA face à la difficulté d’obtenir des gains institutionnels tangibles avant la fin de la législature.'
+      },
+      {
+        title: '4. L’impasse bruxelloise comme point aveugle',
+        badge: 'Risque systémique',
+        badgeColor: 'bg-stone-200 text-stone-800',
+        content: 'Fragilisée par 615 jours de vacance gouvernementale avant l’installation de l’exécutif Dilliès, la Région-capitale cumule le taux de chômage le plus élevé (12,7 %) et la plus forte chute des indemnisés (-50,5 %). Comme le souligne le constitutionnaliste Quinten Jacobs, sa survie financière demeure tributaire de la solidarité fédérale, rendant toute solution confédérale binaire inapplicable sans statut spécifique.'
+      }
+    ];
+
+    function renderVulnerabilities() {
+      const container = document.getElementById('vulnerabilities-accordion');
+      container.innerHTML = vulnerabilitiesData.map((v, i) => `
+        <div class="border border-stone-200 rounded-xl overflow-hidden bg-[#FAF8F5]">
+          <button type="button" class="vuln-toggle w-full flex items-center justify-between p-4 text-left font-bold text-stone-900 text-sm hover:bg-stone-100 transition" data-idx="${i}">
+            <span class="pr-2">${v.title}</span>
+            <span class="shrink-0 px-2 py-0.5 rounded text-[11px] font-semibold ${v.badgeColor}">${v.badge}</span>
+          </button>
+          <div class="vuln-panel px-4 pb-4 text-xs text-stone-600 leading-relaxed ${i === 0 ? '' : 'hidden'}">
+            ${v.content}
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.vuln-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = btn.nextElementSibling;
+          const isHidden = panel.classList.contains('hidden');
+          document.querySelectorAll('.vuln-panel').forEach(p => p.classList.add('hidden'));
+          if (isHidden) panel.classList.remove('hidden');
+        });
+      });
+    }
+
+    let parliamentChartInstance = null;
+    function initParliamentChart(mode = 'coalition') {
+      const ctx = document.getElementById('parliamentChart').getContext('2d');
+      if (parliamentChartInstance) parliamentChartInstance.destroy();
+
+      const dataConfig = mode === 'coalition' ? {
+        labels: ['Coalition Arizona (81)', 'Manque pour 2/3 (19)', 'Autres oppositions (50)'].map(l => wrapLabel(l, 16)),
+        datasets: [{
+          data: [81, 19, 50],
+          backgroundColor: ['#1E3A5F', '#F59E0B', '#D6D3D1'],
+          borderWidth: 2,
+          borderColor: '#FFFFFF'
+        }]
+      } : {
+        labels: ['N-VA (24)', 'MR (19)', 'Les Engagés (14)', 'Vooruit (13)', 'CD&V (11)', 'Opposition (69)'].map(l => wrapLabel(l, 16)),
+        datasets: [{
+          data: [24, 19, 14, 13, 11, 69],
+          backgroundColor: ['#B45309', '#1D4ED8', '#0D9488', '#DC2626', '#EA580C', '#E7E5E4'],
+          borderWidth: 2,
+          borderColor: '#FFFFFF'
+        }]
+      };
+
+      parliamentChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: dataConfig,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          rotation: -90,
+          circumference: 180,
+          cutout: '58%',
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 12, font: { size: 11 } }
+            },
+            tooltip: commonTooltipOptions
+          }
+        }
+      });
+    }
+
+    document.getElementById('seat-view-selector').addEventListener('change', (e) => {
+      initParliamentChart(e.target.value);
+    });
+
+    let laborChartInstance = null;
+    function initLaborChart(metric = 'rates') {
+      const ctx = document.getElementById('laborChart').getContext('2d');
+      if (laborChartInstance) laborChartInstance.destroy();
+
+      const labels = ['Flandre', 'Wallonie', 'Bruxelles-Capitale', 'Moyenne Belgique'].map(l => wrapLabel(l, 16));
+      const config = metric === 'rates' ? {
+        labels,
+        datasets: [
+          {
+            label: 'Taux d’emploi 20-64 ans (%)',
+            data: [77.3, 67.6, 64.7, 72.8],
+            backgroundColor: '#1E3A5F',
+            borderRadius: 6
+          },
+          {
+            label: 'Taux de chômage BIT (%)',
+            data: [4.0, 8.0, 12.7, 6.1],
+            backgroundColor: '#B45309',
+            borderRadius: 6
+          }
+        ]
+      } : {
+        labels: ['Flandre', 'Wallonie', 'Bruxelles-Capitale'].map(l => wrapLabel(l, 16)),
+        datasets: [
+          {
+            label: 'Baisse chômeurs indemnisés (%)',
+            data: [22.8, 45.0, 50.5],
+            backgroundColor: '#991B1B',
+            borderRadius: 6
+          },
+          {
+            label: 'Exclus sollicitant un CPAS (%)',
+            data: [35.0, 49.0, 43.9],
+            backgroundColor: '#1E3A5F',
+            borderRadius: 6
+          }
+        ]
+      };
+
+      laborChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: config,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 90,
+              ticks: { callback: val => val + ' %', font: { size: 11 } },
+              grid: { color: '#E7E5E4' }
+            },
+            x: {
+              ticks: { font: { size: 11 } },
+              grid: { display: false }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+            tooltip: commonTooltipOptions
+          }
+        }
+      });
+    }
+
+    document.getElementById('labor-metric-select').addEventListener('change', (e) => {
+      initLaborChart(e.target.value);
+    });
+
+    let fiscalChartInstance = null;
+    function initFiscalChart(metric = 'deficit') {
+      const ctx = document.getElementById('fiscalChart').getContext('2d');
+      if (fiscalChartInstance) fiscalChartInstance.destroy();
+
+      const config = metric === 'deficit' ? {
+        labels: ['Entité I (Fédéral + Sécu)', 'Entité II (Régions + Comm.)', 'Déficit public global 2025', 'Plafond critère UE'].map(l => wrapLabel(l, 16)),
+        datasets: [{
+          label: 'Solde budgétaire (% du PIB)',
+          data: [-4.0, -1.5, -5.2, -3.0],
+          backgroundColor: ['#991B1B', '#1E3A5F', '#B45309', '#78716C'],
+          borderRadius: 6
+        }]
+      } : {
+        labels: ['Dette publique 2025', 'Projection 2031 (politique inchangée)', 'Dette FWB (% recettes)'].map(l => wrapLabel(l, 16)),
+        datasets: [{
+          label: 'Ratio d’endettement (%)',
+          data: [107.0, 122.0, 97.59],
+          backgroundColor: ['#1E3A5F', '#991B1B', '#B45309'],
+          borderRadius: 6
+        }]
+      };
+
+      fiscalChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: config,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              ticks: { callback: val => val + ' %', font: { size: 11 } },
+              grid: { color: '#E7E5E4' }
+            },
+            x: {
+              ticks: { font: { size: 11 } },
+              grid: { display: false }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: commonTooltipOptions
+          }
+        }
+      });
+    }
+
+    document.getElementById('fiscal-metric-select').addEventListener('change', (e) => {
+      initFiscalChart(e.target.value);
+    });
+
+    const pollDataByRegion = {
+      flandre: {
+        labels: ['Vlaams Belang', 'N-VA', 'Anders (ex-Open VLD)'].map(l => wrapLabel(l, 16)),
+        values: [25.1, 22.0, 6.8],
+        colors: ['#1C1917', '#B45309', '#2563EB'],
+        text: '<strong>En Flandre :</strong> Le Vlaams Belang reste en tête (~25,1 %) devant la N-VA (~22,0 %), tandis que les libéraux flamands (Anders, ex-Open VLD) chutent sous les 7 %, réduisant les options d’une coalition alternative au fédéral.'
+      },
+      wallonie: {
+        labels: ['PS', 'MR'].map(l => wrapLabel(l, 16)),
+        values: [23.9, 20.0],
+        colors: ['#DC2626', '#1D4ED8'],
+        text: '<strong>En Wallonie :</strong> Le Parti Socialiste reprend la première place (~23,9 %) devant le MR (~20,0 %), renforçant le poids d’une opposition francophone hostile à toute réforme confédérale ou amputation sociale.'
+      },
+      bruxelles: {
+        labels: ['PTB', 'PS', 'MR'].map(l => wrapLabel(l, 16)),
+        values: [25.5, 18.3, 13.9],
+        colors: ['#991B1B', '#DC2626', '#1D4ED8'],
+        text: '<strong>À Bruxelles :</strong> Le PTB devient pour la première fois la première force politique (~25,5 %) devant le PS (18,3 %) et le MR (13,9 %), traduisant le rejet des réformes sociales et de la cure d’austérité régionale.'
+      }
+    };
+
+    let pollChartInstance = null;
+    function initPollChart(region = 'flandre') {
+      const ctx = document.getElementById('pollChart').getContext('2d');
+      if (pollChartInstance) pollChartInstance.destroy();
+
+      const info = pollDataByRegion[region];
+      document.getElementById('poll-commentary').innerHTML = info.text;
+
+      pollChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: info.labels,
+          datasets: [{
+            label: 'Intentions de vote (%)',
+            data: info.values,
+            backgroundColor: info.colors,
+            borderRadius: 6,
+            barThickness: 42
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 35,
+              ticks: { callback: val => val + ' %', font: { size: 11 } },
+              grid: { color: '#E7E5E4' }
+            },
+            x: {
+              ticks: { font: { size: 11 } },
+              grid: { display: false }
+            }
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: commonTooltipOptions
+          }
+        }
+      });
+    }
+
+    document.querySelectorAll('.poll-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.poll-tab').forEach(t => {
+          t.classList.remove('active', 'bg-[#1E3A5F]', 'text-white');
+          t.classList.add('bg-white', 'border', 'border-stone-300', 'text-stone-700');
+        });
+        tab.classList.add('active', 'bg-[#1E3A5F]', 'text-white');
+        tab.classList.remove('bg-white', 'border', 'border-stone-300', 'text-stone-700');
+        initPollChart(tab.dataset.region);
+      });
+    });
+
+    document.querySelectorAll('.nav-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderMatrix('all');
+      renderTimeline('all');
+      renderMechanismDetail(0);
+      renderVulnerabilities();
+      initParliamentChart('coalition');
+      initLaborChart('rates');
+      initFiscalChart('deficit');
+      initPollChart('flandre');
+    });
+  </script>
+</body>
+</html>
