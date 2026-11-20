@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bruxelles — 23 Novembre 2026 : Enjeux, Acteurs & Couverture Médiatique</title>
+  <!-- Chosen Palette: Warm Alabaster & Belgian Civic Slate (Background #FAF8F5, Cards #FFFFFF, Stone #F2EFE9, Ink #1E293B, Civic Terracotta #C2410C, Institutional Slate Blue #0F4C81, Amber Alert #B45309) -->
+  <!-- Application Structure Plan: L'application est structurée en un observatoire interactif thématique en cinq volets accessibles depuis une barre de navigation fixe : (1) Vue d'ensemble et séquence de crise de la coalition Arizona (chronologie interactive et explorateur de lignes rouges), (2) Duel budgétaire chiffré comparant le « Plan B » syndical à 21,244 Mds € et le diagnostic macroéconomique patronal via des graphiques Chart.js dynamiques, (3) Cartographie filtrable des sept familles de parties prenantes et du cycle d'actions de novembre-décembre, (4) Guide opérationnel interactif du lundi 23 novembre (itinéraire chronologique et simulateur d'impact par profil/opérateur), et (5) Analyse transversale de la couverture médiatique (graphique multi-axes des 4 régimes de cadrage, asymétrie linguistique Nord/Sud et décryptage du glissement sémantique entre manifestation et grève). Cette architecture non linéaire permet à l'utilisateur de passer immédiatement de la compréhension politique aux chiffres budgétaires, à l'impact pratique ou à l'analyse des médias. -->
+  <!-- Visualization & Content Choices: 1. Chronologie interactive (HTML/CSS/JS) -> Goal: Change/Context -> Permet de relier l'agenda royal et le blocage de la coalition Arizona à la date du 23 novembre sans surcharge textuelle. 2. Graphique en barres horizontales dynamiques (Chart.js Canvas) -> Goal: Compare/Inform -> Présente les 6 mesures chiffrées du Plan B (5,272 Mds €) et la comparaison macro-budgétaire globale (21,244 Mds € vs 10 Mds € recherchés) avec bascule interactive. 3. Graphique comparatif des finances publiques 2000-2026 (Chart.js Canvas) -> Goal: Change/Compare -> Visualise le diagnostic du VBO (recettes stables à 49 % du PIB vs dépenses primaires passant de 42 % à 52 % du PIB) face à l'alerte de déficit de 5,4 % en 2027. 4. Cartographie filtrable des acteurs & Guide opérationnel (Grilles HTML/Tailwind + filtres JS) -> Goal: Organize/Inform -> Facilite l'identification rapide des positions (syndicats, patronat, partis, société civile) et des perturbations par opérateur (STIB, De Lijn, LeTEC, SNCB, Propreté). 5. Graphique radar multi-pôles (Chart.js Canvas) -> Goal: Relationships/Compare -> Compare l'intensité des 4 cadrages éditoriaux à travers les familles de médias observées. -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FAF8F5;
+      color: #1E293B;
+    }
+    h1, h2, .font-serif-title {
+      font-family: 'Source Serif 4', serif;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 310px;
+      max-height: 390px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+    .nav-pill.active {
+      background-color: #1E293B;
+      color: #FAF8F5;
+    }
+    .tab-btn.active {
+      background-color: #0F4C81;
+      color: #FFFFFF;
+      border-color: #0F4C81;
+    }
+    .tab-btn-warm.active {
+      background-color: #C2410C;
+      color: #FFFFFF;
+      border-color: #C2410C;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-orange-200 selection:text-slate-900">
+
+  <header class="sticky top-0 z-50 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#E5E0D8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 gap-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-[#1E293B] text-[#FAF8F5] font-bold text-sm tracking-tight">23N</span>
+            <div>
+              <span class="block text-xs font-semibold uppercase tracking-wider text-[#C2410C]">Observatoire Social & Médiatique</span>
+              <span class="block text-sm font-bold text-slate-900">Bruxelles • Lundi 23 novembre 2026</span>
+            </div>
+          </div>
+          <span class="md:hidden inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-900 border border-amber-300">Échéance Royale</span>
+        </div>
+        <nav aria-label="Navigation principale" class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+          <a href="#contexte" class="nav-pill active whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors text-slate-700 hover:bg-[#EAE5DC]">1. Crise & Enjeux</a>
+          <a href="#budget" class="nav-pill whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors text-slate-700 hover:bg-[#EAE5DC]">2. Plan B vs Patronat</a>
+          <a href="#acteurs" class="nav-pill whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors text-slate-700 hover:bg-[#EAE5DC]">3. Parties Prenantes</a>
+          <a href="#pratique" class="nav-pill whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors text-slate-700 hover:bg-[#EAE5DC]">4. Pratique & Mobilité</a>
+          <a href="#medias" class="nav-pill whitespace-nowrap px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-colors text-slate-700 hover:bg-[#EAE5DC]">5. Analyse Médias</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+    <section class="bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+        <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-100 text-[#C2410C]">Manifestation Nationale Interprofessionnelle</span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">Coalition « Arizona » sous tension</span>
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-[#0F4C81]">Front commun CSC • FGTB • SYNOVA</span>
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-bold text-slate-900 leading-tight mb-4">
+        Pourquoi manifeste-t-on à Bruxelles ce lundi 23 novembre 2026 ?
+      </h1>
+      <p class="text-slate-600 text-base sm:text-lg leading-relaxed max-w-4xl mb-8">
+        Convoquée en front commun par les syndicats et élargie à la société civile, la mobilisation nationale du 23 novembre 2026 percute directement l'agenda institutionnel belge : elle se tient le jour même où le Premier ministre Bart De Wever doit faire rapport au Roi sur l'impasse budgétaire de la coalition « Arizona » (N-VA, MR, Les Engagés, CD&V, Vooruit). Explorez ci-dessous les ressorts politiques et socio-économiques de l'action, la bataille chiffrée autour du « Plan B » fiscal, l'écosystème des acteurs, les perturbations attendues et les fractures de la couverture médiatique.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-4">
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <span>Effort budgétaire recherché</span>
+            <span>🏛️</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#0F4C81]">~10 Mds €</div>
+          <p class="text-xs text-slate-600 mt-1">Trajectoire sur 3 ans négociée par l'Arizona (contre 7,7 Mds € estimés par le VBO en juillet).</p>
+        </div>
+
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-4">
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <span>« Plan B » alternatif FGTB</span>
+            <span>💶</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-[#C2410C]">21,244 Mds €</div>
+          <p class="text-xs text-slate-600 mt-1">Recettes annuelles avancées via 11 mesures fiscales, soit plus du double de l'objectif fédéral.</p>
+        </div>
+
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-4">
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <span>Inflation & Déficit 2027</span>
+            <span>📈</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-slate-900">5,26 % / &gt;5,4 %</div>
+          <p class="text-xs text-slate-600 mt-1">Inflation d'octobre (inédit depuis avril 2023) et risque de déficit dépassant 5,4 % du PIB en 2027.</p>
+        </div>
+
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-4">
+          <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">
+            <span>Mobilisation précédente</span>
+            <span>📢</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-amber-700">30k – 50k</div>
+          <p class="text-xs text-slate-600 mt-1">Participants le 9 octobre 2026 à Bruxelles (30 000 police ; jusqu'à 50 000 selon BX1).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contexte" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#0F4C81]">Section 01 • Genèse politique et sociale</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1 mb-3">L'enlisement budgétaire et l'érosion du pouvoir d'achat</h2>
+        <p class="text-slate-600 leading-relaxed mb-6">
+          Cette section retrace la double mécanique qui alimente la mobilisation du 23 novembre : d'une part, une crise gouvernementale aiguë qui pousse la Belgique vers le régime des douzièmes provisoires début 2027 et place Bart De Wever devant le Roi le jour même du cortège ; d'autre part, une exaspération sociale face au coût de la vie, aux premières restrictions sur l'indexation et aux plans de restructuration industrielle. Cliquez sur les étapes de la chronologie ou filtrez les griefs pour en examiner les détails.
+        </p>
+
+        <div class="bg-[#F2EFE9] rounded-xl p-5 border border-[#E5E0D8] mb-8">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <h3 class="text-base font-bold text-slate-900">🗓️ Séquence automnale : comment le 23 novembre est devenu le point de bascule</h3>
+            <span class="text-xs text-slate-500 font-medium">Sélectionnez une date clé pour afficher son impact</span>
+          </div>
+          <div id="timeline-buttons" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 mb-5"></div>
+          <div id="timeline-detail" class="bg-white rounded-xl p-5 border border-[#E5E0D8] transition-all"></div>
+        </div>
+
+        <div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <h3 class="text-lg font-bold text-slate-900">🧭 Les 4 foyers de colère socio-économique</h3>
+            <div id="grievance-filters" class="flex flex-wrap gap-1.5">
+              <button data-filter="all" class="tab-btn-warm active px-3 py-1 rounded-full text-xs font-semibold border border-[#E5E0D8] transition-colors">Tous les thèmes</button>
+              <button data-filter="pouvoir" class="tab-btn-warm px-3 py-1 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Pouvoir d'achat & Index</button>
+              <button data-filter="rouge" class="tab-btn-warm px-3 py-1 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Lignes rouges sociales</button>
+              <button data-filter="industrie" class="tab-btn-warm px-3 py-1 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Emploi & Restructurations</button>
+              <button data-filter="societe" class="tab-btn-warm px-3 py-1 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Défense & Libertés</button>
+            </div>
+          </div>
+          <div id="grievance-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="budget" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#C2410C]">Section 02 • Revendications & Bataille des chiffres</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1 mb-3">« Plan B » à 21,244 milliards € contre orthodoxie patronale</h2>
+        <p class="text-slate-600 leading-relaxed mb-6">
+          Au reproche patronal d'une « manifestation sans plan sérieux », le front commun syndical oppose le « Plan B » chiffré de la FGTB : onze mesures fiscales et sociales censées rapporter 21,244 milliards d'euros par an, appuyées par une pétition citoyenne ayant dépassé de plus de trois fois le seuil requis à la Chambre. En face, le VBO/FEB, Voka et UNIZO s'appuient sur les séries de la Banque nationale (2000–2026) pour exiger une baisse des dépenses primaires et un choc de croissance plutôt que toute hausse d'impôts.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <h3 class="text-base font-bold text-slate-900">📊 Architecture chiffrée du « Plan B » syndical</h3>
+                <div class="inline-flex rounded-lg border border-[#E5E0D8] bg-white p-0.5">
+                  <button id="btn-planb-detail" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#C2410C] text-white transition-colors">6 mesures détaillées (M€)</button>
+                  <button id="btn-planb-macro" class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors">Comparaison globale (Mds €)</button>
+                </div>
+              </div>
+              <p id="planb-chart-caption" class="text-xs text-slate-600 mb-4">
+                Ventilation des six mesures publiquement chiffrées du Plan B (totalisant 5 272 M€/an), complétées par cinq réformes structurelles sur le capital et la fraude fiscale pour atteindre 21,244 Mds €/an.
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="planBChart"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <h3 class="text-base font-bold text-slate-900">📉 Diagnostic patronal (VBO / BNB) & Impact PIB</h3>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-[#0F4C81]">En % du PIB</span>
+              </div>
+              <p class="text-xs text-slate-600 mb-4">
+                Selon le VBO, les recettes publiques stagnent à 49 % du PIB depuis 2000 tandis que les dépenses primaires grimpent de 42 % à 52 %, menaçant de porter le déficit 2027 au-delà de 5,4 %.
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="vboMacroChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#F2EFE9] rounded-xl border border-[#E5E0D8] p-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <h3 class="text-base font-bold text-slate-900">⚖️ Comparateur doctrinal : Front commun vs Fédérations patronales</h3>
+            <div id="doctrine-tabs" class="flex flex-wrap gap-1.5">
+              <button data-doc="diagnostic" class="tab-btn active px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E5E0D8] transition-colors">Diagnostic budgétaire</button>
+              <button data-doc="leviers" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E5E0D8] bg-white text-slate-700 transition-colors">Fiscalité vs « Quick wins »</button>
+              <button data-doc="industrie" class="tab-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E5E0D8] bg-white text-slate-700 transition-colors">Loi ICIG/Renault vs Pacte</button>
+            </div>
+          </div>
+          <div id="doctrine-content" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="acteurs" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#0F4C81]">Section 03 • Cartographie des forces en présence</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1 mb-3">Un front citoyen élargi face à une majorité fracturée</h2>
+        <p class="text-slate-600 leading-relaxed mb-6">
+          L'architecture de la journée met en présence sept catégories d'acteurs : les trois syndicats représentatifs (dont SYNOVA, nouvelle identité de la CGSLB/ACLVB depuis le 30 mai), un vaste réseau associatif et étudiant (marqué par l'alliance inédite VVS–FEF), l'opposition de gauche et écologiste, une coalition « Arizona » divisée par le blocage de Vooruit, les fédérations patronales et les opérateurs publics. Utilisez les filtres ci-dessous pour explorer leurs positions et le calendrier des actions de novembre-décembre.
+        </p>
+
+        <div id="actor-filters" class="flex flex-wrap gap-2 mb-6">
+          <button data-actor="all" class="tab-btn active px-3.5 py-1.5 rounded-full text-xs font-semibold border border-[#E5E0D8] transition-colors">Toutes les parties prenantes (7)</button>
+          <button data-actor="syndicats" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Front syndical & Centrales</button>
+          <button data-actor="societe" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Société civile & Jeunesse</button>
+          <button data-actor="politique" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Opposition & Coalition Arizona</button>
+          <button data-actor="patronat" class="tab-btn px-3.5 py-1.5 rounded-full text-xs font-semibold border border-[#E5E0D8] bg-[#FAF8F5] text-slate-700 transition-colors">Patronat & Pouvoirs publics</button>
+        </div>
+
+        <div id="actor-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"></div>
+
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5">
+          <h3 class="text-base font-bold text-slate-900 mb-1">📅 Le 23 novembre au cœur d'un cycle continu de mobilisations (novembre – décembre 2026)</h3>
+          <p class="text-xs text-slate-600 mb-4">La manifestation bruxelloise s'inscrit dans une séquence de montée en pression sectorielle et intergénérationnelle.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
+            <div class="bg-white p-3 rounded-lg border border-[#E5E0D8]">
+              <span class="text-xs font-bold text-[#0F4C81]">17 nov.</span>
+              <p class="text-xs font-semibold text-slate-900 mt-0.5">Manif étudiante</p>
+              <p class="text-[11px] text-slate-600 mt-1">Alliance historique VVS + FEF à Bruxelles (jusqu'à 10 000 jeunes).</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-[#E5E0D8]">
+              <span class="text-xs font-bold text-[#0F4C81]">18 nov.</span>
+              <p class="text-xs font-semibold text-slate-900 mt-0.5">Services publics</p>
+              <p class="text-[11px] text-slate-600 mt-1">Action des services publics locaux wallons à Namur.</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-[#E5E0D8]">
+              <span class="text-xs font-bold text-[#0F4C81]">20 nov.</span>
+              <p class="text-xs font-semibold text-slate-900 mt-0.5">Action scolaire</p>
+              <p class="text-[11px] text-slate-600 mt-1">Journée scolaire contre la militarisation.</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-[#E5E0D8]">
+              <span class="text-xs font-bold text-[#0F4C81]">22 nov.</span>
+              <p class="text-xs font-semibold text-slate-900 mt-0.5">Marche paix</p>
+              <p class="text-[11px] text-slate-600 mt-1">Mobilisation associative pour la paix.</p>
+            </div>
+            <div class="bg-orange-50 p-3 rounded-lg border-2 border-[#C2410C]">
+              <span class="text-xs font-extrabold text-[#C2410C]">23 NOV.</span>
+              <p class="text-xs font-bold text-slate-900 mt-0.5">Manif Nationale</p>
+              <p class="text-[11px] text-slate-700 mt-1">Front commun interprofessionnel à Bruxelles (Nord → Midi).</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-[#E5E0D8]">
+              <span class="text-xs font-bold text-[#0F4C81]">27 nov.</span>
+              <p class="text-xs font-semibold text-slate-900 mt-0.5">« VUURWERK »</p>
+              <p class="text-[11px] text-slate-600 mt-1">Secteur socioculturel (menée avec plusieurs employeurs).</p>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-[#E5E0D8]">
+              <span class="text-xs font-bold text-[#0F4C81]">10 déc.</span>
+              <p class="text-xs font-semibold text-slate-900 mt-0.5">Non-marchand</p>
+              <p class="text-[11px] text-slate-600 mt-1">Cortège du secteur non marchand à Bruxelles.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pratique" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Section 04 • Logistique, Parcours & Perturbations</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1 mb-3">Organisation pratique du lundi 23 novembre 2026</h2>
+        <p class="text-slate-600 leading-relaxed mb-6">
+          Bien que le spectre d'une grève générale ait été évoqué en septembre, la journée du 23 novembre est organisée comme une <strong>manifestation nationale interprofessionnelle couverte par des préavis de grève</strong>. Ce cadre protège juridiquement les participants et ouvre droit aux indemnités syndicales, tout en maintenant la circulation des trains SNCB. Explorez le déroulé horaire du cortège et vérifiez l'état des perturbations par opérateur ou par profil.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          <div class="lg:col-span-5 bg-[#F2EFE9] rounded-xl border border-[#E5E0D8] p-5">
+            <h3 class="text-base font-bold text-slate-900 mb-3">⏱️ Déroulé horaire & Itinéraire bruxellois</h3>
+            <div class="space-y-3">
+              <div class="bg-white rounded-lg p-3.5 border border-[#E5E0D8]">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-[#C2410C]">09h00 – 09h30</span>
+                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-900">Fermetures voirie</span>
+                </div>
+                <p class="text-sm font-bold text-slate-900 mt-1">Mise en place & Accueil Gare du Nord</p>
+                <p class="text-xs text-slate-600 mt-0.5">Fermeture du boulevard du Jardin Botanique dès 9h00. Accueil progressif des délégations (dès 9h30 pour la COC).</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-3.5 border border-[#E5E0D8]">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-[#C2410C]">10h00 – 11h00</span>
+                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-red-100 text-red-900">Tunnels fermés</span>
+                </div>
+                <p class="text-sm font-bold text-slate-900 mt-1">Rassemblement Bd Roi Albert II & Discours</p>
+                <p class="text-xs text-slate-600 mt-0.5">Fermeture des tunnels Reyers et Cinquantenaire dès 10h00 (risque de fermeture sur la Petite Ceinture R20). Prises de parole syndicales.</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-3.5 border border-[#E5E0D8]">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-[#C2410C]">11h00 – ~13h00</span>
+                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-100 text-[#0F4C81]">Cortège principal</span>
+                </div>
+                <p class="text-sm font-bold text-slate-900 mt-1">Gare du Nord → Petite Ceinture → Gare du Midi</p>
+                <p class="text-xs text-slate-600 mt-0.5">Tracé via Bd du Jardin Botanique et Petite Ceinture (point de ralliement PS Place Surlet de Chokier) jusqu'à l'Esplanade de l'Europe.</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-3.5 border border-[#E5E0D8]">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-extrabold text-slate-600">Jusqu'à 15h00</span>
+                  <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900">Réouverture</span>
+                </div>
+                <p class="text-sm font-bold text-slate-900 mt-1">Dislocation et normalisation du trafic</p>
+                <p class="text-xs text-slate-600 mt-0.5">Levée progressive du dispositif policier PolBru et réouverture des axes en milieu d'après-midi.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <h3 class="text-base font-bold text-slate-900">🚦 État des services & Conseils par profil (au 20 nov.)</h3>
+                <div id="profile-filters" class="flex flex-wrap gap-1.5">
+                  <button data-profile="all" class="tab-btn-warm active px-2.5 py-1 rounded-md text-xs font-semibold border border-[#E5E0D8]">Tous les opérateurs</button>
+                  <button data-profile="usager" class="tab-btn-warm px-2.5 py-1 rounded-md text-xs font-semibold border border-[#E5E0D8] bg-white text-slate-700">Usager / Navetteur</button>
+                  <button data-profile="travailleur" class="tab-btn-warm px-2.5 py-1 rounded-md text-xs font-semibold border border-[#E5E0D8] bg-white text-slate-700">Travailleur / Agent</button>
+                  <button data-profile="employeur" class="tab-btn-warm px-2.5 py-1 rounded-md text-xs font-semibold border border-[#E5E0D8] bg-white text-slate-700">Employeur / RH</button>
+                </div>
+              </div>
+              <div id="service-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            </div>
+
+            <div class="mt-4 bg-white rounded-lg border border-amber-300 p-3.5 flex items-start gap-3">
+              <span class="text-lg">⚠️</span>
+              <div class="text-xs text-slate-700 leading-relaxed">
+                <strong>Point juridique clé :</strong> Les affiliés participant à l'action sont couverts par les préavis interprofessionnels et reçoivent une indemnité de grève ainsi que le remboursement du billet de train (via enregistrement sur place ou carte d'action). Dans la fonction publique flamande, l'absence est encodée dans <em>Vlimpers</em> comme « interruption de travail organisée » (retenue de salaire et perte du chèque-repas).
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="medias" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E5E0D8] p-6 sm:p-8 shadow-sm">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#C2410C]">Section 05 • Analyse transversale de la couverture médiatique</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1 mb-3">Quatre régimes de cadrage, une asymétrie Nord-Sud et un flou sémantique</h2>
+        <p class="text-slate-600 leading-relaxed mb-6">
+          L'examen transversal des publications accessibles en ligne (audiovisuel public, presse régionale bruxelloise et flamande, médias anglophones, portails RH, médias alternatifs et communications syndicales/patronales — les quotidiens sous péage étant observés via leurs citations et reprises) révèle une nette segmentation des angles éditoriaux. Interagissez avec le radar comparatif des pôles médiatiques et explorez les deux lignes de fracture qui traversent le traitement de l'événement.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+          <div class="lg:col-span-6 bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 mb-1">🕸️ Profil éditorial des 4 pôles médiatiques</h3>
+              <p class="text-xs text-slate-600 mb-4">
+                Intensité relative des axes de traitement selon la famille de médias (score analytique sur 10 issu des corpus observés).
+              </p>
+            </div>
+            <div class="chart-container">
+              <canvas id="mediaRadarChart"></canvas>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6 bg-[#F2EFE9] rounded-xl border border-[#E5E0D8] p-5 flex flex-col justify-between">
+            <div>
+              <h3 class="text-base font-bold text-slate-900 mb-3">📰 Explorer chaque régime de cadrage éditorial</h3>
+              <div id="media-pole-buttons" class="grid grid-cols-2 gap-2 mb-4"></div>
+              <div id="media-pole-detail" class="bg-white rounded-xl p-5 border border-[#E5E0D8]"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-[#E5E0D8] pt-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+            <h3 class="text-lg font-bold text-slate-900">🔍 Deux lignes de fracture transversales dans les médias</h3>
+            <div class="inline-flex rounded-xl border border-[#E5E0D8] bg-[#FAF8F5] p-1">
+              <button id="btn-fracture-semantic" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white transition-colors">1. Glissement « Manifestation » vs « Grève »</button>
+              <button id="btn-fracture-lang" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 transition-colors">2. Asymétrie linguistique Nord / Sud</button>
+            </div>
+          </div>
+          <div id="fracture-panel"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="bg-[#1E293B] text-slate-300 mt-16 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-bold text-white text-sm">Synthèse interactive — Mobilisation nationale du 23 novembre 2026 à Bruxelles</p>
+        <p class="text-slate-400 mt-1">Données politiques, budgétaires, logistiques et médiatiques arrêtées au 20 novembre 2026.</p>
+      </div>
+      <div class="text-slate-400 sm:text-right">
+        <p>Sources intégrées : Front commun syndical, VBO/FEB, Voka, UNIZO, Ville de Bruxelles,</p>
+        <p>STIB, De Lijn, LeTEC, SNCB, VRT NWS, BX1, BRUZZ, Knack, DeWereldMorgen.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const timelineData = [
+      {
+        date: "11 sept.",
+        fullDate: "11 septembre 2026",
+        badge: "Avertissement FGTB",
+        title: "La FGTB fixe la semaine du 23 novembre comme horizon d'escalade",
+        fact: "Dès la rentrée politique, la FGTB avertit qu'une grève générale pourrait suivre dans la semaine du 23 novembre si le gouvernement fédéral franchit ses « lignes rouges » sociales lors du conclave budgétaire d'octobre.",
+        impact: "Installe la fin novembre comme échéance stratégique dans l'agenda social et prépare le terrain à un mouvement interprofessionnel d'ampleur."
+      },
+      {
+        date: "9 oct.",
+        fullDate: "9 octobre 2026",
+        badge: "Premier test de rue",
+        title: "Première manifestation nationale à Bruxelles (30 000 à 50 000 participants)",
+        fact: "Un premier cortège national rassemble 30 000 manifestants selon un chiffre policier relayé par un guide explicatif, et entre 30 000 et 50 000 selon la chaîne régionale bruxelloise BX1.",
+        impact: "Établit le seuil quantitatif de référence que le front commun syndical ambitionne de dépasser lors de la journée du 23 novembre."
+      },
+      {
+        date: "21 oct.",
+        fullDate: "21 octobre 2026",
+        badge: "Convocation officielle",
+        title: "CSC, FGTB et SYNOVA convoquent une « grande mobilisation citoyenne »",
+        fact: "Les trois syndicats représentatifs lancent officiellement l'appel à une grande mobilisation citoyenne à Bruxelles pour le lundi 23 novembre 2026, élargie au monde associatif.",
+        impact: "Ancre le rendez-vous de rue au cœur même de la phase décisive des arbitrages budgétaires de l'automne."
+      },
+      {
+        date: "29 oct.",
+        fullDate: "29 octobre 2026",
+        badge: "Pic d'inflation",
+        title: "L'inflation d'octobre atteint 5,26 %, un niveau inédit depuis avril 2023",
+        fact: "Selon les chiffres relayés par une plateforme de mobilisation citoyenne, l'inflation grimpe à 5,26 % en octobre, ravivant l'inquiétude sur le logement, le chauffage, l'énergie et l'alimentation.",
+        impact: "Renforce la sensibilité autour de la défense de l'indexation automatique au moment où la première application de l'« index en centimes » entre en vigueur dans le secteur papier le 1er novembre."
+      },
+      {
+        date: "2–6 nov.",
+        fullDate: "2 au 6 novembre 2026",
+        badge: "Crise gouvernementale",
+        title: "Démission suspendue de Bart De Wever et bascule vers les douzièmes provisoires",
+        fact: "Faute d'accord des cinq partis sur le budget, Bart De Wever remet sa démission au Roi le 2 novembre. Le Palais la tient en suspens puis la refuse le 6 novembre après l'engagement des présidents de parti à faire des concessions. Le pays bascule vers des douzièmes provisoires début 2027, qualifiés le 5 novembre d'« échec cuisant » par De Wever selon La Libre.",
+        impact: "Fragilise considérablement l'exécutif « Arizona » et confère à la pression de rue un poids politique accru."
+      },
+      {
+        date: "16 nov.",
+        fullDate: "16 novembre 2026",
+        badge: "Blocage de Vooruit",
+        title: "Isolement de Vooruit et sursis royal jusqu'au lundi 23 novembre",
+        fact: "Lors des discussions autour d'une nouvelle proposition de Bart De Wever, quatre des cinq partis (N-VA, MR, Les Engagés, CD&V) soutiennent le texte mais Vooruit refuse de suivre, rejetant les coupes dans la santé et l'indexation (provoquant l'exaspération des Engagés). Le Roi accorde un délai d'une semaine jusqu'au lundi 23 novembre.",
+        impact: "Fait coïncider exactement la manifestation nationale à Bruxelles avec le jour où le Premier ministre doit faire rapport au Palais royal."
+      },
+      {
+        date: "23 nov.",
+        fullDate: "Lundi 23 novembre 2026",
+        badge: "Jour J • Collision",
+        title: "Cortège national à Bruxelles le jour du rapport au Roi",
+        fact: "Les manifestants défilent de la gare du Nord à la gare du Midi pendant que Bart De Wever doit rendre compte au Roi de la survie ou de l'accord budgétaire de la coalition Arizona.",
+        impact: "Les présidents de la CSC (Ann Vermorgen) et de la FGTB (Bert Engelaar) soulignent la portée symbolique de maintenir la pression au moment exact des ultimes arbitrages."
+      }
+    ];
+
+    const grievanceData = [
+      {
+        category: "pouvoir",
+        tag: "Pouvoir d'achat & Index",
+        icon: "💶",
+        title: "Renchérissement du coût de la vie et application du « centenindex »",
+        desc: "Hausse marquée des dépenses essentielles (logement, chauffage, carburants, transports, frais scolaires, alimentation) sur fond d'inflation à 5,26 %. Dans le secteur de la production de papier, l'indexation de +1,87 % du 1er novembre 2026 a appliqué pour la première fois « l'index en centimes », plafonnant l'indexation des salaires bruts dépassant 4 000 €/mois."
+      },
+      {
+        category: "rouge",
+        tag: "Lignes rouges sociales",
+        icon: "🛑",
+        title: "Refus du saut d'index, des coupes santé et de la perte de congés",
+        desc: "Opposition frontale à tout saut d'index, à la suppression de jours fériés tombant le week-end ou de jours de congé (une piste qui ne relèverait le PIB que de 0,05 % selon DeWereldMorgen), à la remise en cause des écochèques et aux coupes dans les soins de santé, le chômage, les pensions et les moyens des CPAS/OCMW."
+      },
+      {
+        category: "industrie",
+        tag: "Emploi & Restructurations",
+        icon: "🏭",
+        title: "Plans sociaux chez GSK, Vynova, UPS et transition IA / climat",
+        desc: "Vague d'inquiétudes face aux licenciements collectifs annoncés dans de grandes entreprises (GSK, Vynova, UPS) et aux mutations liées à l'intelligence artificielle. La centrale ACCG réclame une « loi ICIG » prolongeant la loi Renault pour interdire les dividendes au détriment du maintien de l'activité."
+      },
+      {
+        category: "societe",
+        tag: "Défense & Libertés publiques",
+        icon: "⚖️",
+        title: "Dépenses militaires, Coopération et loi sur les visites domiciliaires",
+        desc: "Critique de l'affectation de milliards d'euros aux dépenses militaires parallèlement aux coupes dans la Coopération au développement, la culture et l'enseignement. Dénonciation de la nouvelle loi sur les visites domiciliaires (woonstbetreding), perçue comme une dérive sécuritaire criminalisant la contestation."
+      }
+    ];
+
+    const doctrineData = {
+      diagnostic: {
+        unionTitle: "Front commun syndical : Refus d'une austérité unilatérale",
+        unionPoints: [
+          "Reconnaît la nécessité d'assainir les finances publiques, mais refuse que l'effort de ~10 Mds € pèse sur les salariés, malades, jeunes et pensionnés.",
+          "Dénonce la sous-contribution des plus hauts patrimoines, des revenus du capital et des montages fiscaux.",
+          "Alerte sur le risque récessif d'une compression du pouvoir d'achat en période d'inflation à 5,26 %."
+        ],
+        employerTitle: "Patronat (VBO/FEB, Voka, UNIZO) : Urgence des dépenses",
+        employerPoints: [
+          "S'appuie sur la Banque nationale : entre 2000 et 2026, les recettes publiques stagnent à 49 % du PIB tandis que les dépenses primaires grimpent de 42 % à 52 %.",
+          "Avertit le 18 novembre que la Belgique risque d'être la « lanterne rouge » de la zone euro en 2027 (> 5,4 % de déficit).",
+          "Juge la manifestation prématurée et « sans plan sérieux » en l'absence d'accord gouvernemental finalisé."
+        ]
+      },
+      leviers: {
+        unionTitle: "Les leviers du « Plan B » FGTB (21,244 Mds €/an)",
+        unionPoints: [
+          "Suppression des niches fiscales et contrôle renforcé des montages (+2 550 M€) ; révision des avantages des sociétés de management (+526 M€).",
+          "Cotisations équitables sur voitures de société, stock-options et primes (+756 M€) ; cotisations normales sur les flexi-jobs (+380 M€).",
+          "Hausse de la contribution des indépendants aux plus hauts revenus (+700 M€), hausse des salaires bruts (+360 M€) et impôt progressif sur le capital."
+        ],
+        employerTitle: "Le plan de croissance patronal : 10 « quick wins »",
+        employerPoints: [
+          "Refus catégorique de toute nouvelle fiscalité sur l'entrepreneuriat et les revenus du capital, jugée destructrice de compétitivité.",
+          "Mise en avant par le VBO de 10 « quick wins » destinés à générer +0,5 % à +1 % de croissance économique supplémentaire.",
+          "Simplification administrative rapide et sans coût budgétaire pour libérer l'investissement et l'emploi privé."
+        ]
+      },
+      industrie: {
+        unionTitle: "Encadrement des restructurations & Dialogue social",
+        unionPoints: [
+          "Demande d'une « loi ICIG » (portée par l'ACCG) prolongeant la loi Renault pour empêcher la distribution de dividendes lorsqu'elle menace l'emploi ou favorise une faillite.",
+          "Exigence de Gert Truyens (SYNOVA) : un délai royal n'a de sens que si le gouvernement associe les partenaires sociaux au lieu d'agir par « faits accomplis ».",
+          "Investissements publics dans la formation, l'innovation et la transition écologique."
+        ],
+        employerTitle: "Allègement de l'État & Pacte tripartite",
+        employerPoints: [
+          "Réduction structurelle du périmètre de l'État à tous les niveaux de pouvoir pour restaurer la confiance des marchés financiers.",
+          "Appel du VBO à un pacte tripartite de responsabilité (« It takes three to tango ») entre gouvernement, employeurs et syndicats.",
+          "Campagne numérique dédiée (iksteunondernemerschap.be) pour mobiliser le soutien public en faveur des entrepreneurs."
+        ]
+      }
+    };
+
+    const actorData = [
+      {
+        group: "syndicats",
+        badge: "Front commun syndical",
+        color: "bg-orange-100 text-[#C2410C]",
+        title: "FGTB/ABVV, CSC/ACV et SYNOVA",
+        leaders: "Bert Engelaar (FGTB), Ann Vermorgen (CSC), Gert Truyens (SYNOVA)",
+        role: "Organisateurs de la manifestation nationale couverte par des préavis de grève. SYNOVA (ex-CGSLB/ACLVB depuis le 30 mai, ~300 000 affiliés) rejoint pleinement le front tout en réclamant la relance de la concertation sociale face aux « faits accomplis »."
+      },
+      {
+        group: "syndicats",
+        badge: "Centrales & Secteurs",
+        color: "bg-orange-100 text-[#C2410C]",
+        title: "SETCa, METEA, ACCG, Enseignement & Non-marchand",
+        leaders: "COC, COV, ACOD Onderwijs, VSOA Onderwijs, centrales industrielles et socioculturelles",
+        role: "Organisation logistique (trains collectifs, cartes d'action, accueil Gare du Nord), portage de la proposition de « loi ICIG » (ACCG) face aux plans sociaux (GSK, Vynova, UPS) et inscription dans le cycle d'actions du 27 nov. et 10 déc."
+      },
+      {
+        group: "societe",
+        badge: "Société civile & Jeunesse",
+        color: "bg-emerald-100 text-emerald-900",
+        title: "Mutualités, Coalitions, ONG & Mouvements étudiants",
+        leaders: "Coalition Santé, Coalition Climat, CNCD-11.11.11, FEF, VVS, ABVV Jongeren",
+        role: "Transformation du cortège en « mobilisation citoyenne » via des blocs thématiques (social-santé, solidarité internationale, culture, féminisme) et prolongement de l'alliance étudiante historique VVS–FEF du 17 novembre."
+      },
+      {
+        group: "politique",
+        badge: "Opposition politique",
+        color: "bg-rose-100 text-rose-900",
+        title: "PS, PTB/PVDA et Ecolo",
+        leaders: "Sofie Merckx (PTB), Marie-Colline Leroy Van Moer & Gilles Vanden Burre (Ecolo), délégations PS",
+        role: "Soutien politique direct dans la rue : le PS fixe un point de ralliement sur le parcours (Place Surlet de Chokier), le PTB relaye le mot d'ordre « faites payer les super-riches » et Ecolo conteste le cap gouvernemental sur fond de motion de méfiance."
+      },
+      {
+        group: "politique",
+        badge: "Majorité fédérale « Arizona »",
+        color: "bg-blue-100 text-[#0F4C81]",
+        title: "N-VA, MR, Les Engagés, CD&V et Vooruit",
+        leaders: "Premier ministre Bart De Wever (N-VA) et présidents des cinq partis",
+        role: "Coalition profondément fracturée : N-VA et MR bloquent les taxes sur le capital, tandis que Vooruit s'est isolé le 16 novembre en refusant la note de De Wever (coupes santé/indexation), provoquant l'exaspération des Engagés."
+      },
+      {
+        group: "patronat",
+        badge: "Organisations patronales",
+        color: "bg-slate-200 text-slate-800",
+        title: "VBO/FEB, Voka et UNIZO",
+        leaders: "Pieter Timmermans (VBO), Frank Beckx (Voka), Bart Buysse (UNIZO)",
+        role: "Critique de l'opportunité d'une manifestation avant tout accord budgétaire finalisé, lancement de la campagne iksteunondernemerschap.be et défense d'un assainissement par la baisse des dépenses et les 10 « quick wins » de croissance."
+      },
+      {
+        group: "patronat",
+        badge: "Autorités & Opérateurs",
+        color: "bg-amber-100 text-amber-900",
+        title: "Ville de Bruxelles, PolBru, Transports & Administrations",
+        leaders: "STIB/MIVB, De Lijn, LeTEC, SNCB/NMBS, Bruxelles-Propreté, CGRA/CGVS",
+        role: "Encadrement sécuritaire et fermeture des voiries/tunnels (PolBru), adaptation ou interruption des réseaux de transport et de propreté, et gestion administrative des absences (Vlimpers, CGRA)."
+      }
+    ];
+
+    const serviceData = [
+      {
+        profiles: ["usager", "travailleur"],
+        operator: "STIB / MIVB (Bruxelles)",
+        status: "Fortes perturbations",
+        statusClass: "bg-red-100 text-red-900",
+        detail: "Impact sévère attendu sur le métro, le tram et le bus en raison du préavis de grève déposé par une partie du personnel et des déviations le long du parcours.",
+        advice: "Premières estimations diffusées le dimanche 22 novembre au soir, puis info trafic en temps réel le lundi dès 6h00. Privilégier les modes alternatifs."
+      },
+      {
+        profiles: ["usager", "travailleur"],
+        operator: "De Lijn & LeTEC (Régions)",
+        status: "Interruptions & Déviations",
+        statusClass: "bg-amber-100 text-amber-900",
+        detail: "Perturbations et déviations annoncées en Flandre (préavis de grève déposé chez De Lijn) et en Wallonie sur le réseau LeTEC.",
+        advice: "Service alternatif De Lijn publié dès le samedi 21 novembre en soirée ; horaires adaptés LeTEC publiés au plus tard le vendredi 20 novembre à 16h00."
+      },
+      {
+        profiles: ["usager", "travailleur"],
+        operator: "SNCB / NMBS (Trains)",
+        status: "Trafic maintenu • Affluence",
+        statusClass: "bg-emerald-100 text-emerald-900",
+        detail: "Aucun mouvement de grève ni impact ferroviaire spécifique annoncé à ce stade, mais très forte affluence attendue dans les trains et aux gares du Nord et du Midi.",
+        advice: "Consulter le planificateur de voyages et anticiper les temps de correspondance ou d'accès aux sorties des gares bruxelloises."
+      },
+      {
+        profiles: ["usager"],
+        operator: "Bruxelles-Propreté",
+        status: "Collectes perturbées",
+        statusClass: "bg-amber-100 text-amber-900",
+        detail: "Perturbations probables de la collecte des sacs, du vidage des conteneurs d'immeubles et commerces, des Recypark, du call center, de Proxy Chimik et des encombrants.",
+        advice: "Les habitants et commerçants des communes habituellement collectées le lundi sont invités à sortir leurs sacs comme d'habitude."
+      },
+      {
+        profiles: ["usager", "travailleur", "employeur"],
+        operator: "Écoles, Administrations & CGRA",
+        status: "Service adapté",
+        statusClass: "bg-blue-100 text-[#0F4C81]",
+        detail: "Perturbations dans les administrations, l'enseignement (préavis COC, COV, ACOD, VSOA) et le non-marchand. Maintien des entretiens personnels au CGRA/CGVS.",
+        advice: "En cas d'impossibilité de déplacement vers le CGRA/CGVS, un report d'entretien peut être sollicité. Encodage Vlimpers pour les agents flamands."
+      },
+      {
+        profiles: ["employeur", "travailleur"],
+        operator: "Entreprises & Secteur privé",
+        status: "Continuité opérationnelle",
+        statusClass: "bg-slate-200 text-slate-800",
+        detail: "Risque d'absences liées à la participation au cortège (couverte par préavis) ou aux difficultés de mobilité autour de Bruxelles.",
+        advice: "Les secrétariats sociaux et fédérations (Attentia, Sociare) recommandent d'anticiper via le télétravail, les horaires flexibles, la prise de congés ou le covoiturage."
+      }
+    ];
+
+    const mediaPolesData = [
+      {
+        short: "Proximité & Expatriés",
+        title: "Médias de proximité, lifestyle et publics internationaux",
+        outlets: "BX1, BRUZZ, The Brussels Times, Bruxelles Secrète, Le Bonbon, TVL, DeepArrival, Relocate.to",
+        framing: "Gêne urbaine et logistique pratique",
+        summary: "Priorité donnée aux fermetures de tunnels, au plan B de mobilité, aux perturbations de la STIB ou des collectes de déchets et à la comparaison numérique avec les 30 000 à 50 000 manifestants du 9 octobre.",
+        effect: "Très utile pour l'orientation pratique des navetteurs, habitants et touristes, mais tend à dépolitiser l'action sociale en la présentant d'abord comme un épisode de congestion urbaine."
+      },
+      {
+        short: "Politique & Audiovisuel",
+        title: "Presse politique et audiovisuel public",
+        outlets: "VRT NWS (Het Kwartier), RTBF (reprises), Knack, Business AM, et échos de La Libre, Le Soir, Het Nieuwsblad",
+        framing: "Crise institutionnelle et arbitrage royal",
+        summary: "La manifestation est lue comme une variable du compte à rebours gouvernemental : isolement de Vooruit, bascule vers les douzièmes provisoires et échéance du rapport de Bart De Wever au Roi le 23 novembre.",
+        effect: "Met en balance symétrique l'opposition syndicale aux coupes sociales et la demande patronale d'épargner les entrepreneurs (VRT), ancrant la protestation dans le jeu partisan."
+      },
+      {
+        short: "Presse RH & Patronat",
+        title: "Portails RH, secrétariats sociaux et relais patronaux",
+        outlets: "HR Alert, Attentia, Sociare, communications directes VBO/FEB, Voka, UNIZO",
+        framing: "Conformité juridique et risque macroéconomique",
+        summary: "Diffusion de modes d'emploi juridiques face aux absences, dénonciation d'une manifestation jugée prématurée en l'absence d'accord budgétaire finalisé, alerte sur les taux d'intérêt et la compétitivité.",
+        effect: "Déplace le débat de la justice fiscale vers la rationalité économique et la continuité opérationnelle des entreprises, tout en valorisant la contre-campagne patronale."
+      },
+      {
+        short: "Alternatifs & Syndicats",
+        title: "Médias alternatifs, associatifs et syndicaux",
+        outlets: "DeWereldMorgen, Kairos Wallonie Bruxelles, Ouaisfieu, ThinkABVV, Visie",
+        framing: "Justice sociale et convergence des luttes",
+        summary: "Entretiens approfondis avec les dirigeants syndicaux, vulgarisation du Plan B à 21,244 Mds €, mise en lumière du faible impact PIB (+0,05 %) de la suppression de congés et critique des lois sécuritaires.",
+        effect: "Constitue le principal canal d'exposition détaillée du chiffrage alternatif syndical et d'une lecture structurelle reliant austérité, militarisation et libertés publiques."
+      }
+    ];
+
+    function wrapLabel(label, maxLen = 16) {
+      if (label.length <= maxLen) return label;
+      const words = label.split(' ');
+      const lines = [];
+      let currentLine = '';
+      words.forEach(word => {
+        if ((currentLine + ' ' + word).trim().length <= maxLen) {
+          currentLine = (currentLine + ' ' + word).trim();
+        } else {
+          if (currentLine) lines.push(currentLine);
+          currentLine = word;
+        }
+      });
+      if (currentLine) lines.push(currentLine);
+      return lines;
+    }
+
+    function renderTimeline(activeIndex = 6) {
+      const btnContainer = document.getElementById('timeline-buttons');
+      const detailContainer = document.getElementById('timeline-detail');
+      btnContainer.innerHTML = '';
+
+      timelineData.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        const isActive = idx === activeIndex;
+        btn.className = `p-2.5 rounded-xl border text-left transition-all ${
+          isActive
+            ? 'bg-[#1E293B] text-white border-[#1E293B] shadow-sm'
+            : 'bg-white text-slate-700 border-[#E5E0D8] hover:border-slate-400'
+        }`;
+        btn.innerHTML = `
+          <span class="block text-xs font-extrabold ${isActive ? 'text-orange-300' : 'text-[#C2410C]'}">${item.date}</span>
+          <span class="block text-[11px] font-medium truncate mt-0.5">${item.badge}</span>
+        `;
+        btn.addEventListener('click', () => renderTimeline(idx));
+        btnContainer.appendChild(btn);
+      });
+
+      const current = timelineData[activeIndex];
+      detailContainer.innerHTML = `
+        <div class="flex flex-wrap items-center gap-2 mb-2">
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-[#C2410C]">${current.fullDate}</span>
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">${current.badge}</span>
+        </div>
+        <h4 class="text-base sm:text-lg font-bold text-slate-900 mb-2">${current.title}</h4>
+        <p class="text-sm text-slate-700 leading-relaxed mb-3">${current.fact}</p>
+        <div class="bg-[#FAF8F5] rounded-lg p-3 border border-[#E5E0D8] text-xs text-slate-700">
+          <strong class="text-[#0F4C81]">Incidence sur le 23 novembre :</strong> ${current.impact}
+        </div>
+      `;
+    }
+
+    function renderGrievances(filter = 'all') {
+      const grid = document.getElementById('grievance-grid');
+      const filtered = filter === 'all' ? grievanceData : grievanceData.filter(g => g.category === filter);
+      grid.innerHTML = filtered.map(item => `
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5 hover:border-slate-300 transition-colors">
+          <div class="flex items-center justify-between mb-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-white border border-[#E5E0D8] text-[#C2410C]">${item.tag}</span>
+            <span class="text-lg">${item.icon}</span>
+          </div>
+          <h4 class="text-base font-bold text-slate-900 mb-2">${item.title}</h4>
+          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${item.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    function renderDoctrine(key = 'diagnostic') {
+      const container = document.getElementById('doctrine-content');
+      const d = doctrineData[key];
+      container.innerHTML = `
+        <div class="bg-white rounded-xl p-5 border border-[#E5E0D8]">
+          <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-[#C2410C] mb-2">Ligne syndicale</span>
+          <h4 class="text-base font-bold text-slate-900 mb-3">${d.unionTitle}</h4>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+            ${d.unionPoints.map(p => `<li class="flex items-start gap-2"><span class="text-[#C2410C] font-bold">•</span><span>${p}</span></li>`).join('')}
+          </ul>
+        </div>
+        <div class="bg-white rounded-xl p-5 border border-[#E5E0D8]">
+          <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-[#0F4C81] mb-2">Ligne patronale</span>
+          <h4 class="text-base font-bold text-slate-900 mb-3">${d.employerTitle}</h4>
+          <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+            ${d.employerPoints.map(p => `<li class="flex items-start gap-2"><span class="text-[#0F4C81] font-bold">•</span><span>${p}</span></li>`).join('')}
+          </ul>
+        </div>
+      `;
+    }
+
+    function renderActors(group = 'all') {
+      const grid = document.getElementById('actor-grid');
+      const filtered = group === 'all' ? actorData : actorData.filter(a => a.group === group);
+      grid.innerHTML = filtered.map(a => `
+        <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5 flex flex-col justify-between">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${a.color} mb-2">${a.badge}</span>
+            <h4 class="text-base font-bold text-slate-900 mb-1">${a.title}</h4>
+            <p class="text-xs font-semibold text-slate-500 mb-3">${a.leaders}</p>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${a.role}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderServices(profile = 'all') {
+      const grid = document.getElementById('service-grid');
+      const filtered = profile === 'all' ? serviceData : serviceData.filter(s => s.profiles.includes(profile));
+      grid.innerHTML = filtered.map(s => `
+        <div class="bg-white rounded-xl border border-[#E5E0D8] p-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <h4 class="text-sm font-bold text-slate-900">${s.operator}</h4>
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-bold whitespace-nowrap ${s.statusClass}">${s.status}</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed mb-2.5">${s.detail}</p>
+          </div>
+          <div class="bg-[#FAF8F5] rounded-lg p-2.5 border border-[#E5E0D8] text-[11px] text-slate-700">
+            <strong>Recommandation :</strong> ${s.advice}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMediaPoles(activeIdx = 0) {
+      const btnContainer = document.getElementById('media-pole-buttons');
+      const detailContainer = document.getElementById('media-pole-detail');
+      btnContainer.innerHTML = '';
+
+      mediaPolesData.forEach((pole, idx) => {
+        const btn = document.createElement('button');
+        const active = idx === activeIdx;
+        btn.className = `px-3 py-2 rounded-lg text-xs font-bold text-left border transition-all ${
+          active
+            ? 'bg-[#1E293B] text-white border-[#1E293B]'
+            : 'bg-white text-slate-700 border-[#E5E0D8] hover:border-slate-400'
+        }`;
+        btn.textContent = pole.short;
+        btn.addEventListener('click', () => renderMediaPoles(idx));
+        btnContainer.appendChild(btn);
+      });
+
+      const current = mediaPolesData[activeIdx];
+      detailContainer.innerHTML = `
+        <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-[#C2410C] mb-2">Cadrage : ${current.framing}</span>
+        <h4 class="text-base font-bold text-slate-900 mb-1">${current.title}</h4>
+        <p class="text-xs font-semibold text-[#0F4C81] mb-3">Titres observés : ${current.outlets}</p>
+        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-3">${current.summary}</p>
+        <div class="bg-[#FAF8F5] rounded-lg p-3 border border-[#E5E0D8] text-xs text-slate-700">
+          <strong>Effet sur la perception :</strong> ${current.effect}
+        </div>
+      `;
+    }
+
+    function renderFracture(mode = 'semantic') {
+      const panel = document.getElementById('fracture-panel');
+      if (mode === 'semantic') {
+        panel.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-[#FAF8F5] rounded-xl border border-amber-300 p-5">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 mb-2">Amalgame médiatique fréquent</span>
+              <h4 class="text-base font-bold text-slate-900 mb-2">« Grève nationale » / « National strike »</h4>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-3">
+                Plusieurs titres destinés aux publics urbains, internationaux ou expatriés — comme <em>The Brussels Times</em> (URL <code>national-strike-on-monday</code>), <em>Bruxelles Secrète</em> (« Grève et manifestation nationale »), <em>DeepArrival</em> (« National Strike ») ou le média ukrainophone <em>Relocate.to</em> (« grèves en Belgique ») — présentent l'événement comme une grève généralisée.
+              </p>
+              <p class="text-xs text-slate-600">
+                <strong>Mécanisme :</strong> Entretenu par l'existence réelle de préavis sectoriels (STIB, De Lijn, enseignement), ce flou dramatise la perception d'un blocage total du pays.
+              </p>
+            </div>
+            <div class="bg-[#FAF8F5] rounded-xl border border-emerald-300 p-5">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-900 mb-2">Mise au point factuelle</span>
+              <h4 class="text-base font-bold text-slate-900 mb-2">« Manifestation nationale » avec préavis de couverture</h4>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-3">
+                Les médias de référence locaux (<em>BX1</em>, <em>BRUZZ</em>) et les guides pratiques en ligne (<em>I am Beezy</em>) rappellent explicitement qu'il ne s'agit ni d'une grève générale ni d'un arrêt des trains nationaux SNCB/NMBS.
+              </p>
+              <p class="text-xs text-slate-600">
+                <strong>Enjeu éditorial :</strong> L'hyper-focalisation sur une paralysie supposée risque d'éclipser les arbitrages budgétaires précis qui se jouent au même moment entre le Palais royal et la rue de la Loi.
+              </p>
+            </div>
+          </div>
+        `;
+      } else {
+        panel.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-[#0F4C81] mb-2">Pôle francophone</span>
+              <h4 class="text-base font-bold text-slate-900 mb-2">Accent sur la « mobilisation citoyenne » et l'anti-austérité</h4>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Les médias bruxellois et nationaux relayés (<em>BX1</em>, <em>RTBF</em>, <em>Le Soir</em>, <em>La Libre</em>) reprennent fréquemment le vocable de « grande mobilisation citoyenne » contre « la politique d'austérité » et accordent une large place aux appels et cartes blanches du front associatif et non marchand.
+              </p>
+            </div>
+            <div class="bg-[#FAF8F5] rounded-xl border border-[#E5E0D8] p-5">
+              <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 mb-2">Pôle néerlandophone</span>
+              <h4 class="text-base font-bold text-slate-900 mb-2">Forte visibilité patronale et lecture institutionnelle</h4>
+              <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                Si <em>VRT NWS</em> et <em>BRUZZ</em> couvrent factuellement les inquiétudes sociales — notant l'alliance étudiante VVS–FEF — et que <em>De Standaard</em> publie une tribune remarquée de Nona De Dier défendant les grévistes, la critique patronale flamande (<em>Voka</em>, <em>UNIZO</em>) bénéficie d'un fort écho, tandis que <em>Knack</em>, <em>Het Nieuwsblad</em> et <em>Gazet van Antwerpen</em> privilégient l'agenda du Palais royal et des douzièmes provisoires.
+              </p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    let planBChartInstance = null;
+
+    function initPlanBChart(mode = 'detail') {
+      const ctx = document.getElementById('planBChart').getContext('2d');
+      if (planBChartInstance) {
+        planBChartInstance.destroy();
+      }
+
+      if (mode === 'detail') {
+        const rawLabels = [
+          "Suppression niches fiscales & contrôles",
+          "Voitures de société, stock-options & primes",
+          "Contribution hauts revenus indépendants",
+          "Révision fiscale sociétés de management",
+          "Cotisations normales sur flexi-jobs",
+          "Hausse salaires bruts (sécurité sociale)"
+        ];
+        planBChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: rawLabels.map(l => wrapLabel(l, 22)),
+            datasets: [{
+              label: 'Recettes annuelles estimées (en millions €)',
+              data: [2550, 756, 700, 526, 380, 360],
+              backgroundColor: ['#C2410C', '#D97706', '#0F4C81', '#2563EB', '#475569', '#64748B'],
+              borderRadius: 6
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ` +${ctx.parsed.x.toLocaleString('fr-BE')} millions €/an`
+                }
+              }
+            },
+            scales: {
+              x: {
+                beginAtZero: true,
+                grid: { color: '#E5E0D8' },
+                ticks: {
+                  font: { size: 11 },
+                  callback: val => val + ' M€'
+                }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+              }
+            }
+          }
+        });
+      } else {
+        const rawLabels = [
+          "Estimation VBO (juillet 2026)",
+          "Effort recherché par l'Arizona (3 ans)",
+          "Plan B FGTB — Total 11 mesures (par an)"
+        ];
+        planBChartInstance = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: rawLabels.map(l => wrapLabel(l, 20)),
+            datasets: [
+              {
+                label: 'Mesures chiffrées publiquement / Cible (Mds €)',
+                data: [7.7, 10.0, 5.272],
+                backgroundColor: ['#64748B', '#0F4C81', '#C2410C'],
+                borderRadius: 6
+              },
+              {
+                label: 'Autres mesures structurelles Plan B (capital & fraude)',
+                data: [0, 0, 15.972],
+                backgroundColor: '#FDBA74',
+                borderRadius: 6
+              }
+            ]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: { boxWidth: 12, font: { size: 11 } }
+              },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ` ${ctx.dataset.label} : ${ctx.parsed.x.toFixed(3).replace('.', ',')} Mds €`
+                }
+              }
+            },
+            scales: {
+              x: {
+                stacked: true,
+                beginAtZero: true,
+                grid: { color: '#E5E0D8' },
+                ticks: {
+                  font: { size: 11 },
+                  callback: val => val + ' Mds €'
+                }
+              },
+              y: {
+                stacked: true,
+                grid: { display: false },
+                ticks: { font: { size: 11 } }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function initVboMacroChart() {
+      const ctx = document.getElementById('vboMacroChart').getContext('2d');
+      const labels = [
+        "Recettes publiques (2000)",
+        "Recettes publiques (2026)",
+        "Dépenses primaires (2000)",
+        "Dépenses primaires (2026)",
+        "Déficit projeté 2027 (seuil alerte)"
+      ];
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels.map(l => wrapLabel(l, 18)),
+          datasets: [{
+            label: 'Part du PIB (%)',
+            data: [49.0, 49.0, 42.0, 52.0, 5.4],
+            backgroundColor: ['#94A3B8', '#0F4C81', '#CBD5E1', '#C2410C', '#B45309'],
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const prefix = ctx.dataIndex === 4 ? 'Supérieur à ' : '';
+                  return ` ${prefix}${ctx.parsed.y.toString().replace('.', ',')} % du PIB`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 60,
+              grid: { color: '#E5E0D8' },
+              ticks: {
+                font: { size: 11 },
+                callback: val => val + ' %'
+              }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { font: { size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    function initMediaRadarChart() {
+      const ctx = document.getElementById('mediaRadarChart').getContext('2d');
+      const axes = [
+        "Gêne urbaine & logistique",
+        "Crise institutionnelle & Roi",
+        "Risque économique & RH",
+        "Justice sociale & Plan B"
+      ];
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: axes.map(a => wrapLabel(a, 18)),
+          datasets: [
+            {
+              label: 'Proximité & Expatriés',
+              data: [9.5, 3.0, 2.5, 2.0],
+              borderColor: '#D97706',
+              backgroundColor: 'rgba(217, 119, 6, 0.14)',
+              borderWidth: 2
+            },
+            {
+              label: 'Politique & Audiovisuel',
+              data: [4.5, 9.5, 6.0, 5.0],
+              borderColor: '#0F4C81',
+              backgroundColor: 'rgba(15, 76, 129, 0.14)',
+              borderWidth: 2
+            },
+            {
+              label: 'Presse RH & Patronat',
+              data: [4.0, 5.5, 9.5, 1.5],
+              borderColor: '#475569',
+              backgroundColor: 'rgba(71, 85, 105, 0.14)',
+              borderWidth: 2
+            },
+            {
+              label: 'Alternatifs & Syndicats',
+              data: [2.0, 6.5, 3.0, 9.8],
+              borderColor: '#C2410C',
+              backgroundColor: 'rgba(194, 65, 12, 0.14)',
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { boxWidth: 11, font: { size: 11 } }
+            }
+          },
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 10,
+              ticks: { display: false, stepSize: 2 },
+              grid: { color: '#E5E0D8' },
+              pointLabels: { font: { size: 11, weight: '600' }, color: '#1E293B' }
+            }
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTimeline(6);
+      renderGrievances('all');
+      renderDoctrine('diagnostic');
+      renderActors('all');
+      renderServices('all');
+      renderMediaPoles(0);
+      renderFracture('semantic');
+
+      initPlanBChart('detail');
+      initVboMacroChart();
+      initMediaRadarChart();
+
+      document.querySelectorAll('#grievance-filters button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#grievance-filters button').forEach(b => {
+            b.classList.remove('active');
+            b.classList.add('bg-[#FAF8F5]', 'text-slate-700');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('bg-[#FAF8F5]', 'text-slate-700');
+          renderGrievances(btn.dataset.filter);
+        });
+      });
+
+      const btnDetail = document.getElementById('btn-planb-detail');
+      const btnMacro = document.getElementById('btn-planb-macro');
+      const caption = document.getElementById('planb-chart-caption');
+
+      btnDetail.addEventListener('click', () => {
+        btnDetail.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-[#C2410C] text-white transition-colors';
+        btnMacro.className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors';
+        caption.textContent = 'Ventilation des six mesures publiquement chiffrées du Plan B (totalisant 5 272 M€/an), complétées par cinq réformes structurelles sur le capital et la fraude fiscale pour atteindre 21,244 Mds €/an.';
+        initPlanBChart('detail');
+      });
+
+      btnMacro.addEventListener('click', () => {
+        btnMacro.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-[#C2410C] text-white transition-colors';
+        btnDetail.className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-colors';
+        caption.textContent = 'Mise en perspective macroéconomique : les 21,244 Mds €/an du Plan B représentent plus du double des ~10 Mds € recherchés sur trois ans par la coalition Arizona.';
+        initPlanBChart('macro');
+      });
+
+      document.querySelectorAll('#doctrine-tabs button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#doctrine-tabs button').forEach(b => {
+            b.classList.remove('active');
+            b.classList.add('bg-white', 'text-slate-700');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('bg-white', 'text-slate-700');
+          renderDoctrine(btn.dataset.doc);
+        });
+      });
+
+      document.querySelectorAll('#actor-filters button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#actor-filters button').forEach(b => {
+            b.classList.remove('active');
+            b.classList.add('bg-[#FAF8F5]', 'text-slate-700');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('bg-[#FAF8F5]', 'text-slate-700');
+          renderActors(btn.dataset.actor);
+        });
+      });
+
+      document.querySelectorAll('#profile-filters button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#profile-filters button').forEach(b => {
+            b.classList.remove('active');
+            b.classList.add('bg-white', 'text-slate-700');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('bg-white', 'text-slate-700');
+          renderServices(btn.dataset.profile);
+        });
+      });
+
+      const btnSemantic = document.getElementById('btn-fracture-semantic');
+      const btnLang = document.getElementById('btn-fracture-lang');
+
+      btnSemantic.addEventListener('click', () => {
+        btnSemantic.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white transition-colors';
+        btnLang.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 transition-colors';
+        renderFracture('semantic');
+      });
+
+      btnLang.addEventListener('click', () => {
+        btnLang.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-[#1E293B] text-white transition-colors';
+        btnSemantic.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-slate-200 transition-colors';
+        renderFracture('lang');
+      });
+
+      const navLinks = document.querySelectorAll('nav a.nav-pill');
+      const sections = ['contexte', 'budget', 'acteurs', 'pratique', 'medias'].map(id => document.getElementById(id));
+
+      window.addEventListener('scroll', () => {
+        const scrollPos = window.scrollY + 140;
+        sections.forEach((sec, idx) => {
+          if (sec && scrollPos >= sec.offsetTop && scrollPos < sec.offsetTop + sec.offsetHeight) {
+            navLinks.forEach(l => l.classList.remove('active'));
+            navLinks[idx].classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
