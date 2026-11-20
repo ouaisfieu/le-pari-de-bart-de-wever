@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analyse critique : Couverture médiatique du 23 novembre 2026 à Bruxelles</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #1E293B;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 620px;
+      margin-left: auto;
+      margin-right: auto;
+      height: 310px;
+      max-height: 390px;
+    }
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 350px;
+      }
+    }
+    .nav-pill.active {
+      background-color: #1E293B;
+      color: #FAF8F5;
+    }
+    .pole-btn.active {
+      background-color: #B45309;
+      color: #FFFFFF;
+      border-color: #B45309;
+    }
+    .timeline-btn.active {
+      background-color: #2B5B6C;
+      color: #FFFFFF;
+      border-color: #2B5B6C;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-amber-200 selection:text-slate-900">
+<!-- Chosen Palette: Warm Editorial Alabaster & Slate (#FAF8F5 background, #FFFFFF cards, #1E293B deep slate ink, #B45309 muted terracotta accent, #2B5B6C slate-teal secondary) -->
+<!-- Application Structure Plan: L'application est structurée en cinq modules thématiques et analytiques plutôt que de suivre linéairement le texte source : (1) Diagnostic & Double Chronologie interactive permettant de visualiser le basculement du 16 novembre et la collision politique/sociale du 23 novembre ; (2) Cartographie des 5 Pôles Discursifs et de l'asymétrie linguistique FR/NL combinant un radar comparatif et un explorateur filtrable ; (3) Audit interactif des Chiffrages Budgétaires confrontant les macro-enveloppes et mesures détaillées face aux angles morts journalistiques ; (4) Décryptage Sémantique démêlant l'amalgame entre manifestation sous préavis et grève générale ; (5) Grille Déontologique interactive inspirée des cadres CDJ/CSA/VRT pour évaluer la couverture du Jour J. Cette architecture privilégie la comparaison croisée, la vérification factuelle et la navigation non linéaire. -->
+<!-- Visualization & Content Choices: (1) Chronologie interactive (HTML/CSS/JS) -> Comparer l'évolution temporelle de la crise Arizona et des alertes mobilité -> Filtrage par axe et panneau de détail au clic ; (2) Graphique Radar (Chart.js Canvas) -> Comparer les priorités éditoriales des 5 pôles sur 4 axes -> Mise à jour synchronisée avec les fiches détaillées ; (3) Graphique à barres horizontales (Chart.js Canvas) -> Comparer les chiffrages budgétaires non audités (Md€ et M€) -> Bascule dynamique entre enveloppes globales et recettes alternatives + inspecteur critique ; (4) Graphique en anneau (Chart.js Canvas) + comparateur HTML/JS -> Visualiser la répartition des cadrages à J-3 et corriger les confusions juridiques/opérationnelles (STIB vs SNCB, SYNOVA) ; (5) Checklist interactive (HTML/JS) -> Évaluer les 4 critères déontologiques du 23 novembre. -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+  <header class="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur border-b border-[#E7E2DA]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div>
+        <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#B45309]">
+          <span>📰 Observatoire Critique des Médias</span>
+          <span>•</span>
+          <span>Point d'étape : Vendredi 20 Nov. 2026 (J-3)</span>
+        </div>
+        <h1 class="text-lg sm:text-xl font-bold text-slate-900 leading-tight">
+          Manifestation à Bruxelles du 23 novembre 2026 : fractures d'une couverture médiatique
+        </h1>
+      </div>
+      <nav aria-label="Navigation principale" class="flex flex-wrap gap-1.5">
+        <a href="#synthese" class="nav-pill active px-3 py-1.5 rounded-full text-xs font-medium border border-[#E7E2DA] transition">1. Diagnostic & Chronologie</a>
+        <a href="#poles" class="nav-pill px-3 py-1.5 rounded-full text-xs font-medium border border-[#E7E2DA] bg-white text-slate-700 hover:bg-slate-100 transition">2. Pôles & FR/NL</a>
+        <a href="#chiffres" class="nav-pill px-3 py-1.5 rounded-full text-xs font-medium border border-[#E7E2DA] bg-white text-slate-700 hover:bg-slate-100 transition">3. Audit Chiffré</a>
+        <a href="#semantique" class="nav-pill px-3 py-1.5 rounded-full text-xs font-medium border border-[#E7E2DA] bg-white text-slate-700 hover:bg-slate-100 transition">4. Grève vs Cortège</a>
+        <a href="#deontologie" class="nav-pill px-3 py-1.5 rounded-full text-xs font-medium border border-[#E7E2DA] bg-white text-slate-700 hover:bg-slate-100 transition">5. Grille Jour J</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-14">
+
+    <section id="synthese" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E7E2DA] p-6 sm:p-8 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+          <div class="space-y-3 max-w-3xl">
+            <span class="inline-block px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-[#B45309] border border-amber-200">
+              Synthèse générale à J-3 • Corpus observable au 20 novembre 2026
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">
+              Une information à deux vitesses entre crise de l'« Arizona » et alerte aux embouteillages
+            </h2>
+            <p class="text-slate-600 leading-relaxed text-sm sm:text-base">
+              À trois jours de la mobilisation nationale prévue le lundi 23 novembre 2026 à Bruxelles, l'analyse des publications accessibles révèle une couverture fragmentée et doublement asymétrique. D'un côté, le traitement politique se concentre sur l'impasse du comité restreint (<em>kern</em>) fédéral et l'échéance fixée par le Roi Philippe à Bart De Wever ce même 23 novembre, tout en isolant ces tractations de la rue. De l'autre, la presse bruxelloise et régionale aborde le cortège sous l'angle des perturbations logistiques (<em>hinder</em>), reléguant le conflit budgétaire vers les médias alternatifs et les canaux militants.
+            </p>
+          </div>
+          <div class="bg-[#FAF8F5] border border-[#E7E2DA] rounded-xl p-4 lg:w-80 shrink-0 space-y-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-[#2B5B6C]">Note méthodologique</div>
+            <p class="text-xs text-slate-600 leading-relaxed">
+              Ce bilan porte exclusivement sur les sources observables au 20 novembre (<code>BX1</code>, <code>BRUZZ</code>, <code>Le Vif</code>, <code>Knack</code>, <code>ROBtv</code>, <code>Wablieft</code>, <code>DeWereldMorgen</code>, <code>MO*</code>, portails RH/mobilité et communications syndicales/patronales). Aucun article direct de <code>Le Soir</code>, <code>La Libre</code>, <code>De Tijd</code>, <code>De Morgen</code>, <code>VRT NWS</code> ou <code>RTL</code> consacré au 23 novembre n'était recensé dans ce corpus à cette date.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Fracture discursive</div>
+            <div class="text-2xl font-bold text-slate-900 mt-1">5 pôles étanches</div>
+            <p class="text-xs text-slate-600 mt-1.5">Cloisonnement entre presse pratique, rubrique politique « Rue de la Loi », patronat, syndicats et médias alternatifs.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Collision calendaire</div>
+            <div class="text-2xl font-bold text-[#B45309] mt-1">Lundi 23 Nov.</div>
+            <p class="text-xs text-slate-600 mt-1.5">Jour du défilé Gare du Nord–Gare du Midi ET de l'audience royale de Bart De Wever auprès du Roi Philippe.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Asymétrie d'audit</div>
+            <div class="text-2xl font-bold text-[#2B5B6C] mt-1">10 Md€ vs 21 Md€</div>
+            <p class="text-xs text-slate-600 mt-1.5">Absence de contre-expertise indépendante face aux trajectoires budgétaires et contre-budgets en circulation.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA]">
+            <div class="text-xs font-semibold text-slate-500 uppercase">Invisibilisation</div>
+            <div class="text-2xl font-bold text-slate-900 mt-1">SYNOVA & Séquence</div>
+            <p class="text-xs text-slate-600 mt-1.5">Méconnaissance du nouveau nom de l'ex-CGSLB (mai 2026) et isolement d'une séquence continue d'automne.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-[#E7E2DA] p-6 sm:p-8 shadow-sm space-y-5">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900">Double chronologie : Séquence sociale vs. Crise de l'Arizona</h3>
+            <p class="text-sm text-slate-600 mt-1">
+              Explorez comment l'intensité médiatique bascule le <strong>16 novembre</strong> lors des avis de perturbation STIB/De Lijn, au moment même où le <em>kern</em> échoue et où le Palais fixe l'échéance du 23 novembre. Cliquez sur une date pour inspecter son traitement médiatique.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-tl-filter="all" class="timeline-btn active px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] transition">Tout le cycle (9 oct.–10 déc.)</button>
+            <button type="button" data-tl-filter="politique" class="timeline-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] bg-[#FAF8F5] text-slate-700 transition">Crise Arizona & Palais</button>
+            <button type="button" data-tl-filter="social" class="timeline-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] bg-[#FAF8F5] text-slate-700 transition">Mobilisation & Alertes Médias</button>
+          </div>
+        </div>
+
+        <div id="timeline-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"></div>
+
+        <div id="timeline-detail" class="p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span id="tl-detail-badge" class="px-2 py-0.5 rounded text-xs font-bold bg-[#2B5B6C] text-white">Pivot clé</span>
+              <span id="tl-detail-date" class="text-sm font-bold text-slate-900">Lundi 16 novembre 2026 (J-7)</span>
+            </div>
+            <h4 id="tl-detail-title" class="text-base font-bold text-slate-900">Échec du kern, délai royal au 23 novembre et vague d'alertes mobilité</h4>
+            <p id="tl-detail-desc" class="text-sm text-slate-600 leading-relaxed">
+              Après le blocage de Vooruit face aux quatre autres partis de l'Arizona (N-VA, MR, Les Engagés, CD&V), le Roi Philippe charge Bart De Wever de poursuivre les discussions jusqu'au 23 novembre. Ce même jour démarre la vague la plus dense d'articles pratiques sur les perturbations STIB et De Lijn (BRUZZ, Bruxelles Secrète, Persinfo), sans que la presse locale ne relie les deux événements.
+            </p>
+          </div>
+          <div class="shrink-0 bg-white p-3 rounded-lg border border-[#E7E2DA] md:w-64">
+            <div class="text-[11px] font-bold uppercase text-slate-400">Sources & relais observés</div>
+            <div id="tl-detail-sources" class="text-xs font-medium text-slate-800 mt-1">BRUZZ, BX1, Knack, Wablieft, Bruxelles Secrète, Vlaanderen.be, CLB Group</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="poles" class="scroll-mt-24 space-y-6">
+      <div class="space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#2B5B6C]">Architecture de l'espace public</span>
+        <h2 class="text-2xl font-bold text-slate-900">Cartographie critique des 5 pôles éditoriaux et fracture linguistique</h2>
+        <p class="text-slate-600 text-sm sm:text-base max-w-4xl leading-relaxed">
+          Cette section analyse la manière dont l'information au 20 novembre se segmente en cinq univers discursifs hermétiques, doublés d'une nette divergence entre l'écosystème néerlandophone et l'écosystème francophone/bruxellois. Utilisez le graphique radar pour comparer le poids relatif des thèmes dans chaque pôle et sélectionnez un pôle ou une aire linguistique pour examiner ses procédés rhétoriques et ses angles morts.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-[#E7E2DA] p-6 shadow-sm flex flex-col justify-between space-y-4">
+          <div>
+            <h3 class="text-base font-bold text-slate-900">Profils de cadrage éditorial par pôle</h3>
+            <p class="text-xs text-slate-500 mt-1">
+              Intensité relative observée dans le corpus J-3 selon quatre dimensions dominantes (indice analytique de 1 à 10 basé sur la fréquence thématique).
+            </p>
+          </div>
+          <div class="chart-container">
+            <canvas id="polesRadarChart"></canvas>
+          </div>
+          <div class="text-xs text-slate-500 bg-[#FAF8F5] p-3 rounded-lg border border-[#E7E2DA]">
+            <strong>Enseignement clé :</strong> La presse locale maximise l'axe <em>Perturbations pratiques</em> tandis que la rubrique politique maximise l'axe <em>Arithmétique Kern/Palais</em>, laissant le <em>Chiffrage socio-économique</em> aux seuls médias alternatifs et acteurs militants.
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-[#E7E2DA] p-6 shadow-sm space-y-5">
+          <div class="flex flex-wrap gap-2" id="pole-selector">
+            <button type="button" data-pole="0" class="pole-btn active px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] transition">1. Presse bruxelloise & rég.</button>
+            <button type="button" data-pole="1" class="pole-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] bg-[#FAF8F5] text-slate-700 transition">2. Politique « Rue de la Loi »</button>
+            <button type="button" data-pole="2" class="pole-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] bg-[#FAF8F5] text-slate-700 transition">3. Médias engagés/alternatifs</button>
+            <button type="button" data-pole="3" class="pole-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] bg-[#FAF8F5] text-slate-700 transition">4. Patronat, RH & Employeurs</button>
+            <button type="button" data-pole="4" class="pole-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E7E2DA] bg-[#FAF8F5] text-slate-700 transition">5. Syndicats, Mutuelles & Partis</button>
+          </div>
+
+          <div id="pole-card" class="p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#E7E2DA] pb-3">
+              <h3 id="pole-title" class="text-lg font-bold text-slate-900">Presse bruxelloise, régionale et généraliste</h3>
+              <span id="pole-sources" class="text-xs font-semibold px-2.5 py-1 rounded bg-white border border-[#E7E2DA] text-slate-700">BX1, BRUZZ, Le Vif, ROBtv, Bruxelles Secrète</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="bg-white p-4 rounded-lg border border-[#E7E2DA]">
+                <div class="text-xs font-bold uppercase text-[#2B5B6C] mb-1">Cadrage dominant</div>
+                <p id="pole-framing" class="text-sm text-slate-700 leading-relaxed">
+                  Focalisation sur les entraves urbaines, la mobilité (STIB, De Lijn, tunnels) et la collecte des déchets, accompagnée d'un résumé succinct des revendications syndicales.
+                </p>
+              </div>
+              <div class="bg-white p-4 rounded-lg border border-[#E7E2DA]">
+                <div class="text-xs font-bold uppercase text-[#B45309] mb-1">Procédés rhétoriques & angles morts</div>
+                <p id="pole-blindspots" class="text-sm text-slate-700 leading-relaxed">
+                  Guillemets de mise à distance autour de la « grande mobilisation citoyenne » (BX1) ; quasi-absence d'analyse fiscale ou budgétaire des mesures contestées ; exception notable du fil budgétaire du Vif qui relie l'impasse de Bart De Wever à la pression sociale.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-[#E7E2DA] pt-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-sm font-bold text-slate-900">Comparateur de l'asymétrie linguistique observée (NL vs. FR)</h4>
+              <span class="text-xs text-slate-500">Corpus observable au 20 nov. 2026</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="p-4 rounded-xl border border-amber-200 bg-amber-50/40 space-y-1.5">
+                <div class="text-xs font-bold text-[#B45309] uppercase">Côté néerlandophone (Flandre)</div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  Accent marqué sur la discipline administrative (<code>Vlaanderen.be</code> : aucun congé syndical, retenue de salaire et de chèque-repas), la délégitimation patronale (<code>VOKA</code> : <em>« een nieuwe betoging zonder ernstig plan »</em>), les nuisances locales (<code>ROBtv</code> sur les poubelles) ou le seul blocage parlementaire (<code>Wablieft</code>). Une chronique de <code>De Standaard</code> défendant les grévistes fait figure d'exception célébrée sur les blogs militants (<code>ABVV Stora Enso Langerbrugge</code>).
+                </p>
+              </div>
+              <div class="p-4 rounded-xl border border-slate-300 bg-slate-50 space-y-1.5">
+                <div class="text-xs font-bold text-[#2B5B6C] uppercase">Côté francophone et bruxellois</div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  Écho plus large accordé aux relais socio-politiques qui entourent le front commun : volonté d'élargissement citoyen relayée par <code>BX1</code> et <code>Le Vif</code>, alerte médico-sociale de <code>Solidaris Wallonie</code>, appel et point de ralliement du <code>PS</code> (place Surlet de Chokier), contre-chiffrage fiscal du <code>PTB</code> et logistique des convois ferroviaires régionaux (Hainaut, Luxembourg).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="chiffres" class="scroll-mt-24 space-y-6">
+      <div class="space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#B45309]">Déficit d'arbitrage factuel</span>
+        <h2 class="text-2xl font-bold text-slate-900">L'angle mort économique : audit des chiffrages budgétaires en concurrence</h2>
+        <p class="text-slate-600 text-sm sm:text-base max-w-4xl leading-relaxed">
+          À J-3, la presse généraliste juxtapose des formules générales sans chiffrage, permettant au patronat (<code>VOKA</code>) de nier l'existence d'un « plan sérieux » tandis que syndicats, partis et médias alternatifs avancent des montants précis sans contre-expertise indépendante. Basculez entre les enveloppes macro-budgétaires et les recettes alternatives détaillées, puis cliquez sur un indicateur pour inspecter ses limites méthodologiques.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-[#E7E2DA] p-6 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <h3 class="text-base font-bold text-slate-900">Grandeurs financières avancées dans le débat</h3>
+            <div class="inline-flex rounded-lg border border-[#E7E2DA] p-0.5 bg-[#FAF8F5]">
+              <button type="button" id="btn-chart-macro" class="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1E293B] text-white transition">Macro (Md€)</button>
+              <button type="button" id="btn-chart-micro" class="px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 transition">Recettes alt. (M€)</button>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="budgetChart"></canvas>
+          </div>
+          <p id="budget-chart-caption" class="text-xs text-slate-500 leading-relaxed">
+            Comparaison des grandes enveloppes budgétaires citées : l'effort fédéral de 10 Md€ recherché d'ici 2029 (BX1, Wablieft), les propositions attribuées à Bart De Wever (1,1 Md€) et Vooruit (1,5 Md€) sur les « épaules les plus fortes » (PTB), et le contre-budget syndical global de 21 Md€ (ACCG, SYNOVA, SETCa).
+          </p>
+        </div>
+
+        <div class="lg:col-span-6 bg-white rounded-2xl border border-[#E7E2DA] p-6 shadow-sm flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <h3 class="text-base font-bold text-slate-900">Inspecteur critique des chiffres et mesures sociales</h3>
+            <p class="text-xs text-slate-500">Sélectionnez un chiffre ou une mesure du corpus pour afficher sa source exacte, son traitement éditorial et ses angles morts.</p>
+            <div id="metric-pills" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div id="metric-detail-box" class="p-5 rounded-xl bg-[#FAF8F5] border border-[#E7E2DA] space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span id="md-title" class="text-base font-bold text-slate-900">Contre-budget syndical : 21 milliards d'euros</span>
+              <span id="md-source" class="text-xs font-semibold px-2 py-0.5 rounded bg-white border border-[#E7E2DA] text-[#2B5B6C]">ACCG, SYNOVA, SETCa</span>
+            </div>
+            <div class="space-y-2 text-sm">
+              <div>
+                <span class="font-semibold text-slate-800">Traitement médiatique observé :</span>
+                <span id="md-treatment" class="text-slate-600">Ignoré par VOKA (qui affirme l'absence de « plan sérieux ») et absent des aperçus généralistes centrés sur la mobilité (BRUZZ, Bruxelles City News).</span>
+              </div>
+              <div class="p-3 rounded-lg bg-white border border-amber-200">
+                <span class="font-semibold text-[#B45309]">Limite analytique & audit manquant :</span>
+                <span id="md-audit" class="text-slate-700">Aucune rédaction généraliste n'a soumis ces 11 propositions de la FGTB et du front commun à des économistes indépendants pour en évaluer le rendement net.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="semantique" class="scroll-mt-24 space-y-6">
+      <div class="space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#2B5B6C]">Précision terminologique et opérationnelle</span>
+        <h2 class="text-2xl font-bold text-slate-900">Dérives sémantiques : manifestation citoyenne vs. « grève générale »</h2>
+        <p class="text-slate-600 text-sm sm:text-base max-w-4xl leading-relaxed">
+          La couverture préparatoire entretient un glissement sémantique entre une manifestation nationale couverte par un préavis de grève (<em>stakingsaanzegging</em>) et une grève générale paralysant tout le pays. Ce flou s'accompagne d'une inertie éditoriale autour du changement de nom de la <code>CGSLB</code> en <code>SYNOVA</code>. Explorez les données ci-dessous pour confronter les discours approximatifs aux faits vérifiés à J-3.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-[#E7E2DA] p-6 shadow-sm space-y-4">
+          <h3 class="text-base font-bold text-slate-900">Structure thématique des publications recensées à J-3</h3>
+          <p class="text-xs text-slate-500">
+            Répartition indicative des angles dominants dans l'ensemble des 63 sources documentées au 20 novembre 2026.
+          </p>
+          <div class="chart-container">
+            <canvas id="semanticDonutChart"></canvas>
+          </div>
+          <div class="text-xs text-slate-600 bg-[#FAF8F5] p-3 rounded-lg border border-[#E7E2DA]">
+            <strong>Bascule rhétorique occultée :</strong> Après le slogan défensif <em>« Stop à l'Arizona »</em> du 9 octobre, le front commun a adopté <em>« Construire l'avenir ensemble, ne pas le subir »</em> pour rallier mutualités, jeunes, culture et associations.
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-[#E7E2DA] p-6 shadow-sm space-y-4">
+          <h3 class="text-base font-bold text-slate-900">Comparateur : Ce qui est écrit vs. La réalité juridique et opérationnelle</h3>
+          <div class="space-y-3" id="reality-cards">
+            <div class="p-4 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <div class="text-[11px] font-bold uppercase text-[#B45309]">⚠️ Discours imprécis (RH & presse rég.)</div>
+                <p class="text-xs text-slate-700 mt-1">
+                  <code>Attentia</code> qualifie le 23 novembre de « jour de grève » (<em>stakingsdag</em>), <code>ROBtv</code> évoque une « grève nationale » (<em>nationale staking</em>), <code>Tootbus</code> invoque « la grève » et <code>Neutr-On</code> annonce des trains réduits.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-lg border border-[#E7E2DA]">
+                <div class="text-[11px] font-bold uppercase text-[#2B5B6C]">✓ Réalité juridique & ferroviaire (20 nov.)</div>
+                <p class="text-xs text-slate-700 mt-1">
+                  Appel officiel à une <strong>manifestation nationale citoyenne</strong> adossée à un préavis couvrant les participants (ex. <code>CGSP/ACOD TBM</code> : indemnité de 40 € + repas + 10 €). La <code>SNCB</code> annonce une forte affluence mais <strong>aucune perturbation de grève sur le rail</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <div class="text-[11px] font-bold uppercase text-[#B45309]">⚠️ Amalgames sur les services publics</div>
+                <p class="text-xs text-slate-700 mt-1">
+                  Suggestion d'un arrêt généralisé de l'ensemble des administrations et transports publics dans tout le pays.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-lg border border-[#E7E2DA]">
+                <div class="text-[11px] font-bold uppercase text-[#2B5B6C]">✓ Périmètre effectif des perturbations</div>
+                <p class="text-xs text-slate-700 mt-1">
+                  Perturbations concentrées sur la <code>STIB</code>, <code>De Lijn</code>, le <code>TEC</code>, le ramassage des déchets et certains guichets communaux (<code>Saint-Gilles</code>, <code>Ville de Bruxelles</code>), tandis que le <code>CGRA</code> maintient ses entretiens d'asile.
+                </p>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <div class="text-[11px] font-bold uppercase text-[#B45309]">⚠️ Inertie sur l'identité syndicale</div>
+                <p class="text-xs text-slate-700 mt-1">
+                  <code>Attentia</code> orthographie « SYNAVO » en français et en néerlandais ; plusieurs mentions transitoires citent encore la <code>CGSLB</code> ou « les trois syndicats » sans la nommer.
+                </p>
+              </div>
+              <div class="bg-white p-3 rounded-lg border border-[#E7E2DA]">
+                <div class="text-[11px] font-bold uppercase text-[#2B5B6C]">✓ Identité officielle depuis le 30 mai 2026</div>
+                <p class="text-xs text-slate-700 mt-1">
+                  Le syndicat libéral (environ 300 000 affiliés revendiqués) porte officiellement le nom de <strong>SYNOVA</strong> depuis près de six mois et cosigne l'appel du front commun.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="deontologie" class="scroll-mt-24 space-y-6">
+      <div class="bg-white rounded-2xl border border-[#E7E2DA] p-6 sm:p-8 shadow-sm space-y-6">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div class="space-y-2 max-w-3xl">
+            <span class="text-xs font-bold uppercase tracking-wider text-[#B45309]">Enjeux déontologiques & régulation</span>
+            <h2 class="text-2xl font-bold text-slate-900">Grille d'évaluation de la couverture médiatique pour le 23 novembre</h2>
+            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Dans un contexte marqué par la vigilance du <code>CDJ</code> (cinq décisions rendues en octobre 2026 concernant <code>RTBF</code>, <code>LN24</code>, <code>Sudinfo</code>, <code>L'Avenir</code> et <code>La Dernière Heure</code>), du <code>CSA</code> et des audits d'impartialité de la <code>VRT</code> (dont l'audit 2021 prenait pour cas d'école un appel à la grève nationale), la couverture du lundi 23 novembre pourra être évaluée selon quatre critères concrets. Cochez les critères pour simuler la conformité éditoriale d'un média le Jour J.
+            </p>
+          </div>
+          <div class="bg-[#FAF8F5] border border-[#E7E2DA] rounded-xl p-4 lg:w-72 shrink-0 text-center">
+            <div class="text-xs font-bold uppercase text-slate-500">Indice de qualité Jour J</div>
+            <div id="deont-score" class="text-3xl font-extrabold text-[#2B5B6C] my-1">0 / 4</div>
+            <div id="deont-status" class="text-xs text-slate-600">Cochez les critères remplis dans l'édition observée</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="criteria-grid">
+          <label class="cursor-pointer p-5 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] hover:border-[#2B5B6C] transition flex items-start gap-3.5">
+            <input type="checkbox" class="deont-check mt-1 h-4 w-4 rounded border-slate-300 text-[#2B5B6C] focus:ring-[#2B5B6C]">
+            <div class="space-y-1.5">
+              <div class="text-sm font-bold text-slate-900">1. Réarticuler la rue et le Palais royal</div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Mettre en regard le défilé Gare du Nord–Gare du Midi avec l'audience de Bart De Wever chez le Roi Philippe le même jour, pour analyser l'effet réel sur le rapport de force entre Vooruit et ses partenaires de l'Arizona.
+              </p>
+            </div>
+          </label>
+
+          <label class="cursor-pointer p-5 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] hover:border-[#2B5B6C] transition flex items-start gap-3.5">
+            <input type="checkbox" class="deont-check mt-1 h-4 w-4 rounded border-slate-300 text-[#2B5B6C] focus:ring-[#2B5B6C]">
+            <div class="space-y-1.5">
+              <div class="text-sm font-bold text-slate-900">2. Distinguer factuellement les régimes de perturbation</div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Rompre avec l'amalgame entre manifestation couverte par un préavis et grève générale, en séparant nettement les perturbations urbaines/régionales (STIB, De Lijn) de l'affluence ferroviaire (SNCB) et en nommant correctement SYNOVA.
+              </p>
+            </div>
+          </label>
+
+          <label class="cursor-pointer p-5 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] hover:border-[#2B5B6C] transition flex items-start gap-3.5">
+            <input type="checkbox" class="deont-check mt-1 h-4 w-4 rounded border-slate-300 text-[#2B5B6C] focus:ring-[#2B5B6C]">
+            <div class="space-y-1.5">
+              <div class="text-sm font-bold text-slate-900">3. Soumettre les chiffrages à une contre-expertise</div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Confronter à des économistes indépendants les 10 Md€ de l'Arizona, le contre-budget syndical de 21 Md€, les estimations attribuées à la BNB sur les niches fiscales et le calcul du PTB imputant 85 % de l'effort aux travailleurs.
+              </p>
+            </div>
+          </label>
+
+          <label class="cursor-pointer p-5 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] hover:border-[#2B5B6C] transition flex items-start gap-3.5">
+            <input type="checkbox" class="deont-check mt-1 h-4 w-4 rounded border-slate-300 text-[#2B5B6C] focus:ring-[#2B5B6C]">
+            <div class="space-y-1.5">
+              <div class="text-sm font-bold text-slate-900">4. Documenter la composition réelle du cortège</div>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Vérifier sur le terrain l'élargissement revendiqué par FGTB, CSC et SYNOVA vers la société civile (mutualités, jeunes, culture, santé, salariés touchés par les restructurations ou le plafonnement du <em>centenindex</em>).
+              </p>
+            </div>
+          </label>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-[#E7E2DA] bg-white py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+      <div>Synthèse interactive établie à partir du corpus documentaire observable au vendredi 20 novembre 2026 (J-3).</div>
+      <div>Aucune donnée extrapolée au-delà des sources recensées.</div>
+    </div>
+  </footer>
+
+  <script>
+    function wrapLabel(label, maxLen = 16) {
+      if (typeof label !== 'string' || label.length <= maxLen) return label;
+      const words = label.split(' ');
+      const lines = [];
+      let current = '';
+      words.forEach(word => {
+        if ((current + (current ? ' ' : '') + word).length <= maxLen) {
+          current += (current ? ' ' : '') + word;
+        } else {
+          if (current) lines.push(current);
+          current = word;
+        }
+      });
+      if (current) lines.push(current);
+      return lines;
+    }
+
+    const timelineData = [
+      {
+        date: '9 & 12 oct. 2026',
+        badge: 'Acte I • Social',
+        type: 'social',
+        title: 'Manifestation nationale « Stop à l\'Arizona » et grève ACOD',
+        desc: 'Premier jalon majeur de la mobilisation d\'automne contre le programme gouvernemental, suivi de la grève des services publics ACOD le 12 octobre. La couverture ultérieure tend à oublier cette continuité.',
+        sources: 'Archives syndicales, L\'Avenir, agendas bruxellois'
+      },
+      {
+        date: '21–22 oct. 2026',
+        badge: 'Annonce & Contre-récit',
+        type: 'social',
+        title: 'Appel au 23 novembre et contre-chiffrage alternatif',
+        desc: 'SYNOVA et le front commun lancent l\'appel avec un slogan positif (« Construire l\'avenir ensemble, ne pas le subir »). DeWereldMorgen publie un décryptage fiscal détaillé (« Wall of Injustice ») ignoré par la presse généraliste.',
+        sources: 'SYNOVA, BRUZZ, DeWereldMorgen'
+      },
+      {
+        date: '6 nov. 2026',
+        badge: 'Crise fédérale',
+        type: 'politique',
+        title: 'Le Roi Philippe refuse la démission de Bart De Wever',
+        desc: 'Premier coup de semonce institutionnel au sommet de l\'État fédéral face aux blocages budgétaires de la coalition Arizona (N-VA, MR, Les Engagés, CD&V, Vooruit).',
+        sources: 'BX1, BRUZZ'
+      },
+      {
+        date: '16 nov. 2026',
+        badge: 'Pivot clé (J-7)',
+        type: 'politique',
+        title: 'Échec du kern, délai royal au 23 nov. et vague d\'alertes mobilité',
+        desc: 'Après le blocage de Vooruit face aux quatre autres partis, le Roi fixe au lundi 23 novembre la date du prochain rapport de Bart De Wever. Simultanément, STIB et De Lijn déclenchent la vague d\'articles pratiques sur les perturbations.',
+        sources: 'BRUZZ, BX1, Knack, Wablieft, Bruxelles Secrète, Vlaanderen.be, CLB Group'
+      },
+      {
+        date: '17–20 nov. 2026',
+        badge: 'Convergence J-3',
+        type: 'social',
+        title: 'Exclusion de Vooruit, cortèges jeunes/climat et arrêtés de police',
+        desc: 'Manifestation étudiante (17 nov.), exclusion de Vooruit des bilatérales (18 nov.), entretien syndical dans DeWereldMorgen (19 nov.), grève scolaire climat/anti-militarisation et synthèse pratique BX1 (20 nov.).',
+        sources: 'Le Vif, BX1, DeWereldMorgen, VOKA, Attentia, SNCB'
+      }
+    ];
+
+    const timelineGrid = document.getElementById('timeline-grid');
+    function renderTimeline(filter = 'all') {
+      timelineGrid.innerHTML = '';
+      const filtered = filter === 'all' ? timelineData : timelineData.filter(item => item.type === filter);
+      filtered.forEach((item, idx) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'text-left p-4 rounded-xl border transition flex flex-col justify-between gap-2 ' +
+          (idx === (filter === 'all' ? 3 : 0) ? 'border-[#2B5B6C] bg-[#2B5B6C]/5 shadow-sm' : 'border-[#E7E2DA] bg-[#FAF8F5] hover:bg-white');
+        card.innerHTML = `
+          <div>
+            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.type === 'politique' ? 'bg-amber-100 text-[#B45309]' : 'bg-slate-200 text-slate-800'}">${item.badge}</span>
+            <div class="text-xs font-bold text-slate-500 mt-1.5">${item.date}</div>
+            <div class="text-sm font-bold text-slate-900 mt-0.5 leading-snug">${item.title}</div>
+          </div>
+          <div class="text-[11px] font-semibold text-[#2B5B6C]">Cliquer pour analyser →</div>
+        `;
+        card.addEventListener('click', () => {
+          document.getElementById('tl-detail-badge').textContent = item.badge;
+          document.getElementById('tl-detail-date').textContent = item.date;
+          document.getElementById('tl-detail-title').textContent = item.title;
+          document.getElementById('tl-detail-desc').textContent = item.desc;
+          document.getElementById('tl-detail-sources').textContent = item.sources;
+          Array.from(timelineGrid.children).forEach(el => {
+            el.className = 'text-left p-4 rounded-xl border border-[#E7E2DA] bg-[#FAF8F5] hover:bg-white transition flex flex-col justify-between gap-2';
+          });
+          card.className = 'text-left p-4 rounded-xl border border-[#2B5B6C] bg-[#2B5B6C]/5 shadow-sm transition flex flex-col justify-between gap-2';
+        });
+        timelineGrid.appendChild(card);
+      });
+    }
+    renderTimeline('all');
+
+    document.querySelectorAll('.timeline-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.timeline-btn').forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('bg-[#FAF8F5]', 'text-slate-700');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('bg-[#FAF8F5]', 'text-slate-700');
+        renderTimeline(btn.dataset.tlFilter);
+      });
+    });
+
+    const polesData = [
+      {
+        title: 'Presse bruxelloise, régionale et généraliste',
+        sources: 'BX1, BRUZZ, Le Vif, ROBtv, Bruxelles Secrète, Bruxelles City News, Persinfo',
+        framing: 'Focalisation sur les perturbations urbaines, la mobilité (STIB, De Lijn, tunnels) et le ramassage des déchets, accompagnée d\'un résumé très bref des revendications syndicales.',
+        blindspots: 'Guillemets de mise à distance autour de la « grande mobilisation citoyenne » (BX1) ; faible contextualisation fiscale et budgétaire ; exception du fil budgétaire du Vif reliant l\'impasse de Bart De Wever à la pression sociale.'
+      },
+      {
+        title: 'Couverture politique « Rue de la Loi »',
+        sources: 'Knack, Le Vif (live), BX1 (crise), BRUZZ (politique), Wablieft',
+        framing: 'Impasse arithmétique du kern (« 4 oui, 1 non » face à Vooruit), déclarations croisées des vice-Premiers ministres (Clarinval, Prévot, Vandenbroucke) et délai royal fixé au 23 novembre.',
+        blindspots: 'Cloisonnement marqué entre les arbitrages gouvernementaux et le rapport de force social dans la rue, pourtant prévu le jour même du rapport au Roi Philippe.'
+      },
+      {
+        title: 'Médias engagés et alternatifs',
+        sources: 'DeWereldMorgen, MO*, Vrede.be, Neutr-On',
+        framing: 'Conflit distributif contre l\'austérité (« Wall of Injustice »), mise en perspective des restructurations (UPS, GSK, Vynova) et convergence avec les jeunes et les mouvements pacifistes.',
+        blindspots: 'Chiffrage fiscal détaillé et entretien approfondi avec Vermorgen (CSC) et Bert Engelaar (FGTB), mais adhésion peu critique aux estimations de recettes avancées.'
+      },
+      {
+        title: 'Patronat, secteur RH et pouvoirs employeurs',
+        sources: 'VOKA, FEB/VBO (citée), Attentia, CLB Group, Vlaanderen.be',
+        framing: 'Délégitimation d\'une mobilisation jugée sans objet ni « plan sérieux » (VOKA), crainte d\'un « effet boule de neige » sur les taux (FEB/VBO) et gestion des retenues salariales.',
+        blindspots: 'Argument du vide décisionnel occultant la volonté syndicale d\'influencer le budget avant décision ; assimilation de la journée à un « jour de grève » (Attentia) et faute sur le nom « SYNAVO ».'
+      },
+      {
+        title: 'Auto-médiatisation syndicale, mutualiste et partisane',
+        sources: 'FGTB/ABVV, CSC/ACV, SYNOVA, Solidaris Wallonie, PS, PTB/PVDA',
+        framing: 'Mobilisation citoyenne positive (« Construire l\'avenir ensemble, ne pas le subir »), défense de l\'indexation et des malades de longue durée, et promotion d\'une fiscalité alternative.',
+        blindspots: 'Mise en avant d\'un contre-budget de 21 milliards d\'euros et lecture fortement polarisée de la répartition de l\'effort fiscal (PTB imputant 85 % de l\'effort aux travailleurs).'
+      }
+    ];
+
+    document.querySelectorAll('.pole-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.pole-btn').forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('bg-[#FAF8F5]', 'text-slate-700');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('bg-[#FAF8F5]', 'text-slate-700');
+        const p = polesData[Number(btn.dataset.pole)];
+        document.getElementById('pole-title').textContent = p.title;
+        document.getElementById('pole-sources').textContent = p.sources;
+        document.getElementById('pole-framing').textContent = p.framing;
+        document.getElementById('pole-blindspots').textContent = p.blindspots;
+      });
+    });
+
+    const radarCtx = document.getElementById('polesRadarChart').getContext('2d');
+    new Chart(radarCtx, {
+      type: 'radar',
+      data: {
+        labels: [
+          wrapLabel('Perturbations & mobilité'),
+          wrapLabel('Jeux politiques Kern & Palais'),
+          wrapLabel('Chiffrage socio-économique'),
+          wrapLabel('Légitimité citoyenne')
+        ],
+        datasets: [
+          {
+            label: 'Presse bruxelloise & rég.',
+            data: [9, 3, 2, 4],
+            borderColor: '#1E293B',
+            backgroundColor: 'rgba(30, 41, 59, 0.12)',
+            borderWidth: 2
+          },
+          {
+            label: 'Rubrique Rue de la Loi',
+            data: [2, 10, 3, 2],
+            borderColor: '#2B5B6C',
+            backgroundColor: 'rgba(43, 91, 108, 0.14)',
+            borderWidth: 2
+          },
+          {
+            label: 'Médias alternatifs & syndicats',
+            data: [3, 5, 9, 9],
+            borderColor: '#B45309',
+            backgroundColor: 'rgba(180, 83, 9, 0.14)',
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            min: 0,
+            max: 10,
+            ticks: { display: false, stepSize: 2 },
+            pointLabels: { font: { size: 11, weight: '600' }, color: '#334155' },
+            grid: { color: '#E7E2DA' },
+            angleLines: { color: '#E7E2DA' }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { boxWidth: 12, font: { size: 11 } }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                return ctx.dataset.label + ' : ' + ctx.parsed.r + '/10';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const budgetMetrics = [
+      {
+        pill: '21 Md€ contre-budget',
+        title: 'Contre-budget syndical alternatif : 21 milliards d\'euros',
+        source: 'ACCG, SYNOVA, SETCa',
+        treatment: 'Ignoré par VOKA (qui affirme l\'absence de « plan sérieux ») et absent des aperçus généralistes centrés sur la mobilité (BRUZZ, Bruxelles City News).',
+        audit: 'Aucune rédaction généraliste n\'a soumis ces 11 propositions de la FGTB et du front commun à des économistes indépendants pour évaluer leur rendement réel.'
+      },
+      {
+        pill: '10 Md€ effort Arizona',
+        title: 'Effort budgétaire fédéral recherché d\'ici 2029 : 10 milliards d\'euros',
+        source: 'BX1, Wablieft, PTB',
+        treatment: 'Repris comme cadre de référence constant dans la presse politique, mais rarement ventilé par poste dans les articles consacrés à la manifestation.',
+        audit: 'La trajectoire globale est citée sans éclairer l\'arbitrage concret entre économies structurelles, fiscalité du travail et contribution des hauts patrimoines.'
+      },
+      {
+        pill: '1,1 vs 1,5 Md€ (85 %)',
+        title: 'Contribution des « épaules les plus fortes » et calcul des 85 %',
+        source: 'PTB/PVDA (sur l\'enveloppe de 10 Md€)',
+        treatment: 'Absent des synthèses généralistes sur le cortège. Le PTB oppose 1,1 Md€ (attribué à Bart De Wever) à au moins 1,5 Md€ (exigé par Vooruit).',
+        audit: 'Arithmétiquement, 10 moins 1,5 = 8,5 Md€ (85 %), mais ce calcul suppose que toute mesure hors impôt sur les plus riches pèse exclusivement sur les travailleurs.'
+      },
+      {
+        pill: '2,55 Md€ niches fiscales',
+        title: 'Fermeture des niches fiscales (dont sociétés de management) : 2,55 Md€',
+        source: 'DeWereldMorgen (22 oct., citant des chiffres BNB)',
+        treatment: 'Détaillé uniquement dans la presse alternative sous un titre affirmant que la Banque nationale étaye l\'alternative syndicale.',
+        audit: 'Présenté sans audit contradictoire sur les effets comportementaux, la faisabilité juridique ou un chevauchement avec les 756 M€ sur les rémunérations alternatives.'
+      },
+      {
+        pill: '+0,05 % PIB (congés)',
+        title: 'Impact macroéconomique attribué à la limitation des jours de congé : +0,05 % PIB',
+        source: 'DeWereldMorgen (entretien syndical du 19 nov.)',
+        treatment: 'Cité uniquement dans le circuit alternatif pour questionner l\'efficacité économique d\'une mesure visant les jours fériés ou de congé.',
+        audit: 'Absent des médias généralistes observés, privant le public d\'un éclairage sur le rapport coût social / gain macroéconomique.'
+      },
+      {
+        pill: '1,87 % centenindex',
+        title: 'Indexation plafonnée au 1er novembre 2026 (+1,87 % au-dessus de 4 000 € brut)',
+        source: 'Blog syndical local ABVV Stora Enso Langerbrugge',
+        treatment: 'Illustration concrète d\'érosion salariale vécue dès novembre 2026 dans le secteur papier, alors que la presse générale traite l\'indexation de façon abstraite.',
+        audit: 'Manque de reportages de terrain documentant les effets concrets des mécanismes de plafonnement sur les salariés.'
+      },
+      {
+        pill: '2 ans max burn-out',
+        title: 'Limitation à deux ans des indemnités d\'incapacité pour burn-out',
+        source: 'Solidaris Wallonie',
+        treatment: 'Absent des aperçus généralistes sur le 23 novembre, bien que la mutualité dénonce le coût humain et économique de retours précipités au travail.',
+        audit: 'Angle mort socio-sanitaire majeur illustrant pourquoi les mutualités rejoignent le cortège aux côtés des syndicats.'
+      }
+    ];
+
+    const metricPillsContainer = document.getElementById('metric-pills');
+    budgetMetrics.forEach((m, idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = m.pill;
+      btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold border transition ' +
+        (idx === 0 ? 'bg-[#B45309] text-white border-[#B45309]' : 'bg-[#FAF8F5] text-slate-700 border-[#E7E2DA] hover:bg-slate-100');
+      btn.addEventListener('click', () => {
+        Array.from(metricPillsContainer.children).forEach(b => {
+          b.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-[#FAF8F5] text-slate-700 border-[#E7E2DA] hover:bg-slate-100';
+        });
+        btn.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold border transition bg-[#B45309] text-white border-[#B45309]';
+        document.getElementById('md-title').textContent = m.title;
+        document.getElementById('md-source').textContent = m.source;
+        document.getElementById('md-treatment').textContent = m.treatment;
+        document.getElementById('md-audit').textContent = m.audit;
+      });
+      metricPillsContainer.appendChild(btn);
+    });
+
+    const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+    const macroConfig = {
+      labels: [
+        wrapLabel('Contre-budget syndical (21 Md€)'),
+        wrapLabel('Effort fédéral Arizona 2029 (10 Md€)'),
+        wrapLabel('Part épaules fortes Vooruit (1,5 Md€)'),
+        wrapLabel('Part épaules fortes De Wever (1,1 Md€)')
+      ],
+      data: [21, 10, 1.5, 1.1],
+      unit: ' Md€',
+      colors: ['#B45309', '#1E293B', '#2B5B6C', '#64748B'],
+      caption: 'Comparaison des grandes enveloppes budgétaires citées : le contre-budget syndical global de 21 Md€, l\'effort fédéral de 10 Md€ d\'ici 2029, et les propositions sur les « épaules les plus fortes » (1,5 Md€ vs 1,1 Md€).'
+    };
+    const microConfig = {
+      labels: [
+        wrapLabel('Fermeture niches / soc. management'),
+        wrapLabel('Rémunérations alt. / stock-options'),
+        wrapLabel('Responsabilisation maladie employeurs'),
+        wrapLabel('Fin tarif réduit ISOC & régimes préf.'),
+        wrapLabel('Réforme loi 1996 norme salariale')
+      ],
+      data: [2550, 756, 575, 526, 360],
+      unit: ' M€',
+      colors: ['#B45309', '#2B5B6C', '#1E293B', '#475569', '#64748B'],
+      caption: 'Détail des recettes alternatives citées par DeWereldMorgen (en millions d\'euros par an), non soumises à un audit contradictoire sur les éventuels chevauchements (notamment entre niches fiscales globales et options sur actions).'
+    };
+
+    const budgetChart = new Chart(budgetCtx, {
+      type: 'bar',
+      data: {
+        labels: macroConfig.labels,
+        datasets: [{
+          label: 'Montant avancé',
+          data: macroConfig.data,
+          backgroundColor: macroConfig.colors,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                const activeUnit = document.getElementById('btn-chart-macro').classList.contains('bg-[#1E293B]') ? ' Md€' : ' M€';
+                return 'Montant cité : ' + ctx.parsed.x + activeUnit;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: '#E7E2DA' },
+            ticks: { font: { size: 11 } }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 11, weight: '600' }, color: '#1E293B' }
+          }
+        }
+      }
+    });
+
+    document.getElementById('btn-chart-macro').addEventListener('click', function() {
+      this.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1E293B] text-white transition';
+      document.getElementById('btn-chart-micro').className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 transition';
+      budgetChart.data.labels = macroConfig.labels;
+      budgetChart.data.datasets[0].data = macroConfig.data;
+      budgetChart.data.datasets[0].backgroundColor = macroConfig.colors;
+      budgetChart.update();
+      document.getElementById('budget-chart-caption').textContent = macroConfig.caption;
+    });
+
+    document.getElementById('btn-chart-micro').addEventListener('click', function() {
+      this.className = 'px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1E293B] text-white transition';
+      document.getElementById('btn-chart-macro').className = 'px-2.5 py-1 rounded-md text-xs font-semibold text-slate-700 transition';
+      budgetChart.data.labels = microConfig.labels;
+      budgetChart.data.datasets[0].data = microConfig.data;
+      budgetChart.data.datasets[0].backgroundColor = microConfig.colors;
+      budgetChart.update();
+      document.getElementById('budget-chart-caption').textContent = microConfig.caption;
+    });
+
+    const donutCtx = document.getElementById('semanticDonutChart').getContext('2d');
+    new Chart(donutCtx, {
+      type: 'doughnut',
+      data: {
+        labels: [
+          wrapLabel('Mobilité, RH & perturbations pratiques'),
+          wrapLabel('Appels syndicaux, mutuelles & partis'),
+          wrapLabel('Impasse politique Kern & Palais'),
+          wrapLabel('Médias alternatifs & contre-chiffrages'),
+          wrapLabel('Cadre déontologique & régulation')
+        ],
+        datasets: [{
+          data: [38, 28, 17, 11, 6],
+          backgroundColor: ['#1E293B', '#B45309', '#2B5B6C', '#D97706', '#94A3B8'],
+          borderWidth: 2,
+          borderColor: '#FFFFFF'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '62%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { boxWidth: 12, font: { size: 11 } }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(ctx) {
+                return ctx.label + ' : ' + ctx.parsed + ' % du corpus observé';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const checks = document.querySelectorAll('.deont-check');
+    checks.forEach(chk => {
+      chk.addEventListener('change', () => {
+        const count = Array.from(checks).filter(c => c.checked).length;
+        document.getElementById('deont-score').textContent = count + ' / 4';
+        const statusEl = document.getElementById('deont-status');
+        if (count === 0) {
+          statusEl.textContent = 'Cochez les critères remplis dans l\'édition observée';
+        } else if (count <= 2) {
+          statusEl.textContent = 'Couverture partielle : persistance d\'angles morts factuels ou politiques';
+        } else if (count === 3) {
+          statusEl.textContent = 'Couverture solide : bonne articulation entre terrain social et enjeux budgétaires';
+        } else {
+          statusEl.textContent = 'Couverture exemplaire au regard des exigences de pluralisme et de rigueur';
+        }
+      });
+    });
+
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('nav a').forEach(l => {
+          l.classList.remove('active');
+          l.classList.add('bg-white', 'text-slate-700');
+        });
+        this.classList.add('active');
+        this.classList.remove('bg-white', 'text-slate-700');
+      });
+    });
+  </script>
+</body>
+</html>
